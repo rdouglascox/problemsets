@@ -4,16 +4,16 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6ead011fd83198086aa1289d811b2071278972e7687572199fa413b5d0fb32d3
+-- hash: 7fcb67d23f108044c8fd349f8b96c7260057d754dbc780b627c19946acd9128e
 
 name:           problemsets
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/problemsets#readme>
-homepage:       https://github.com/githubuser/problemsets#readme
-bug-reports:    https://github.com/githubuser/problemsets/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2021 Author name here
+homepage:       https://github.com/rdouglascox/problemsets#readme
+bug-reports:    https://github.com/rdouglascox/problemsets/issues
+author:         Ryan Cox
+maintainer:     ryan@rdouglascox.com
+copyright:      2021 Ryan Cox
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -23,11 +23,21 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/problemsets
+  location: https://github.com/rdouglascox/problemsets
 
 library
   exposed-modules:
       Lib
+      ProblemSet01.ProblemSet01
+      ProblemSet02.ProblemSet02
+      ProblemSet03.ProblemSet03
+      ProblemSet04.ProblemSet04
+      ProblemSet05.ProblemSet05
+      ProblemSet06.ProblemSet06
+      ProblemSet07.ProblemSet07
+      ProblemSet08.ProblemSet08
+      ProblemSet09.ProblemSet09
+      ProblemSet10.ProblemSet10
   other-modules:
       Paths_problemsets
   hs-source-dirs:
