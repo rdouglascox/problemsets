@@ -1,10 +1,10 @@
 name:                problemsets
 version:             0.1.0.0
-github:              "githubuser/problemsets"
+github:              "rdouglascox/problemsets"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+author:              "Ryan Cox"
+maintainer:          "ryan@rdouglascox.com"
+copyright:           "2021 Ryan Cox"
 
 extra-source-files:
 - README.md
