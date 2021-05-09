@@ -1,0 +1,313 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.3.4)  28 APR 2021 21:06
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**ps07a.tex
+(./ps07a.tex
+LaTeX2e <2020-10-01> patch level 2
+L3 programming layer <2020-12-03> xparse <2020-03-03>
+(/usr/share/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
+(/usr/share/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+\c@part=\count177
+\c@section=\count178
+\c@subsection=\count179
+\c@subsubsection=\count180
+\c@paragraph=\count181
+\c@subparagraph=\count182
+\c@figure=\count183
+\c@table=\count184
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(/usr/share/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks15
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/share/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2020/08/01 v1.3d Input encoding file
+\inpenc@prehook=\toks16
+\inpenc@posthook=\toks17
+)
+(/usr/share/texmf-dist/tex/latex/qtree/qtree.sty
+Package: 2008/12/12 v.3.1bQtree: tree-drawing for linguistics
+Package: qtree 2008/12/12 v.3.1bQtree: tree-drawing for linguistics
+(/usr/share/texmf-dist/tex/latex/pict2e/pict2e.sty
+Package: pict2e 2020/09/30 v0.4b Improved picture commands (HjG,RN,JT)
+
+(/usr/share/texmf-dist/tex/latex/pict2e/pict2e.cfg
+File: pict2e.cfg 2016/02/05 v0.1u pict2e configuration for teTeX/TeXLive
+)
+Package pict2e Info: Driver file: pdftex.def on input line 112.
+
+(/usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+)
+Package pict2e Info: Driver file for pict2e: p2e-pdftex.def on input line 114.
+
+(/usr/share/texmf-dist/tex/latex/pict2e/p2e-pdftex.def
+File: p2e-pdftex.def 2016/02/05 v0.1u Driver-dependant file (RN,HjG,JT)
+)
+(/usr/share/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+\pIIe@GRAPH=\toks18
+\@arclen=\dimen139
+\@arcrad=\dimen140
+\pIIe@tempdima=\dimen141
+\pIIe@tempdimb=\dimen142
+\pIIe@tempdimc=\dimen143
+\pIIe@tempdimd=\dimen144
+\pIIe@tempdime=\dimen145
+\pIIe@tempdimf=\dimen146
+)
+\c@treecount=\count185
+\c@branchcount=\count186
+\parentbox=\box47
+\treebox=\box48
+\treeboxone=\box49
+\treeboxtwo=\box50
+\treeboxthree=\box51
+\treeboxfour=\box52
+\treeboxfive=\box53
+\treeboxsix=\box54
+\treeboxseven=\box55
+\treeboxeight=\box56
+\treeboxnine=\box57
+\treeboxten=\box58
+\treeboxeleven=\box59
+\treeboxtwelve=\box60
+\treeboxthirteen=\box61
+\treeboxfourteen=\box62
+\treeboxfifteen=\box63
+\treeboxsixteen=\box64
+\treeboxseventeen=\box65
+\treeboxeighteen=\box66
+\treeboxnineteen=\box67
+\treeboxtwenty=\box68
+\treeoffsetone=\skip49
+\treeoffsettwo=\skip50
+\treeoffsetthree=\skip51
+\treeoffsetfour=\skip52
+\treeoffsetfive=\skip53
+\treeoffsetsix=\skip54
+\treeoffsetseven=\skip55
+\treeoffseteight=\skip56
+\treeoffsetnine=\skip57
+\treeoffsetten=\skip58
+\treeoffseteleven=\skip59
+\treeoffsettwelve=\skip60
+\treeoffsetthirteen=\skip61
+\treeoffsetfourteen=\skip62
+\treeoffsetfifteen=\skip63
+\treeoffsetsixteen=\skip64
+\treeoffsetseventeen=\skip65
+\treeoffseteighteen=\skip66
+\treeoffsetnineteen=\skip67
+\treeoffsettwenty=\skip68
+\treeshiftone=\skip69
+\treeshifttwo=\skip70
+\treeshiftthree=\skip71
+\treeshiftfour=\skip72
+\treeshiftfive=\skip73
+\treeshiftsix=\skip74
+\treeshiftseven=\skip75
+\treeshifteight=\skip76
+\treeshiftnine=\skip77
+\treeshiftten=\skip78
+\treeshifteleven=\skip79
+\treeshifttwelve=\skip80
+\treeshiftthirteen=\skip81
+\treeshiftfourteen=\skip82
+\treeshiftfifteen=\skip83
+\treeshiftsixteen=\skip84
+\treeshiftseventeen=\skip85
+\treeshifteighteen=\skip86
+\treeshiftnineteen=\skip87
+\treeshifttwenty=\skip88
+\treewidthone=\skip89
+\treewidthtwo=\skip90
+\treewidththree=\skip91
+\treewidthfour=\skip92
+\treewidthfive=\skip93
+\treewidthsix=\skip94
+\treewidthseven=\skip95
+\treewidtheight=\skip96
+\treewidthnine=\skip97
+\treewidthten=\skip98
+\treewidtheleven=\skip99
+\treewidthtwelve=\skip100
+\treewidththirteen=\skip101
+\treewidthfourteen=\skip102
+\treewidthfifteen=\skip103
+\treewidthsixteen=\skip104
+\treewidthseventeen=\skip105
+\treewidtheighteen=\skip106
+\treewidthnineteen=\skip107
+\treewidthtwenty=\skip108
+\daughteroffsetone=\skip109
+\daughteroffsettwo=\skip110
+\daughteroffsetthree=\skip111
+\daughteroffsetfour=\skip112
+\branchwidthone=\skip113
+\branchwidthtwo=\skip114
+\branchwidththree=\skip115
+\branchwidthfour=\skip116
+\parentoffset=\skip117
+\treeoffset=\skip118
+\daughteroffset=\skip119
+\branchwidth=\skip120
+\parentwidth=\skip121
+\treewidth=\skip122
+\qta=\toks19
+\qtb=\toks20
+\nbranches=\count187
+\qroofx=\count188
+\qroofy=\count189
+\@qrscratchbox=\box69
+)
+(/usr/share/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks21
+)
+(/usr/share/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/share/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count190
+\Gm@cntv=\count191
+\c@Gm@tempcnt=\count192
+\Gm@bindingoffset=\dimen147
+\Gm@wd@mp=\dimen148
+\Gm@odd@mp=\dimen149
+\Gm@even@mp=\dimen150
+\Gm@layoutwidth=\dimen151
+\Gm@layoutheight=\dimen152
+\Gm@layouthoffset=\dimen153
+\Gm@layoutvoffset=\dimen154
+\Gm@dimlist=\toks22
+)
+(/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
+\l__kernel_color_stack_int=\count193
+\l__pdf_internal_box=\box70
+)
+No file ps07a.aux.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 1.
+LaTeX Font Info:    ... okay on input line 1.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 1.
+LaTeX Font Info:    ... okay on input line 1.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 1.
+LaTeX Font Info:    ... okay on input line 1.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 1.
+LaTeX Font Info:    ... okay on input line 1.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 1.
+LaTeX Font Info:    ... okay on input line 1.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 1.
+LaTeX Font Info:    ... okay on input line 1.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 1.
+LaTeX Font Info:    ... okay on input line 1.
+(/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count194
+\scratchdimen=\dimen155
+\scratchbox=\box71
+\nofMPsegments=\count195
+\nofMParguments=\count196
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count197
+\MPscratchDim=\dimen156
+\MPnumerator=\count198
+\makeMPintoPDFobject=\count199
+\everyMPtoPDFconversion=\toks24
+)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(51.0727pt, 512.1496pt, 51.07271pt)
+* v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=512.1496pt
+* \textheight=556.47656pt
+* \oddsidemargin=-21.1973pt
+* \evensidemargin=-21.1973pt
+* \topmargin=-13.87262pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 1.
+(/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 1.
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
+.
+
+(/usr/share/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./ps07a.aux) ) 
+Here is how much of TeX's memory you used:
+ 2378 strings out of 479383
+ 32067 string characters out of 5875831
+ 331626 words of memory out of 5000000
+ 19498 multiletter control sequences out of 15000+600000
+ 410073 words of font info for 54 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 66i,9n,72p,3122b,476s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/s
+hare/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/
+symbols/msam10.pfb>
+Output written on ps07a.pdf (2 pages, 46654 bytes).
+PDF statistics:
+ 27 PDF objects out of 1000 (max. 8388607)
+ 18 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

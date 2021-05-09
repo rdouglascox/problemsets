@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7fcb67d23f108044c8fd349f8b96c7260057d754dbc780b627c19946acd9128e
+-- hash: 098f662d48da83ae398466d064cca94d67cbdc13b14a4821cfe7279ddf9b31d9
 
 name:           problemsets
 version:        0.1.0.0
@@ -27,23 +27,56 @@ source-repository head
 
 library
   exposed-modules:
+      Data.GPLIModel
+      Data.GPLIprop
+      Data.GPLITree
+      Data.PLprop
       Lib
-      ProblemSet01.ProblemSet01
-      ProblemSet02.ProblemSet02
+      Models.Evaluator
+      Parsers.GPLIParser
+      Parsers.GPLIToken
+      Printing.LaTeXGPLIModel
+      Printing.LaTeXGPLIProps
+      Printing.LaTeXGPLITrees
+      Printing.LaTeXPLProps
+      Printing.LaTeXPLTrees
+      Printing.LaTeXTables
+      Printing.PLprop
+      Printing.TextGPLIModel
+      Printing.TextGPLITree
+      ProblemSet01.MakePS01
+      ProblemSet02.MakePS02
       ProblemSet03.ProblemSet03
-      ProblemSet04.ProblemSet04
+      ProblemSet04.MakePS04
       ProblemSet05.ProblemSet05
       ProblemSet06.ProblemSet06
-      ProblemSet07.ProblemSet07
+      ProblemSet07.MakePS07
+      ProblemSet08.MakePS08
       ProblemSet08.ProblemSet08
-      ProblemSet09.ProblemSet09
-      ProblemSet10.ProblemSet10
+      ProblemSet09.MakePS09
+      ProblemSet10.MakePS10
+      Random.GPLIprop
+      Random.Models
+      Random.PLprops
+      Tables.Tables
+      Translations.MonadicParserLeft
+      Translations.Names
+      Translations.RandomSentences
+      Translations.Sentences
+      Translations.Verbs
+      Trees.GPLItrees
+      Trees.PLtrees
   other-modules:
       Paths_problemsets
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      HaTeX
+    , array
+    , async
+    , base >=4.7 && <5
+    , containers
+    , random
   default-language: Haskell2010
 
 executable problemsets-exe
@@ -54,8 +87,13 @@ executable problemsets-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      HaTeX
+    , array
+    , async
+    , base >=4.7 && <5
+    , containers
     , problemsets
+    , random
   default-language: Haskell2010
 
 test-suite problemsets-test
@@ -67,6 +105,11 @@ test-suite problemsets-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      HaTeX
+    , array
+    , async
+    , base >=4.7 && <5
+    , containers
     , problemsets
+    , random
   default-language: Haskell2010
