@@ -8,35 +8,38 @@ printmodellns (Model x y z) = ["Domain: " ++ show x, "Referents: " ++ printrefer
 printmodel :: Model -> String
 printmodel (Model x y z) = "Domain: " ++ show x ++ "\n" ++ "Referents: " ++ show y ++ "\n" ++ "Extensions: " ++ printextensions z
 
-printreferents :: [(Char,Object)] -> String
+printreferents :: [(Char,Int)] -> String
 printreferents xs = "[" ++ printrefpairs xs ++ "]"
 
-printrefpairs :: [(Char,Object)] -> String
-printrefpairs (x:y:xs) = refhelper x ++ "," ++ refhelper y
+printrefpairs :: [(Char,Int)] -> String
+printrefpairs (x:y:[]) = refhelper x ++ "," ++ refhelper y
+printrefpairs (x:[]) = refhelper x
 printrefpairs (x:xs) = refhelper x ++ "," ++ printrefpairs xs
 printrefpairs [] = []
 
 refhelper (x,y) = "(" ++ [x] ++ "," ++ show y ++ ")" 
 
-printextensions :: [(Char, [[Object]])] -> String
+printextensions :: [(Char, [[Int]])] -> String
 printextensions xs = "[" ++ concatMap printpair xs ++ "]"
 
-printpair :: (Char, [[Object]]) -> String
+printpair :: (Char, [[Int]]) -> String
 printpair (c,xss) = "(" ++ [c] ++ "," ++ printlists xss ++ ")"
 
-printlists :: [[Object]] -> String
+printlists :: [[Int]] -> String
+printlists (x:[]) = "[" ++ commasep x ++ "]"
 printlists xss = "[" ++ concatMap printtuple xss ++ "]"
 
-printtuple :: [Object] -> String
+printtuple :: [Int] -> String
 printtuple (x:[]) = show x
 printtuple xs = "(" ++ commasep xs ++ ")"
 
-commasep :: [Object] -> String
+commasep :: [Int] -> String
 commasep (x:[]) = show x
 commasep xs = commasep1 xs
 
-commasep1 :: [Object] -> String
+commasep1 :: [Int] -> String
 commasep1 (x:y:[]) = show x ++ "," ++ show y
+commasep1 (x:[]) = show x
 commasep1 (x:xs) = show x ++ "," ++ commasep1 xs
 commasep1 [] = []
 

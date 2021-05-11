@@ -1,4 +1,4 @@
-module Random.Models where
+module Random.Models (rmodel) where
 
 -- |module should export a function that makes a random model for a
 -- given proposition or list of propositions.
@@ -11,22 +11,41 @@ import Data.List
 
 
 -- |Takes a list of propositions and returns a random model
-rmodel :: [Prop] -> Model
-rmodel = undefined
+rmodel :: [Prop] -> IO Model
+rmodel i = do
+           let p = toconj i
+           d <- rdomain'
+           r <- rreferents' p d 
+           e <- rextensions' p d
+           return (Model d r e)
+
+
+toconj :: [Prop] -> Prop
+toconj (x:[]) = x
+toconj xs = foldl1 Conjunction xs
+
 
 -- | get a random element from a list
 r :: RandomGen g => g -> [a] -> a
 r g x = x!!(fst(randomR(0,((length x)) -1) g))
-
 
 -- | get a random stream from a list
 rs :: RandomGen g => g -> [a] -> [a]
 rs g x = r g1 x : rs g2 x
     where (g1,g2) = split g
 
+rdomain' = do
+           g <- newStdGen
+           let d = rdomain g
+           return (d)
 
 rdomain :: RandomGen g => g -> [Int]
-rdomain g = r g [[1],[1,2],[1,2,3],[1,2,3,4],[1,2,3,4,5]]
+rdomain g = r g [[1],[1,2],[1,2,3],[1,2,3,4]]
+
+rreferents' p d = do
+                  g <- newStdGen
+                  let r =  rreferents g p d
+                  return (r)
 
 rreferents :: RandomGen g => g -> Prop -> [Int] -> [(Char,Int)] 
 rreferents g p d = zip (getrefs2 p) (rs g d)
@@ -50,16 +69,22 @@ getrefs1 (Existential x s) = getrefs1 s
 getrefs1 (Universal x s) = getrefs1 s
 
 
+rextensions' p d = do
+                   g <- newStdGen
+                   let e = rextensions g p d
+                   return (e)
+
 rextensions :: RandomGen g => g -> Prop -> [Int] -> [(Char,[[Int]])]  
-rextensions g p d =  undefined
+rextensions g p d = helper g d (getpreds2 p)
 
 -- |for each n place predicate, we generate a list of lists of length
 -- n taken from the domain. 
 
 
-helper :: RandomGen g => g -> [(Char,Int)] -> [Int] -> [(Char,[[Int]])]
-helper g [] ns = []
-helper g ((c,n):xs) ns = (c, nub $ (rtake g ((length ns)^(length ns)) (chop n (rs g ns)))) : helper g xs ns
+helper :: RandomGen g => g -> [Int] -> [(Char,Int)]  -> [(Char,[[Int]])]
+helper g ns [] = []
+helper g ns ((c,n):xs) = (c, nub $ (rtake g ((length ns)^(length ns)) (chop n (rs g ns)))) : helper g1 ns xs
+    where g1 = fst (split g)
 
 rtake :: RandomGen g => g -> Int -> [a] -> [a]
 rtake g n xs = take ((r g [0..n])::Int) xs 

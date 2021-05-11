@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 098f662d48da83ae398466d064cca94d67cbdc13b14a4821cfe7279ddf9b31d9
+-- hash: 010fe5dd507c773153718ed47b4eb6f864139e067c080f8291cf258d3ea46868
 
 name:           problemsets
 version:        0.1.0.0
@@ -52,7 +52,6 @@ library
       ProblemSet06.ProblemSet06
       ProblemSet07.MakePS07
       ProblemSet08.MakePS08
-      ProblemSet08.ProblemSet08
       ProblemSet09.MakePS09
       ProblemSet10.MakePS10
       Random.GPLIprop

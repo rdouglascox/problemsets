@@ -1,4 +1,4 @@
-module Random.GPLIprop (rprops1, printProp, mplsat, prepforequiv, mplequiv, gpltautstats, gpltaut, gplsat, gplisat, gplival, prepforvalidity, prepfortaut) where
+module Random.GPLIprop (rprops1, gplsat1, printProp, mplsat, mplsat1, prepforequiv, mplequiv, gpltautstats, gpltaut, gplsat, gplisat, gplival, prepforvalidity, prepfortaut) where
 
 import Data.GPLIprop
 import System.Random
@@ -48,6 +48,28 @@ mplsat = do
                                     ,multiUni = 3
                          --           ,includeRules = [UniversalRule]
                                     }
+
+
+
+mplsat1 :: IO ([Prop])
+mplsat1 = do 
+          gen <- newStdGen
+          let prop = head $ take 1 $ rsats gen localSettings 
+          return (prop)
+    where localSettings = dSettings {excludeRules = []
+                                    ,excludeCons = []
+                                    ,numProps = 1
+                                    ,minConst = 2
+                                    ,minBranchSet = 0
+                                    ,maxBranchSet = 3
+                                    ,maxConst = 3
+                                    ,maxArity = 1
+                                    ,minArity = 1
+                                    ,predicats = "ABC"
+                                    ,maxPathSet = 8
+                         --           ,includeRules = [UniversalRule]
+                                    }
+
 
 
 
@@ -117,6 +139,28 @@ gplsat = do
                                     ,maxPathSet = 8
                          --           ,includeRules = [UniversalRule]
                                     }
+
+
+
+gplsat1 :: IO ([Prop])
+gplsat1 = do 
+          gen <- newStdGen
+          let prop = head $ take 1 $ rsats gen localSettings 
+          return (prop)
+    where localSettings = dSettings {excludeRules = []
+                                    ,excludeCons = []
+                                    ,numProps = 1
+                                    ,minConst = 2
+                                    ,minBranchSet = 0
+                                    ,maxBranchSet = 3
+                                    ,maxConst = 3
+                                    ,maxArity = 2
+                                    ,minArity = 2
+                                    ,predicats = "JKL"
+                                    ,maxPathSet = 8
+                         --           ,includeRules = [UniversalRule]
+                                    }
+
 
 
 

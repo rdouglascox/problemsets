@@ -19,22 +19,26 @@ import Text.LaTeX.Base.Math
 -- |printing functions
 import Printing.LaTeXGPLIProps (printprops,printarg) 
 import Printing.LaTeXGPLITrees (printtree) 
-import Printing.LaTeXGPLIModel (printmodels)
+import Printing.LaTeXGPLIModel (printmodels,printmodellns)
 
 -- |random prop functions
 
 
 -- |tree building
 
-import Random.GPLIprop (mplequiv, mplsat, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
+import Random.GPLIprop (mplequiv, gplsat1, mplsat, mplsat1, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
+
 import Trees.GPLItrees (mktree)
 import Trees.GPLItrees (getmodels)
+
+import Models.Evaluator -- meval
+import Random.Models -- rmodel
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps07 :: IO ()
-mkps07 = do
+mkps08 :: IO ()
+mkps08 = do
          (q1q,q1a) <- getq1 
          (q2q,q2a) <- getq2
          renderFile "ps07q.tex" (ps07q (q1q,q2q)) -- render questions to tex
@@ -44,15 +48,17 @@ mkps07 = do
 
 getq1 :: IO (LaTeX,LaTeX)
 getq1 = do
-        p <- mplequiv
-        let t = mktree (prepforequiv p)
-        return (printprops p, printtree t)
+        p <- mplsat1
+        m <- rmodel p
+        let a = meval p m
+        return (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
 
 getq2 :: IO (LaTeX,LaTeX)
 getq2 = do
-        p <- mplsat
-        let t = mktree p
-        return (printprops p, printtree t <> quote (printmodels $ getmodels t))
+        p <- gplsat1
+        m <- rmodel p
+        let a = meval p m
+        return (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
 
 -- |document preamble
 
@@ -88,7 +94,7 @@ ps07a x y = ps07pa <> document (maketitle <> answers x y)
 
 -- | the text of q1
 q1text :: LaTeX
-q1text = item Nothing <> "Is the following proposition true or false in given model? Briefly explain your anwser."
+q1text = item Nothing <> "Is the following proposition true or false in the given model? Briefly explain your anwser."
 
 -- | the text of q2
 q2text :: LaTeX
