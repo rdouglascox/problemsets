@@ -2,7 +2,6 @@
 
 module ProblemSet04.MakePS04 (mkps04) where
 
--- |HaLaTeX imports 
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -14,16 +13,8 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
--- |Imports for questions and answers
-
--- |printing functions
 import Printing.LaTeXPLProps (printprops,printarg) 
 import Printing.LaTeXPLTrees (printtree) 
-
--- |random prop functions
-
-
--- |tree building
 
 import Random.PLprops (plcontraries, prepfc, plvalid, prepforvalidity)
 import Trees.PLtrees (mktree)

@@ -2,8 +2,6 @@
 
 module ProblemSet01.MakePS01 (mkps01) where
 
--- |HaLaTeX imports 
-
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
 import Text.LaTeX.Base.Syntax
@@ -14,7 +12,6 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
--- |Imports for questions and answers
 
 import Translations.RandomSentences
 

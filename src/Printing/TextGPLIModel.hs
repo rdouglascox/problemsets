@@ -1,6 +1,7 @@
 module Printing.TextGPLIModel (printmodel, printmodellns) where
 
 import Data.GPLIModel
+import Data.List
 
 printmodellns :: Model -> [String]
 printmodellns (Model x y z) = ["Domain: " ++ show x, "Referents: " ++ printreferents y, "Extensions: " ++ printextensions z]
@@ -20,26 +21,22 @@ printrefpairs [] = []
 refhelper (x,y) = "(" ++ [x] ++ "," ++ show y ++ ")" 
 
 printextensions :: [(Char, [[Int]])] -> String
-printextensions xs = "[" ++ concatMap printpair xs ++ "]"
+printextensions xs = "[" ++ (concat $ (intersperse "," $ map printpair xs)) ++ "]"
 
 printpair :: (Char, [[Int]]) -> String
 printpair (c,xss) = "(" ++ [c] ++ "," ++ printlists xss ++ ")"
 
 printlists :: [[Int]] -> String
-printlists (x:[]) = "[" ++ commasep x ++ "]"
-printlists xss = "[" ++ concatMap printtuple xss ++ "]"
+printlists [] = "[]"
+printlists xss = if maximum (map length xss) == 1
+                 then "[" ++ commasep (concat xss) ++ "]"
+                 else "[" ++ concatMap printtuple xss ++ "]"
 
 printtuple :: [Int] -> String
 printtuple (x:[]) = show x
 printtuple xs = "(" ++ commasep xs ++ ")"
 
 commasep :: [Int] -> String
-commasep (x:[]) = show x
-commasep xs = commasep1 xs
+commasep n = intersperse ',' (concatMap show n)
 
-commasep1 :: [Int] -> String
-commasep1 (x:y:[]) = show x ++ "," ++ show y
-commasep1 (x:[]) = show x
-commasep1 (x:xs) = show x ++ "," ++ commasep1 xs
-commasep1 [] = []
 

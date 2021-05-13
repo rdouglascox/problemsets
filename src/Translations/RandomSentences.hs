@@ -23,7 +23,6 @@ import Translations.MonadicParserLeft
 import Printing.LaTeXPLProps
 
 
---
 
 pltranslation :: IO (LaTeX,LaTeX)
 pltranslation = do

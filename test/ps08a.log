@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.3.4)  2 MAY 2021 15:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.5.2)  13 MAY 2021 20:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**ps10a.tex
-(./ps10a.tex
+**ps08a.tex
+(./ps08a.tex
 LaTeX2e <2020-10-01> patch level 2
 L3 programming layer <2020-12-03> xparse <2020-03-03>
 (/usr/share/texmf-dist/tex/latex/base/article.cls
@@ -207,7 +207,7 @@ Package: iftex 2020/03/06 v1.0d TeX engine tests
 File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
 \l__kernel_color_stack_int=\count193
 \l__pdf_internal_box=\box70
-) (./ps10a.aux)
+) (./ps08a.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 1.
 LaTeX Font Info:    ... okay on input line 1.
 LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 1.
@@ -245,14 +245,14 @@ LaTeX Font Info:    ... okay on input line 1.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(79.52545pt, 455.24408pt, 79.52547pt)
+* h-part:(L,W,R)=(51.0727pt, 512.1496pt, 51.07271pt)
 * v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
 * \paperwidth=614.295pt
 * \paperheight=794.96999pt
-* \textwidth=455.24408pt
+* \textwidth=512.1496pt
 * \textheight=556.47656pt
-* \oddsidemargin=7.25546pt
-* \evensidemargin=7.25546pt
+* \oddsidemargin=-21.1973pt
+* \evensidemargin=-21.1973pt
 * \topmargin=-13.87262pt
 * \headheight=12.0pt
 * \headsep=25.0pt
@@ -280,14 +280,10 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 1.
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
-.
+Underfull \hbox (badness 10000) in paragraph at lines 1--1
 
-(/usr/share/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1.
+ []
+
 
 Underfull \hbox (badness 10000) in paragraph at lines 1--1
 
@@ -295,24 +291,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--1
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./ps10a.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./ps08a.aux) ) 
 Here is how much of TeX's memory you used:
- 2380 strings out of 479383
- 32087 string characters out of 5875831
- 324619 words of memory out of 5000000
- 19498 multiletter control sequences out of 15000+600000
+ 2362 strings out of 479383
+ 31799 string characters out of 5875831
+ 312618 words of memory out of 5000000
+ 19483 multiletter control sequences out of 15000+600000
  410073 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 66i,9n,72p,2234b,484s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/s
-hare/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/
-symbols/msam10.pfb>
-Output written on ps10a.pdf (2 pages, 48067 bytes).
+ 66i,4n,72p,1109b,215s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmsy10.pfb>
+Output written on ps08a.pdf (1 page, 38059 bytes).
 PDF statistics:
- 27 PDF objects out of 1000 (max. 8388607)
- 18 compressed objects within 1 object stream
+ 20 PDF objects out of 1000 (max. 8388607)
+ 13 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

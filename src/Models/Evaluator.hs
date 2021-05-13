@@ -1,6 +1,5 @@
 module Models.Evaluator (meval) where
 
--- |This module provides an evaluator for propositions on models
 
 import Data.GPLIModel
 import Data.GPLIprop

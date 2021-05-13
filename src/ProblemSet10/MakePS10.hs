@@ -2,7 +2,6 @@
 
 module ProblemSet10.MakePS10 (mkps10) where
 
--- |HaLaTeX imports 
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -14,17 +13,10 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
--- |Imports for questions and answers
 
--- |printing functions
 import Printing.LaTeXGPLIProps (printprops,printarg) 
 import Printing.LaTeXGPLITrees (printtree) 
 import Printing.LaTeXGPLIModel (printmodel, printmodellns, printmodels)
-
--- |random prop functions
-
-
--- |tree building
 
 import Random.GPLIprop (gplisat,gplival,prepforvalidity)
 import Trees.GPLItrees (mktree, getmodel, getmodels)

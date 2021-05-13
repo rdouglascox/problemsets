@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 010fe5dd507c773153718ed47b4eb6f864139e067c080f8291cf258d3ea46868
+-- hash: 6495b8621a571f66e4139f1798e69310b4527673e27d51de32b1cdccb79885a0
 
 name:           problemsets
 version:        0.1.0.0
@@ -31,7 +31,6 @@ library
       Data.GPLIprop
       Data.GPLITree
       Data.PLprop
-      Lib
       Models.Evaluator
       Parsers.GPLIParser
       Parsers.GPLIToken
@@ -74,6 +73,7 @@ library
     , array
     , async
     , base >=4.7 && <5
+    , combinatorial
     , containers
     , random
   default-language: Haskell2010
@@ -90,6 +90,7 @@ executable problemsets-exe
     , array
     , async
     , base >=4.7 && <5
+    , combinatorial
     , containers
     , problemsets
     , random
@@ -108,6 +109,7 @@ test-suite problemsets-test
     , array
     , async
     , base >=4.7 && <5
+    , combinatorial
     , containers
     , problemsets
     , random

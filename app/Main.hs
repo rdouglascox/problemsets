@@ -6,6 +6,7 @@ import ProblemSet01.MakePS01
 import ProblemSet02.MakePS02
 import ProblemSet04.MakePS04
 import ProblemSet07.MakePS07
+import ProblemSet08.MakePS08
 import ProblemSet09.MakePS09
 import ProblemSet10.MakePS10
 
@@ -15,6 +16,7 @@ main = do
        b <- async mkps02r
        c <- async mkps04r
        d <- async mkps07r
+       g <- async mkps08r
        e <- async mkps09r
        f <- async mkps10r
        a1 <- wait a
@@ -23,6 +25,7 @@ main = do
        d1 <- wait d
        e1 <- wait e
        f1 <- wait f
+       g1 <- wait g
        putStrLn "All Done!"
 
 mkps10r = do
@@ -39,6 +42,9 @@ mkps07r = do
           mkps07
           putStrLn "PS07 Done!"
 
+mkps08r = do
+          mkps08
+          putStrLn "PS08 Done!"
 
 mkps04r = do
           mkps04

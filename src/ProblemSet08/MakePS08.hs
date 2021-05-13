@@ -2,7 +2,6 @@
 
 module ProblemSet08.MakePS08 (mkps08) where
 
--- |HaLaTeX imports 
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -14,17 +13,11 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
--- |Imports for questions and answers
 
--- |printing functions
 import Printing.LaTeXGPLIProps (printprops,printarg) 
 import Printing.LaTeXGPLITrees (printtree) 
 import Printing.LaTeXGPLIModel (printmodels,printmodellns)
 
--- |random prop functions
-
-
--- |tree building
 
 import Random.GPLIprop (mplequiv, gplsat1, mplsat, mplsat1, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
 
@@ -41,8 +34,8 @@ mkps08 :: IO ()
 mkps08 = do
          (q1q,q1a) <- getq1 
          (q2q,q2a) <- getq2
-         renderFile "ps07q.tex" (ps07q (q1q,q2q)) -- render questions to tex
-         renderFile "ps07a.tex" (ps07a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+         renderFile "ps08q.tex" (ps08q (q1q,q2q)) -- render questions to tex
+         renderFile "ps08a.tex" (ps08a (q1q,q1a) (q2q,q2a)) -- render answers to tex
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
@@ -63,12 +56,12 @@ getq2 = do
 -- |document preamble
 
 -- |preamble for questions
-ps07pq :: LaTeX 
-ps07pq = docSettings <> title "Problem Set 08: MPL Models (Questions)" <> author "" <> date ""
+ps08pq :: LaTeX 
+ps08pq = docSettings <> title "Problem Set 08: MPL Models (Questions)" <> author "" <> date ""
 
 -- |preamble for answers
-ps07pa :: LaTeX 
-ps07pa = docSettings <> title "Problem Set 08: MPL Models (Answers)" <> author "" <> date ""
+ps08pa :: LaTeX 
+ps08pa = docSettings <> title "Problem Set 08: MPL Models (Answers)" <> author "" <> date ""
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -81,12 +74,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps07q :: (LaTeX,LaTeX) -> LaTeX
-ps07q x = ps07pq <> document (maketitle <> questions x)
+ps08q :: (LaTeX,LaTeX) -> LaTeX
+ps08q x = ps08pq <> document (maketitle <> questions x)
 
 -- |with answers
-ps07a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps07a x y = ps07pa <> document (maketitle <> answers x y)
+ps08a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
+ps08a x y = ps08pa <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 

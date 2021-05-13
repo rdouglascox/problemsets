@@ -2,7 +2,6 @@
 
 module ProblemSet07.MakePS07 (mkps07) where
 
--- |HaLaTeX imports 
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -14,17 +13,9 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
--- |Imports for questions and answers
-
--- |printing functions
 import Printing.LaTeXGPLIProps (printprops,printarg) 
 import Printing.LaTeXGPLITrees (printtree) 
 import Printing.LaTeXGPLIModel (printmodels)
-
--- |random prop functions
-
-
--- |tree building
 
 import Random.GPLIprop (mplequiv, mplsat, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
 import Trees.GPLItrees (mktree)

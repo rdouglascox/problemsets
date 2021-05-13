@@ -36,18 +36,15 @@ module Trees.GPLItrees
      , getmodels
      ) where
 
--- |Haskell modules
 import qualified Data.Set as Set
 import Data.Tree
 import Data.List
 import Data.Maybe
 
--- |Data imports
 import Data.GPLIprop
 import Data.GPLITree
 import Data.GPLIModel
 
--- |Printing imports
 import Printing.TextGPLITree
 import Printing.TextGPLIModel
 

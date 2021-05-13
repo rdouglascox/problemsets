@@ -2,7 +2,6 @@
 
 module ProblemSet02.MakePS02 (mkps02) where
 
--- |HaLaTeX imports 
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -14,15 +13,9 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
--- |Imports for questions and answers
-
--- |printing functions
-
 import Printing.LaTeXPLProps
 import Printing.LaTeXTables
 import Tables.Tables
-
--- |random prop functions
 
 import Random.PLprops
 

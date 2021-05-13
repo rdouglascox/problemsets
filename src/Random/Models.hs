@@ -1,14 +1,12 @@
 module Random.Models (rmodel) where
 
--- |module should export a function that makes a random model for a
--- given proposition or list of propositions.
-
 import Data.GPLIModel
 import Data.GPLIprop
 
 import System.Random
 import Data.List
 
+import Combinatorics
 
 -- |Takes a list of propositions and returns a random model
 rmodel :: [Prop] -> IO Model
@@ -83,8 +81,12 @@ rextensions g p d = helper g d (getpreds2 p)
 
 helper :: RandomGen g => g -> [Int] -> [(Char,Int)]  -> [(Char,[[Int]])]
 helper g ns [] = []
-helper g ns ((c,n):xs) = (c, nub $ (rtake g ((length ns)^(length ns)) (chop n (rs g ns)))) : helper g1 ns xs
+helper g ns ((c,n):xs) = (c, rext g n ns) : helper g1 ns xs
     where g1 = fst (split g)
+
+
+rext :: RandomGen g => g -> Int -> [a] -> [[a]]
+rext g n xs = r g $ subsequences $ variateRep n xs
 
 rtake :: RandomGen g => g -> Int -> [a] -> [a]
 rtake g n xs = take ((r g [0..n])::Int) xs 
