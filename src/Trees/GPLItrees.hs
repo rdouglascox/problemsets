@@ -1122,6 +1122,7 @@ readmodels t = map readmodel (getallopenpaths t)
 getmodel :: PTree -> Model
 getmodel t = head $ readmodels t 
 
+getmodels :: PTree -> [Model]
 getmodels = readmodels
 
 
