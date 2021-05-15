@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ProblemSet08.MakePS08 (mkps08) where
+module ProblemSet08.MakePS08 (mkps08,mkps08g) where
 
 
 import Text.LaTeX
@@ -18,14 +18,47 @@ import Printing.LaTeXGPLIProps (printprops,printarg)
 import Printing.LaTeXGPLITrees (printtree) 
 import Printing.LaTeXGPLIModel (printmodels,printmodellns)
 
+import System.Random
 
-import Random.GPLIprop (mplequiv, gplsat1, mplsat, mplsat1, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
+import Random.GPLIprop (gplsat1, mplsat1, gplsat1g, mplsat1g)
 
 import Trees.GPLItrees (mktree)
 import Trees.GPLItrees (getmodels)
 
-import Models.Evaluator -- meval
-import Random.Models -- rmodel
+import Models.Evaluator (meval) 
+import Random.Models (rmodel,rmodelg)
+
+
+-- |function to render questions and answers to .tex file
+mkps08g :: RandomGen g => g -> IO ()
+mkps08g g = do
+           let (q1q,q1a) = getq1g g1
+           let (q2q,q2a) = getq2g g2
+           renderFile "ps08q.tex" (ps08q (q1q,q2q)) -- render questions to tex
+           renderFile "ps08a.tex" (ps08a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+           where (g1,g2) = split g
+
+-- |here we get the random prop(s), make the tree, return the LaTeX versions
+
+getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
+getq1g g = let p = mplsat1g g in
+           let m = rmodelg g p in
+           let a = meval p m in
+           (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
+
+getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
+getq2g g = let p = gplsat1g g in
+           let m = rmodelg g p in
+           let a = meval p m in
+           (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
+
+
+
+
+
+
+
+
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 

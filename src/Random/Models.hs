@@ -1,11 +1,9 @@
-module Random.Models (rmodel) where
+module Random.Models (rmodel,rmodelg) where
 
 import Data.GPLIModel
 import Data.GPLIprop
-
 import System.Random
 import Data.List
-
 import Combinatorics
 
 -- |Takes a list of propositions and returns a random model
@@ -17,6 +15,15 @@ rmodel i = do
            e <- rextensions' p d
            return (Model d r e)
 
+-- |Takes a random generator and a list of propositions and returns a
+-- |random model
+rmodelg :: RandomGen g => g -> [Prop] -> Model
+rmodelg g i = let p = toconj i in 
+              let d = rdomain g1 in 
+              Model d (rreferents g2 p d) (rextensions g3 p d) 
+              where g1 = snd $ next g
+                    g2 = snd $ next g1
+                    g3 = snd $ next g2 
 
 toconj :: [Prop] -> Prop
 toconj (x:[]) = x

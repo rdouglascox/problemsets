@@ -1,4 +1,4 @@
-module Random.GPLIprop (rprops1, gplsat1, printProp, mplsat, mplsat1, prepforequiv, mplequiv, gpltautstats, gpltaut, gplsat, gplisat, gplival, prepforvalidity, prepfortaut) where
+module Random.GPLIprop (rprops1, gplsat1, printProp, mplsat, mplsat1, prepforequiv, mplequiv, gpltautstats, gpltaut, gplsat, gplisat, gplival, prepforvalidity, prepfortaut,  gplsat1g,  mplsatg, mplsat1g, mplequivg, gpltautg, gplsatg, gplisatg, gplivalg) where
 
 import Data.GPLIprop
 import System.Random
@@ -8,6 +8,179 @@ import Data.Maybe
 import Data.List
 
 -- |Q and A 
+
+-- |NEW FUNCTIONS
+
+mplequivg :: RandomGen g => g ->  [Prop]
+mplequivg gen = head $ take 1 $ requivs gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,numProps = 2
+                                    ,minConst = 4
+                                    ,minBranchSet = 2
+                                    ,maxBranchSet = 6
+                                    ,maxConst = 5
+                                    ,maxArity = 1
+                                    ,minArity = 1
+                                    ,predicats = "G"
+                                    ,variables = "x"
+                                    ,constants = "a"
+                                    ,maxPathSet = 8
+                                    ,includeRules = [UniversalRule, ExistentialRule]
+                                    }
+
+mplsatg :: RandomGen g => g ->  [Prop]
+mplsatg gen = head $ take 1 $ rsats gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,excludeCons = []
+                                    ,numProps = 3
+                                    ,minConst = 2
+                                    ,minBranchSet = 1
+                                    ,maxBranchSet = 3
+                                    ,maxConst = 3
+                                    ,maxArity = 1
+                                    ,minArity = 1
+                                    ,predicats = "ABC"
+                                    ,maxPathSet = 8
+                                    ,multiUni = 3
+                         --           ,includeRules = [UniversalRule]
+                                    }
+
+
+
+mplsat1g :: RandomGen g => g ->  [Prop]
+mplsat1g gen = head $ take 1 $ rsats gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,excludeCons = []
+                                    ,numProps = 1
+                                    ,minConst = 2
+                                    ,minBranchSet = 0
+                                    ,maxBranchSet = 3
+                                    ,maxConst = 3
+                                    ,maxArity = 1
+                                    ,minArity = 1
+                                    ,predicats = "ABC"
+                                    ,maxPathSet = 8
+                         --           ,includeRules = [UniversalRule]
+                                    }
+
+
+
+
+
+
+
+gpltautg :: RandomGen g => g ->  [Prop]
+gpltautg gen = head $ take 1 $ rtauts gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,numProps = 1
+                                    ,minConst = 2
+                                    ,minBranchSet = 2
+                                    ,maxBranchSet = 6
+                                    ,maxConst = 5
+                                    ,multiUni = 2
+                                    ,maxArity = 2
+                                    ,minArity = 2
+                                    ,predicats = "G"
+                                    ,variables = "x"
+                                    ,constants = "ab"
+                                    ,maxPathSet = 15
+                                    }
+
+
+
+
+gplsatg :: RandomGen g => g ->  [Prop]
+gplsatg gen = head $ take 1 $ rsats gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,excludeCons = []
+                                    ,numProps = 2
+                                    ,minConst = 2
+                                    ,minBranchSet = 1
+                                    ,maxBranchSet = 3
+                                    ,maxConst = 3
+                                    ,maxArity = 2
+                                    ,minArity = 2
+                                    ,predicats = "JKL"
+                                    ,maxPathSet = 8
+                         --           ,includeRules = [UniversalRule]
+                                    }
+
+
+
+gplsat1g :: RandomGen g => g ->  [Prop]
+gplsat1g gen = head $ take 1 $ rsats gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,excludeCons = []
+                                    ,numProps = 1
+                                    ,minConst = 2
+                                    ,minBranchSet = 0
+                                    ,maxBranchSet = 3
+                                    ,maxConst = 3
+                                    ,maxArity = 2
+                                    ,minArity = 2
+                                    ,predicats = "JKL"
+                                    ,maxPathSet = 8
+                         --           ,includeRules = [UniversalRule]
+                                    }
+
+
+
+
+
+gplisatg :: RandomGen g => g ->  [Prop]
+gplisatg gen = head $ take 1 $ rsats gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,excludeCons = []
+                                    ,numProps = 2
+                                    ,minConst = 2
+                                    ,minBranchSet = 1
+                                    ,maxBranchSet = 4
+                                    ,maxConst = 4
+                                    ,maxArity = 2
+                                    ,minArity = 2
+                                    ,predicats = "HIJK"
+                                    ,maxPathSet = 8
+                                    ,includeRules = [SubstitutionRule]
+                                    }
+
+
+gplitestg :: RandomGen g => g ->  [Prop]
+gplitestg gen = head $ take 1 $ nrprops gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,excludeCons = []
+                                    ,numProps = 2
+                                    ,minConst = 2
+                                    ,minBranchSet = 1
+                                    ,maxBranchSet = 3
+                                    ,maxConst = 3
+                                    ,maxArity = 2
+                                    ,minArity = 2
+                                    ,predicats = "RI"
+                                    ,maxPathSet = 8
+                                    ,includeRules = [SubstitutionRule]
+                                    }
+
+
+
+
+gplivalg :: RandomGen g => g ->  [Prop]
+gplivalg gen = head $ take 1 $ rvalids gen localSettings 
+    where localSettings = dSettings {excludeRules = []
+                                    ,numProps = 3
+                                    ,minConst = 1
+                                    ,minBranchSet = 1
+                                    ,maxBranchSet = 50
+                                    ,maxConst = 10
+                                    ,maxArity = 2
+                                    ,minArity = 2 
+                                    ,predicats = "GI"
+                                    ,maxPathSet = 40
+                                    ,includeRules = [SubstitutionRule] 
+                                    }
+    
+
+
+-- |OLD FUNCTIONS
 
 mplequiv :: IO ([Prop])
 mplequiv = do 

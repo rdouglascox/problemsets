@@ -10,13 +10,16 @@ import ProblemSet08.MakePS08
 import ProblemSet09.MakePS09
 import ProblemSet10.MakePS10
 
+import System.Random
+
 main :: IO ()
 main = do 
+       gen8 <- newStdGen
        a <- async mkps01r
        b <- async mkps02r
        c <- async mkps04r
        d <- async mkps07r
-       g <- async mkps08r
+       g <- async (mkps08r gen8)
        e <- async mkps09r
        f <- async mkps10r
        a1 <- wait a
@@ -42,9 +45,9 @@ mkps07r = do
           mkps07
           putStrLn "PS07 Done!"
 
-mkps08r = do
-          mkps08
-          putStrLn "PS08 Done!"
+mkps08r gen = do
+              mkps08g gen
+              putStrLn "PS08 Done!"
 
 mkps04r = do
           mkps04
