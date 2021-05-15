@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ProblemSet07.MakePS07 (mkps07) where
+module MakePS.MakePS02 (mkps02) where
 
 
 import Text.LaTeX
@@ -13,47 +13,48 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
-import Printing.LaTeXGPLIProps (printprops,printarg) 
-import Printing.LaTeXGPLITrees (printtree) 
-import Printing.LaTeXGPLIModel (printmodels)
+import Printing.LaTeXPLProps
+import Printing.LaTeXTables
+import Tables.Tables
 
-import Random.GPLIprop (mplequiv, mplsat, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
-import Trees.GPLItrees (mktree)
-import Trees.GPLItrees (getmodels)
+import Random.PLprops
+
+-- |tree building
+
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps07 :: IO ()
-mkps07 = do
+mkps02 :: IO ()
+mkps02 = do
          (q1q,q1a) <- getq1 
          (q2q,q2a) <- getq2
-         renderFile "ps07q.tex" (ps07q (q1q,q2q)) -- render questions to tex
-         renderFile "ps07a.tex" (ps07a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+         renderFile "ps02q.tex" (ps02q (q1q,q2q)) -- render questions to tex
+         renderFile "ps02a.tex" (ps02a (q1q,q1a) (q2q,q2a)) -- render answers to tex
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1 :: IO (LaTeX,LaTeX)
 getq1 = do
-        p <- mplequiv
-        let t = mktree (prepforequiv p)
-        return (printprops p, printtree t)
+        p <- plequivs
+        let t = makeRawTable p
+        return (printprops p, makeTable t)
 
 getq2 :: IO (LaTeX,LaTeX)
 getq2 = do
-        p <- mplsat
-        let t = mktree p
-        return (printprops p, printtree t <> quote (printmodels $ getmodels t))
+        p <- plvalid2
+        let t = makeRawTable p
+        return (printarg p, makeTable t)
 
 -- |document preamble
 
 -- |preamble for questions
-ps07pq :: LaTeX 
-ps07pq = docSettings <> title "Problem Set 07: MPL Trees (Questions)" <> author "" <> date ""
+ps02pq :: LaTeX 
+ps02pq = docSettings <> title "Problem Set 02: PL Tables (Questions)" <> author "" <> date ""
 
 -- |preamble for answers
-ps07pa :: LaTeX 
-ps07pa = docSettings <> title "Problem Set 07: MPL Trees (Answers)" <> author "" <> date ""
+ps02pa :: LaTeX 
+ps02pa = docSettings <> title "Problem Set 02: PL Tables (Answers)" <> author "" <> date ""
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -66,12 +67,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps07q :: (LaTeX,LaTeX) -> LaTeX
-ps07q x = ps07pq <> document (maketitle <> questions x)
+ps02q :: (LaTeX,LaTeX) -> LaTeX
+ps02q x = ps02pq <> document (maketitle <> questions x)
 
 -- |with answers
-ps07a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps07a x y = ps07pa <> document (maketitle <> answers x y)
+ps02a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
+ps02a x y = ps02pa <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 
@@ -79,11 +80,11 @@ ps07a x y = ps07pa <> document (maketitle <> answers x y)
 
 -- | the text of q1
 q1text :: LaTeX
-q1text = item Nothing <> "Use a tree to test whether the following are equivalent. If they are not, then read a countermodel off the tree."
+q1text = item Nothing <> "Use a truth table to test whether the following propositions are equivalient."
 
 -- | the text of q2
 q2text :: LaTeX
-q2text = item Nothing <> "Use a tree to test whether the following propositions are jointly satisfiable. If they are not, then read a countermodel off the tree."
+q2text = item Nothing <> "Use a truth table to test whether the following argument is valid."
 
 -- |template for just the questions
 

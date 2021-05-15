@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ProblemSet02.MakePS02 (mkps02) where
+module MakePS.MakePS04 (mkps04) where
 
 
 import Text.LaTeX
@@ -13,48 +13,46 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
-import Printing.LaTeXPLProps
-import Printing.LaTeXTables
-import Tables.Tables
+import Printing.LaTeXPLProps (printprops,printarg) 
+import Printing.LaTeXPLTrees (printtree) 
 
-import Random.PLprops
-
--- |tree building
-
+import Random.PLprops (plcontraries, prepfc, plvalid, prepforvalidity)
+import Trees.PLtrees (mktree)
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps02 :: IO ()
-mkps02 = do
-         (q1q,q1a) <- getq1 
+mkps04 :: IO ()
+mkps04 = do
+         (q1q,q1a1,q1a2) <- getq1 
          (q2q,q2a) <- getq2
-         renderFile "ps02q.tex" (ps02q (q1q,q2q)) -- render questions to tex
-         renderFile "ps02a.tex" (ps02a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+         renderFile "ps04q.tex" (ps04q (q1q,q2q)) -- render questions to tex
+         renderFile "ps04a.tex" (ps04a (q1q,q1a1,q1a2) (q2q,q2a)) -- render answers to tex
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
-getq1 :: IO (LaTeX,LaTeX)
+getq1 :: IO (LaTeX,LaTeX,LaTeX)
 getq1 = do
-        p <- plequivs
-        let t = makeRawTable p
-        return (printprops p, makeTable t)
+        p <- plcontraries
+        let t1 = mktree (prepfc p)
+        let t2 = mktree p
+        return (printprops p, printtree t2, printtree t1)
 
 getq2 :: IO (LaTeX,LaTeX)
 getq2 = do
-        p <- plvalid2
-        let t = makeRawTable p
-        return (printarg p, makeTable t)
+        p <- plvalid
+        let t = mktree (prepforvalidity p)
+        return (printprops p, printtree t)
 
 -- |document preamble
 
 -- |preamble for questions
-ps02pq :: LaTeX 
-ps02pq = docSettings <> title "Problem Set 02: PL Tables (Questions)" <> author "" <> date ""
+ps04pq :: LaTeX 
+ps04pq = docSettings <> title "Problem Set 04: PL Trees (Questions)" <> author "" <> date ""
 
 -- |preamble for answers
-ps02pa :: LaTeX 
-ps02pa = docSettings <> title "Problem Set 02: PL Tables (Answers)" <> author "" <> date ""
+ps04pa :: LaTeX 
+ps04pa = docSettings <> title "Problem Set 04: PL Trees (Answers)" <> author "" <> date ""
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -67,12 +65,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps02q :: (LaTeX,LaTeX) -> LaTeX
-ps02q x = ps02pq <> document (maketitle <> questions x)
+ps04q :: (LaTeX,LaTeX) -> LaTeX
+ps04q x = ps04pq <> document (maketitle <> questions x)
 
 -- |with answers
-ps02a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps02a x y = ps02pa <> document (maketitle <> answers x y)
+ps04a :: (LaTeX,LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
+ps04a x y = ps04pa <> document (maketitle <> answers' x y)
 
 -- |DOCUMENT BODY
 
@@ -80,11 +78,11 @@ ps02a x y = ps02pa <> document (maketitle <> answers x y)
 
 -- | the text of q1
 q1text :: LaTeX
-q1text = item Nothing <> "Use a truth table to test whether the following propositions are equivalient."
+q1text = item Nothing <> "Use a tree to test whether the following are contraries. If they are not, then read a countermodel off the tree."
 
 -- | the text of q2
 q2text :: LaTeX
-q2text = item Nothing <> "Use a truth table to test whether the following argument is valid."
+q2text = item Nothing <> "Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree."
 
 -- |template for just the questions
 
@@ -102,9 +100,17 @@ q2qtemp q = item Nothing <> q
 q1atemp :: LaTeX -> LaTeX -> LaTeX
 q1atemp q a = item Nothing <> q <> item Nothing <> "Answer:" <> quote a
 
+
+-- |question 1 question and answer template
+q1atemp' :: LaTeX -> LaTeX -> LaTeX -> LaTeX
+q1atemp' q a1 a2 = item Nothing <> q <> item Nothing <> "Answer:" <> quote a1 <> quote a2
+
+
 -- |question 2 question and answer template
 q2atemp :: LaTeX -> LaTeX -> LaTeX
 q2atemp q a = item Nothing <> q <> item Nothing <> "Answer:" <> quote a
+
+
 
 -- |only questions template -- expects each question in order
 questions :: (LaTeX,LaTeX) -> LaTeX
@@ -113,6 +119,10 @@ questions (x,y) = enumerate (q1text <> enumerate (q1qtemp x) <> q2text <> enumer
 -- |questions and answers template -- expects question and answer pairs
 answers :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
 answers (xq,xa) (yq,ya) = enumerate (q1text <> enumerate (q1atemp xq xa) <> q2text <> enumerate (q2atemp yq ya))
+
+answers' :: (LaTeX,LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
+answers' (xq,xa1,xa2) (yq,ya) = enumerate (q1text <> enumerate (q1atemp' xq xa1 xa2) <> q2text <> enumerate (q2atemp yq ya))
+
 
 
 

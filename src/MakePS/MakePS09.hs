@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ProblemSet09.MakePS09 (mkps09) where
+module MakePS.MakePS09 (mkps09) where
 
 
 import Text.LaTeX

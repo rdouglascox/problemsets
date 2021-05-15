@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ProblemSet10.MakePS10 (mkps10) where
-
+module MakePS.MakePS01 (mkps01) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -14,46 +13,36 @@ import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
 
-import Printing.LaTeXGPLIProps (printprops,printarg) 
-import Printing.LaTeXGPLITrees (printtree) 
-import Printing.LaTeXGPLIModel (printmodel, printmodellns, printmodels)
-
-import Random.GPLIprop (gplisat,gplival,prepforvalidity)
-import Trees.GPLItrees (mktree, getmodel, getmodels)
+import Translations.RandomSentences
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps10 :: IO ()
-mkps10 = do
+mkps01 :: IO ()
+mkps01 = do
          (q1q,q1a) <- getq1 
          (q2q,q2a) <- getq2
-         renderFile "ps10q.tex" (ps10q (q1q,q2q)) -- render questions to tex
-         renderFile "ps10a.tex" (ps10a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+         renderFile "ps01q.tex" (ps01q (q1q,q2q)) -- render questions to tex
+         renderFile "ps01a.tex" (ps01a (q1q,q1a) (q2q,q2a)) -- render answers to tex
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1 :: IO (LaTeX,LaTeX)
-getq1 = do
-        p <- gplisat
-        let t = mktree p
-        return (printprops p, printtree t <> quote (printmodels $ getmodels t) )
+getq1 = pltranslation
 
 getq2 :: IO (LaTeX,LaTeX)
-getq2 = do
-        p <- gplival
-        let t = mktree (prepforvalidity p)
-        return (printarg p, printtree t)
+getq2 = pltranslation 
+
 
 -- |document preamble
 
 -- |preamble for questions
-ps10pq :: LaTeX 
-ps10pq = docSettings <> title "Problem Set 10: GPLI Trees (Questions)" <> author "" <> date ""
+ps01pq :: LaTeX 
+ps01pq = docSettings <> title "Problem Set 01: PL Translations (Questions)" <> author "" <> date ""
 
 -- |preamble for answers
-ps10pa :: LaTeX 
-ps10pa = docSettings <> title "Problem Set 10: GPLI Trees (Answers)" <> author "" <> date ""
+ps01pa :: LaTeX 
+ps01pa = docSettings <> title "Problem Set 01: PL Translations (Answers)" <> author "" <> date ""
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -61,17 +50,17 @@ docSettings = documentclass [] article
             <> usepackage [] amssymb 
             <> usepackage [utf8] inputenc 
             <> usepackage [] qtree 
-            <> importGeometry [GWidth (Cm 16)]
+            <> importGeometry [GWidth (Cm 18)]
 
 -- |final latex document to render
 
 -- |only questions
-ps10q :: (LaTeX,LaTeX) -> LaTeX
-ps10q x = ps10pq <> document (maketitle <> questions x)
+ps01q :: (LaTeX,LaTeX) -> LaTeX
+ps01q x = ps01pq <> document (maketitle <> questions x)
 
 -- |with answers
-ps10a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps10a x y = ps10pa <> document (maketitle <> answers x y)
+ps01a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
+ps01a x y = ps01pa <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 
@@ -79,11 +68,11 @@ ps10a x y = ps10pa <> document (maketitle <> answers x y)
 
 -- | the text of q1
 q1text :: LaTeX
-q1text = item Nothing <> "Use a tree to test whether the following propositions are jointly satisfiable. If they are, then read a model off the tree."
+q1text = item Nothing <> "Translate the following into PL. Provide a glossary for your translation."
 
 -- | the text of q2
 q2text :: LaTeX
-q2text = item Nothing <> "Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree."
+q2text = item Nothing <> "Translate the following into PL. Provide a glossary for your translation."
 
 -- |template for just the questions
 
