@@ -18,7 +18,7 @@ import Printing.LaTeXGPLIProps (printprops,printarg)
 import Printing.LaTeXGPLITrees (printtree)
 import Printing.LaTeXGPLIModel (printmodels,printmodellns)
 
-import System.Random
+import System.Random ( RandomGen(split) )
 
 import Random.GPLIprop (gplsat1, mplsat1, gplsat1g, mplsat1g)
 
