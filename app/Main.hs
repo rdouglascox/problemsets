@@ -1,6 +1,8 @@
 module Main where
 
 import Control.Concurrent.Async ( async, wait )
+import Control.Monad
+import System.Environment
 
 import MakePS.MakePS01 ( mkps01 )
 import MakePS.MakePS02 ( mkps02 )
@@ -12,8 +14,12 @@ import MakePS.MakePS10 ( mkps10g )
 
 import System.Random ( newStdGen, next, mkStdGen )
 
-main :: IO ()
-main = do 
+main = do
+       n <- getArgs
+       batch (read (head n) :: Int)
+
+basic :: IO ()
+basic = do
        g <- newStdGen    -- get random generator
        let (num,_) = next g  -- use it to get a random number
        let seed = mkStdGen num
@@ -34,3 +40,5 @@ main = do
        return()
 
 
+batch :: Int -> IO ()
+batch n = replicateM_ n main
