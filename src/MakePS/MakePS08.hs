@@ -1,14 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS08 (mkps08,mkps08g) where
+module MakePS.MakePS08 (mkps08g) where
 
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
 import Text.LaTeX.Base.Syntax
 import Text.LaTeX.Packages.Geometry
-import Text.LaTeX.Packages.Inputenc   
-import Text.LaTeX.Base.Pretty         
+import Text.LaTeX.Packages.Inputenc
+import Text.LaTeX.Base.Pretty
 import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
@@ -29,12 +29,12 @@ import Random.Models (rmodel,rmodelg)
 
 
 -- |function to render questions and answers to .tex file
-mkps08g :: RandomGen g => g -> IO ()
-mkps08g g = do
+mkps08g :: RandomGen g => g -> Int -> IO ()
+mkps08g g n = do
            let (q1q,q1a) = getq1g g1
            let (q2q,q2a) = getq2g g2
-           renderFile "ps08q.tex" (ps08q (q1q,q2q)) -- render questions to tex
-           renderFile "ps08a.tex" (ps08a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+           renderFile "ps08q.tex" (ps08q (q1q,q2q) n) -- render questions to tex
+           renderFile "ps08a.tex" (ps08a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
            where (g1,g2) = split g
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
@@ -52,48 +52,15 @@ getq2g g = let p = gplsat1g g in
            (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
 
 
-
-
-
-
-
-
-
--- |GENERAL DOCUMENT BUILDING FUNCTIONS
-
--- |function to render questions and answers to .tex file
-mkps08 :: IO ()
-mkps08 = do
-         (q1q,q1a) <- getq1
-         (q2q,q2a) <- getq2
-         renderFile "ps08q.tex" (ps08q (q1q,q2q)) -- render questions to tex
-         renderFile "ps08a.tex" (ps08a (q1q,q1a) (q2q,q2a)) -- render answers to tex
-
--- |here we get the random prop(s), make the tree, return the LaTeX versions
-
-getq1 :: IO (LaTeX,LaTeX)
-getq1 = do
-        p <- mplsat1
-        m <- rmodel p
-        let a = meval p m
-        return (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
-
-getq2 :: IO (LaTeX,LaTeX)
-getq2 = do
-        p <- gplsat1
-        m <- rmodel p
-        let a = meval p m
-        return (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
-
 -- |document preamble
 
 -- |preamble for questions
-ps08pq :: LaTeX
-ps08pq = docSettings <> title "Problem Set 08: MPL Models (Questions)" <> author "" <> date ""
+ps08pq :: Int -> LaTeX
+ps08pq n = docSettings <> title "Problem Set 08: MPL Models (Questions)" <> author "" <> date (fromString $ show n)
 
 -- |preamble for answers
-ps08pa :: LaTeX
-ps08pa = docSettings <> title "Problem Set 08: MPL Models (Answers)" <> author "" <> date ""
+ps08pa :: Int -> LaTeX
+ps08pa n = docSettings <> title "Problem Set 08: MPL Models (Answers)" <> author "" <> date (fromString $ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -106,12 +73,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps08q :: (LaTeX,LaTeX) -> LaTeX
-ps08q x = ps08pq <> document (maketitle <> questions x)
+ps08q :: (LaTeX,LaTeX) -> Int -> LaTeX
+ps08q x n = ps08pq n <> document (maketitle <> questions x)
 
 -- |with answers
-ps08a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps08a x y = ps08pa <> document (maketitle <> answers x y)
+ps08a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> Int -> LaTeX
+ps08a x y n = ps08pa n <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 
