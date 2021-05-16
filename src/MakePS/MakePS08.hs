@@ -56,11 +56,11 @@ getq2g g = let p = gplsat1g g in
 
 -- |preamble for questions
 ps08pq :: Int -> LaTeX
-ps08pq n = docSettings <> title "Problem Set 08: MPL Models (Questions)" <> author "" <> date (fromString $ show n)
+ps08pq n = docSettings <> title "Problem Set 08: MPL Models (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
 ps08pa :: Int -> LaTeX
-ps08pa n = docSettings <> title "Problem Set 08: MPL Models (Answers)" <> author "" <> date (fromString $ show n)
+ps08pa n = docSettings <> title "Problem Set 08: MPL Models (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX

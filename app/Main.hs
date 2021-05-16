@@ -8,7 +8,7 @@ import MakePS.MakePS04 ( mkps04 )
 import MakePS.MakePS07 ( mkps07 )
 import MakePS.MakePS08 ( mkps08g )
 import MakePS.MakePS09 ( mkps09g )
-import MakePS.MakePS10 ( mkps10 )
+import MakePS.MakePS10 ( mkps10g )
 
 import System.Random ( newStdGen, next, mkStdGen )
 
@@ -23,7 +23,7 @@ main = do
        d <- async mkps07
        g <- async (mkps08g seed num)
        e <- async (mkps09g seed num)
-       f <- async mkps10
+       f <- async (mkps10g seed num)
        a1 <- wait a
        b1 <- wait b
        c1 <- wait c

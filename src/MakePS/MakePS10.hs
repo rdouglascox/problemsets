@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS10 (mkps10) where
+module MakePS.MakePS10 (mkps10g) where
 
 
 import Text.LaTeX
@@ -13,47 +13,47 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
+import System.Random ( RandomGen(split) )
 
 import Printing.LaTeXGPLIProps (printprops,printarg) 
 import Printing.LaTeXGPLITrees (printtree) 
 import Printing.LaTeXGPLIModel (printmodel, printmodellns, printmodels)
 
-import Random.GPLIprop (gplisat,gplival,prepforvalidity)
+import Random.GPLIprop (gplisatg,gplivalg,prepforvalidity)
 import Trees.GPLItrees (mktree, getmodel, getmodels)
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps10 :: IO ()
-mkps10 = do
-         (q1q,q1a) <- getq1 
-         (q2q,q2a) <- getq2
-         renderFile "ps10q.tex" (ps10q (q1q,q2q)) -- render questions to tex
-         renderFile "ps10a.tex" (ps10a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+mkps10g :: RandomGen g => g -> Int -> IO ()
+mkps10g g n = do
+         let (q1q,q1a) = getq1g g1
+         let (q2q,q2a) = getq2g g2
+         renderFile "ps10q.tex" (ps10q (q1q,q2q) n) -- render questions to tex
+         renderFile "ps10a.tex" (ps10a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+        where (g1,g2) = split g
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
-getq1 :: IO (LaTeX,LaTeX)
-getq1 = do
-        p <- gplisat
-        let t = mktree p
-        return (printprops p, printtree t <> quote (printmodels $ getmodels t) )
+getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
+getq1g g = let p = gplisatg g in
+           let t = mktree p in
+           (printprops p, printtree t <> quote (printmodels $ getmodels t) )
 
-getq2 :: IO (LaTeX,LaTeX)
-getq2 = do
-        p <- gplival
-        let t = mktree (prepforvalidity p)
-        return (printarg p, printtree t)
+getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
+getq2g g = let p = gplivalg g in
+           let t = mktree (prepforvalidity p) in
+           (printarg p, printtree t)
 
 -- |document preamble
 
 -- |preamble for questions
-ps10pq :: LaTeX 
-ps10pq = docSettings <> title "Problem Set 10: GPLI Trees (Questions)" <> author "" <> date ""
+ps10pq :: Int -> LaTeX 
+ps10pq n = docSettings <> title "Problem Set 10: GPLI Trees (Questions)" <> author "" <> date (fromString $ show n)
 
 -- |preamble for answers
-ps10pa :: LaTeX 
-ps10pa = docSettings <> title "Problem Set 10: GPLI Trees (Answers)" <> author "" <> date ""
+ps10pa :: Int -> LaTeX 
+ps10pa n = docSettings <> title "Problem Set 10: GPLI Trees (Answers)" <> author "" <> date (fromString $ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -66,12 +66,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps10q :: (LaTeX,LaTeX) -> LaTeX
-ps10q x = ps10pq <> document (maketitle <> questions x)
+ps10q :: (LaTeX,LaTeX) -> Int -> LaTeX
+ps10q x n = ps10pq n <> document (maketitle <> questions x)
 
 -- |with answers
-ps10a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps10a x y = ps10pa <> document (maketitle <> answers x y)
+ps10a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> Int ->  LaTeX
+ps10a x y n = ps10pa n <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 
