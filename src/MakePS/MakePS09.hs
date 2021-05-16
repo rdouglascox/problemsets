@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS09 (mkps09) where
+module MakePS.MakePS09 (mkps09g) where
 
 
 import Text.LaTeX
@@ -14,6 +14,8 @@ import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
 
+import System.Random ( RandomGen(split) )
+
 import Printing.LaTeXGPLIProps (printprops,printarg) 
 import Printing.LaTeXGPLITrees (printtree) 
 import Printing.LaTeXGPLIModel (printmodels)
@@ -26,36 +28,34 @@ import Trees.GPLItrees (mktree, getmodels)
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps09 :: IO ()
-mkps09 = do
-         (q1q,q1a) <- getq1 
-         (q2q,q2a) <- getq2
-         renderFile "ps09q.tex" (ps09q (q1q,q2q)) -- render questions to tex
-         renderFile "ps09a.tex" (ps09a (q1q,q1a) (q2q,q2a)) -- render answers to tex
-
+mkps09g :: RandomGen g => g -> Int -> IO ()
+mkps09g g n = do
+         (q1q,q1a) <- getq1g g1
+         (q2q,q2a) <- getq2g g2
+         renderFile "ps09q.tex" (ps09q (q1q,q2q) n) -- render questions to tex
+         renderFile "ps09a.tex" (ps09a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+        where (g1,g2) = splig g
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
-getq1 :: IO (LaTeX,LaTeX)
-getq1 = do
-        p <- gpltaut
-        let t = mktree (prepfortaut p)
-        return (printprops p, printtree t)
+getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
+getq1g g = let p = gpltautg g in
+           let t = mktree (prepfortaut p) in
+           (printprops p, printtree t)
 
-getq2 :: IO (LaTeX,LaTeX)
-getq2 = do
-        p <- gplsat
-        let t = mktree p
-        return (printprops p, (printtree t <> quote (printmodels $ getmodels t)))
+getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
+getq2g g = let p = gplsat g in
+           let t = mktree p in
+           (printprops p, (printtree t <> quote (printmodels $ getmodels t)))
 
 -- |document preamble
 
 -- |preamble for questions
-ps09pq :: LaTeX 
-ps09pq = docSettings <> title "Problem Set 09: GPL Trees (Questions)" <> author "" <> date ""
+ps09pq :: Int -> LaTeX 
+ps09pq n = docSettings <> title "Problem Set 09: GPL Trees (Questions)" <> author "" <> date (fromString $ show n)
 
 -- |preamble for answers
-ps09pa :: LaTeX 
-ps09pa = docSettings <> title "Problem Set 09: GPL Trees (Answers)" <> author "" <> date ""
+ps09pa :: Int -> LaTeX 
+ps09pa n = docSettings <> title "Problem Set 09: GPL Trees (Answers)" <> author "" <> date (fromString $ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -68,12 +68,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps09q :: (LaTeX,LaTeX) -> LaTeX
-ps09q x = ps09pq <> document (maketitle <> questions x)
+ps09q :: (LaTeX,LaTeX) -> Int -> LaTeX
+ps09q x n = ps09pq n <> document (maketitle <> questions x)
 
 -- |with answers
-ps09a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps09a x y = ps09pa <> document (maketitle <> answers x y)
+ps09a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> Int -> LaTeX
+ps09a x y n = ps09pa n <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 
