@@ -15,8 +15,7 @@ import MakePS.MakePS10 ( mkps10g )
 import System.Random ( newStdGen, next, mkStdGen )
 
 main = do
-       n <- getArgs
-       batch (read (head n) :: Int)
+       batch 4
 
 basic :: IO ()
 basic = do
