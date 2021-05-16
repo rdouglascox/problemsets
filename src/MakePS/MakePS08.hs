@@ -7,25 +7,24 @@ import Text.LaTeX
 import Text.LaTeX.Base.Commands
 import Text.LaTeX.Base.Syntax
 import Text.LaTeX.Packages.Geometry
-import Text.LaTeX.Packages.Inputenc   -- usepackage [utf8] inputenc
-import Text.LaTeX.Base.Pretty         -- prettyLaTeX
+import Text.LaTeX.Packages.Inputenc   
+import Text.LaTeX.Base.Pretty         
 import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
 
-import Printing.LaTeXGPLIProps (printprops,printarg) 
-import Printing.LaTeXGPLITrees (printtree) 
+import Printing.LaTeXGPLIProps (printprops,printarg)
+import Printing.LaTeXGPLITrees (printtree)
 import Printing.LaTeXGPLIModel (printmodels,printmodellns)
 
 import System.Random
 
 import Random.GPLIprop (gplsat1, mplsat1, gplsat1g, mplsat1g)
 
-import Trees.GPLItrees (mktree)
-import Trees.GPLItrees (getmodels)
+import Trees.GPLItrees ( mktree, getmodels )
 
-import Models.Evaluator (meval) 
+import Models.Evaluator (meval)
 import Random.Models (rmodel,rmodelg)
 
 
@@ -65,7 +64,7 @@ getq2g g = let p = gplsat1g g in
 -- |function to render questions and answers to .tex file
 mkps08 :: IO ()
 mkps08 = do
-         (q1q,q1a) <- getq1 
+         (q1q,q1a) <- getq1
          (q2q,q2a) <- getq2
          renderFile "ps08q.tex" (ps08q (q1q,q2q)) -- render questions to tex
          renderFile "ps08a.tex" (ps08a (q1q,q1a) (q2q,q2a)) -- render answers to tex
@@ -89,19 +88,19 @@ getq2 = do
 -- |document preamble
 
 -- |preamble for questions
-ps08pq :: LaTeX 
+ps08pq :: LaTeX
 ps08pq = docSettings <> title "Problem Set 08: MPL Models (Questions)" <> author "" <> date ""
 
 -- |preamble for answers
-ps08pa :: LaTeX 
+ps08pa :: LaTeX
 ps08pa = docSettings <> title "Problem Set 08: MPL Models (Answers)" <> author "" <> date ""
 
 -- |shared document settings
 docSettings :: LaTeX
-docSettings = documentclass [] article 
-            <> usepackage [] amssymb 
-            <> usepackage [utf8] inputenc 
-            <> usepackage [] qtree 
+docSettings = documentclass [] article
+            <> usepackage [] amssymb
+            <> usepackage [utf8] inputenc
+            <> usepackage [] qtree
             <> importGeometry [GWidth (Cm 18)]
 
 -- |final latex document to render

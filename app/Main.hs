@@ -1,16 +1,16 @@
-module Main where
+module Main (main) where
 
-import Control.Concurrent.Async
+import Control.Concurrent.Async ( async, wait )
 
-import ProblemSet01.MakePS01
-import ProblemSet02.MakePS02
-import ProblemSet04.MakePS04
-import ProblemSet07.MakePS07
-import ProblemSet08.MakePS08
-import ProblemSet09.MakePS09
-import ProblemSet10.MakePS10
+import MakePS.MakePS01 ( mkps01 )
+import MakePS.MakePS02 ( mkps02 )
+import MakePS.MakePS04 ( mkps04 )
+import MakePS.MakePS07 ( mkps07 )
+import MakePS.MakePS08 ( mkps08g )
+import MakePS.MakePS09 ( mkps09 )
+import MakePS.MakePS10 ( mkps10 )
 
-import System.Random
+import System.Random ( newStdGen )
 
 main :: IO ()
 main = do 
