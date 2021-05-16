@@ -12,11 +12,10 @@ import MakePS.MakePS08 ( mkps08g )
 import MakePS.MakePS09 ( mkps09g )
 import MakePS.MakePS10 ( mkps10g )
 
-import System.Random ( newStdGen, next, mkStdGen )
+import Options.Applicative
+import Data.Semigroup ((<>))
 
-main = do
-       arg <- getArgs
-       batch (read (head (arg)) :: Int)
+import System.Random ( newStdGen, next, mkStdGen )
 
 basic :: IO ()
 basic = do
@@ -36,3 +35,55 @@ basic1 = do
 
 batch :: Int -> IO ()
 batch n =  replicateConcurrently_ n basic
+
+
+
+main :: IO ()
+main = mode =<< execParser opts
+  where
+    opts = info (sample <**> helper)
+      ( fullDesc
+     <> progDesc "problemsets 0.1.0.0"
+     <> header "problemsets - generate problem sets for logic" )
+
+mode :: MyOptions -> IO ()
+mode (x,_,_,_) = batch x
+
+data MyOptions = MyOptions
+  { bsize      :: Int
+  , psets      :: [Int]
+  , ident      :: Int
+  , file       :: Int
+  }
+
+sample :: Parser MyOptions
+sample = MyOptions
+      <$> option auto
+          ( long "batch-size"
+         <> short 'b'
+         <> help "Batch size."
+         <> showDefault
+         <> value 1
+         <> metavar "INT" )
+      <*> option auto
+          ( long "problem-sets"
+         <> short 'p'
+         <> help "Which problem sets."
+         <> showDefault
+         <> value 1
+         <> metavar "[INT]" )
+      <*> option auto
+          ( long "identifier"
+         <> short 'i'
+         <> help "Problem set identifier."
+         <> showDefault
+         <> value 1
+         <> metavar "INT" )
+      <*> option auto
+          ( long "enthusiasm"
+         <> short 'f'
+         <> help "Identifier file."
+         <> showDefault
+         <> value 1
+         <> metavar "INT" )
+

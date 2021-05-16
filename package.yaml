@@ -27,6 +27,7 @@ dependencies:
 - random
 - async
 - combinatorial
+- optparse-applicative
 
 library:
   source-dirs: src
