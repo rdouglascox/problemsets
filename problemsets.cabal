@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f1df235c6169ac25e25548e67cd6b70438088f5349890d271f473e1b3369572d
+-- hash: 94c21304c40c6125f1a1930018f78a4c534f42484f1a12707188946f460926aa
 
 name:           problemsets
 version:        0.1.0.0
@@ -72,6 +72,7 @@ library
     , base >=4.7 && <5
     , combinatorial
     , containers
+    , optparse-applicative
     , random
   default-language: Haskell2010
 
@@ -89,6 +90,7 @@ executable problemsets-exe
     , base >=4.7 && <5
     , combinatorial
     , containers
+    , optparse-applicative
     , problemsets
     , random
   default-language: Haskell2010
@@ -108,6 +110,7 @@ test-suite problemsets-test
     , base >=4.7 && <5
     , combinatorial
     , containers
+    , optparse-applicative
     , problemsets
     , random
   default-language: Haskell2010
