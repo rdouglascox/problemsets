@@ -22,7 +22,7 @@ import Printing.LaTeXGPLIModel (printmodels)
 
 
 
-import Random.GPLIprop (gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
+import Random.GPLIprop (gpltautstats, gpltautg,gplsatg,gplisat,gplival,prepforvalidity,prepfortaut)
 import Trees.GPLItrees (mktree, getmodels)
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
@@ -30,11 +30,11 @@ import Trees.GPLItrees (mktree, getmodels)
 -- |function to render questions and answers to .tex file
 mkps09g :: RandomGen g => g -> Int -> IO ()
 mkps09g g n = do
-         (q1q,q1a) <- getq1g g1
-         (q2q,q2a) <- getq2g g2
+         let (q1q,q1a) = getq1g g1
+         let (q2q,q2a) = getq2g g2
          renderFile "ps09q.tex" (ps09q (q1q,q2q) n) -- render questions to tex
          renderFile "ps09a.tex" (ps09a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
-        where (g1,g2) = splig g
+        where (g1,g2) = split g
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
@@ -43,7 +43,7 @@ getq1g g = let p = gpltautg g in
            (printprops p, printtree t)
 
 getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
-getq2g g = let p = gplsat g in
+getq2g g = let p = gplsatg g in
            let t = mktree p in
            (printprops p, (printtree t <> quote (printmodels $ getmodels t)))
 
