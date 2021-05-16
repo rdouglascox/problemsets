@@ -32,8 +32,8 @@ mkps09g :: RandomGen g => g -> Int -> IO ()
 mkps09g g n = do
          let (q1q,q1a) = getq1g g1
          let (q2q,q2a) = getq2g g2
-         renderFile "ps09q.tex" (ps09q (q1q,q2q) n) -- render questions to tex
-         renderFile "ps09a.tex" (ps09a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+         renderFile ("ps09" ++ "-" ++ (show n) ++ "q.tex") (ps09q (q1q,q2q) n) -- render questions to tex
+         renderFile ("ps09" ++ "-" ++ (show n) ++ "a.tex") (ps09a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
         where (g1,g2) = split g
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
