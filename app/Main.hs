@@ -1,8 +1,6 @@
 module Main where
 
 import Control.Concurrent.Async ( async, wait,  mapConcurrently_, replicateConcurrently_ )
-import Control.Monad
-import System.Environment
 
 import MakePS.MakePS01 ( mkps01 )
 import MakePS.MakePS02 ( mkps02 )
@@ -13,6 +11,23 @@ import MakePS.MakePS09 ( mkps09g )
 import MakePS.MakePS10 ( mkps10g )
 
 import Options.Applicative
+    ( (<**>),
+      auto,
+      fullDesc,
+      header,
+      help,
+      info,
+      long,
+      metavar,
+      option,
+      progDesc,
+      short,
+      showDefault,
+      strOption,
+      value,
+      execParser,
+      helper,
+      Parser )
 import Data.Semigroup ((<>))
 
 import System.Random ( newStdGen, next, mkStdGen )
@@ -54,8 +69,8 @@ main = mode =<< execParser opts
      <> header "problemsets - generate problem sets for logic" )
 
 mode :: MyOptions -> IO ()
-mode opts | ident(opts) /= 0 = batch2 (bsize(opts)) (ident(opts))
-          | otherwise =  batch (bsize(opts))
+mode opts | ident opts /= 0 = batch2 (bsize opts) (ident opts)
+          | otherwise =  batch (bsize opts)
 
 data MyOptions = MyOptions
   { bsize      :: Int
