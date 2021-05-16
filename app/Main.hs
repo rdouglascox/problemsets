@@ -1,6 +1,6 @@
 module Main where
 
-import Control.Concurrent.Async ( async, wait )
+import Control.Concurrent.Async ( async, wait, (mkps07g seed num) )
 import Control.Monad
 import System.Environment
 
@@ -14,7 +14,7 @@ import MakePS.MakePS10 ( mkps10g )
 
 import System.Random ( newStdGen, next, mkStdGen )
 
-main = do
+main =
        batch 4
 
 basic :: IO ()
@@ -22,20 +22,7 @@ basic = do
        g <- newStdGen    -- get random generator
        let (num,_) = next g  -- use it to get a random number
        let seed = mkStdGen num
-       a <- async mkps01
-       b <- async mkps02
-       c <- async mkps04
-       d <- async (mkps07g seed num)
-       g <- async (mkps08g seed num)
-       e <- async (mkps09g seed num)
-       f <- async (mkps10g seed num)
-       a1 <- wait a
-       b1 <- wait b
-       c1 <- wait c
-       d1 <- wait d
-       e1 <- wait e
-       f1 <- wait f
-       g1 <- wait g
+       mapConcurrently_ id [mkps01,mkps02,mkps04, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
        return()
 
 
