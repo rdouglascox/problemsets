@@ -51,11 +51,11 @@ getq2g g = let p = gplsatg g in
 
 -- |preamble for questions
 ps09pq :: Int -> LaTeX 
-ps09pq n = docSettings <> title "Problem Set 09: GPL Trees (Questions)" <> author "" <> date (fromString $ show n)
+ps09pq n = docSettings <> title "Problem Set 09: GPL Trees (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
 ps09pa :: Int -> LaTeX 
-ps09pa n = docSettings <> title "Problem Set 09: GPL Trees (Answers)" <> author "" <> date (fromString $ show n)
+ps09pa n = docSettings <> title "Problem Set 09: GPL Trees (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX

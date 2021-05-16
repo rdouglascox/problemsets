@@ -49,11 +49,11 @@ getq2g g = let p = gplivalg g in
 
 -- |preamble for questions
 ps10pq :: Int -> LaTeX 
-ps10pq n = docSettings <> title "Problem Set 10: GPLI Trees (Questions)" <> author "" <> date (fromString $ show n)
+ps10pq n = docSettings <> title "Problem Set 10: GPLI Trees (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
 ps10pa :: Int -> LaTeX 
-ps10pa n = docSettings <> title "Problem Set 10: GPLI Trees (Answers)" <> author "" <> date (fromString $ show n)
+ps10pa n = docSettings <> title "Problem Set 10: GPLI Trees (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX

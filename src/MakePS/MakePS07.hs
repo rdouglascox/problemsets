@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS07 (mkps07) where
+module MakePS.MakePS07 (mkps07g) where
 
 
 import Text.LaTeX
@@ -17,43 +17,45 @@ import Printing.LaTeXGPLIProps (printprops,printarg)
 import Printing.LaTeXGPLITrees (printtree) 
 import Printing.LaTeXGPLIModel (printmodels)
 
-import Random.GPLIprop (mplequiv, mplsat, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
+
+import System.Random ( RandomGen(split) )
+
+import Random.GPLIprop (mplequivg, mplsatg, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
 import Trees.GPLItrees (mktree)
 import Trees.GPLItrees (getmodels)
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps07 :: IO ()
-mkps07 = do
-         (q1q,q1a) <- getq1 
-         (q2q,q2a) <- getq2
-         renderFile "ps07q.tex" (ps07q (q1q,q2q)) -- render questions to tex
-         renderFile "ps07a.tex" (ps07a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+mkps07g :: RandomGen g => g -> Int -> IO ()
+mkps07g g n = do
+         let (q1q,q1a) =  getq1g g1 
+         let (q2q,q2a) = getq2g g2
+         renderFile "ps07q.tex" (ps07q (q1q,q2q) n) -- render questions to tex
+         renderFile "ps07a.tex" (ps07a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+         where (g1,g2) = split g
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
-getq1 :: IO (LaTeX,LaTeX)
-getq1 = do
-        p <- mplequiv
-        let t = mktree (prepforequiv p)
-        return (printprops p, printtree t)
+getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
+getq1g g  =  let p = mplequivg g in
+             let t = mktree (prepforequiv p) in
+             (printprops p, printtree t)
 
-getq2 :: IO (LaTeX,LaTeX)
-getq2 = do
-        p <- mplsat
-        let t = mktree p
-        return (printprops p, printtree t <> quote (printmodels $ getmodels t))
+getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
+getq2g g = let  p = mplsatg g in 
+           let t = mktree p in
+           (printprops p, printtree t <> quote (printmodels $ getmodels t))
 
 -- |document preamble
 
 -- |preamble for questions
-ps07pq :: LaTeX 
-ps07pq = docSettings <> title "Problem Set 07: MPL Trees (Questions)" <> author "" <> date ""
+ps07pq :: Int -> LaTeX 
+ps07pq n = docSettings <> title "Problem Set 07: MPL Trees (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
-ps07pa :: LaTeX 
-ps07pa = docSettings <> title "Problem Set 07: MPL Trees (Answers)" <> author "" <> date ""
+ps07pa :: Int -> LaTeX 
+ps07pa n = docSettings <> title "Problem Set 07: MPL Trees (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -66,12 +68,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps07q :: (LaTeX,LaTeX) -> LaTeX
-ps07q x = ps07pq <> document (maketitle <> questions x)
+ps07q :: (LaTeX,LaTeX) -> Int ->  LaTeX
+ps07q x n = ps07pq n <> document (maketitle <> questions x)
 
 -- |with answers
-ps07a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps07a x y = ps07pa <> document (maketitle <> answers x y)
+ps07a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> Int -> LaTeX
+ps07a x y n = ps07pa n <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 

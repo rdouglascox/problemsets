@@ -5,7 +5,7 @@ import Control.Concurrent.Async ( async, wait )
 import MakePS.MakePS01 ( mkps01 )
 import MakePS.MakePS02 ( mkps02 )
 import MakePS.MakePS04 ( mkps04 )
-import MakePS.MakePS07 ( mkps07 )
+import MakePS.MakePS07 ( mkps07g )
 import MakePS.MakePS08 ( mkps08g )
 import MakePS.MakePS09 ( mkps09g )
 import MakePS.MakePS10 ( mkps10g )
@@ -20,7 +20,7 @@ main = do
        a <- async mkps01
        b <- async mkps02
        c <- async mkps04
-       d <- async mkps07
+       d <- async (mkps07g seed num)
        g <- async (mkps08g seed num)
        e <- async (mkps09g seed num)
        f <- async (mkps10g seed num)
