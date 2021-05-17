@@ -1,6 +1,8 @@
 module Main where
 
 import Control.Concurrent.Async ( async, wait,  mapConcurrently_, replicateConcurrently_ )
+import Data.List
+import Data.Maybe
 
 import MakePS.MakePS01 ( mkps01g )
 import MakePS.MakePS02 ( mkps02g )
@@ -49,7 +51,10 @@ basic2 num = do
        mapConcurrently_ id (allsets seed num)
        return()
 
+
 allsets seed num = [mkps01g seed num, mkps02g seed num, mkps04g seed num,mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
+
+get ns xs = map (\n -> (fromJust $ lookup n (zip [1..] xs))) ns
 
 batch2 :: Int -> Int -> IO ()
 batch2 n1 n2 =  replicateConcurrently_ n1 (basic2 n2)
