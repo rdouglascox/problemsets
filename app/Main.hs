@@ -34,16 +34,16 @@ import Data.Semigroup ((<>))
 
 import System.Random ( newStdGen, next, mkStdGen )
 
-basic :: IO ()
-basic = do
+basic :: [Int] -> IO ()
+basic ns = do
        g <- newStdGen    -- get random generator
        let (num,_) = next g  -- use it to get a random number
        let seed = mkStdGen num
-       mapConcurrently_ id (allsets seed num)
+       mapConcurrently_ id (get ns (allsets seed num))
        return()
 
-batch :: Int -> IO ()
-batch n =  replicateConcurrently_ n basic
+batch :: Int -> [Int] -> IO ()
+batch n ns =  replicateConcurrently_ n (basic ns)
 
 basic2 :: Int -> IO ()
 basic2 num = do
@@ -52,7 +52,7 @@ basic2 num = do
        return()
 
 
-allsets seed num = [mkps01g seed num, mkps02g seed num, mkps04g seed num,mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
+allsets seed num = [mkps01g seed num, mkps02g seed num, mkps02g seed num, mkps04g seed num, mkps02g seed num, mkps02g seed num, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
 
 get ns xs = map (\n -> (fromJust $ lookup n (zip [1..] xs))) ns
 
@@ -69,7 +69,7 @@ main = mode =<< execParser opts
 
 mode :: MyOptions -> IO ()
 mode opts | ident opts /= 0 = batch2 (bsize opts) (ident opts)
-          | otherwise =  batch (bsize opts)
+          | otherwise =  batch (bsize opts) (psets opts)
 
 data MyOptions = MyOptions
   { bsize      :: Int
@@ -92,7 +92,7 @@ sample = MyOptions
          <> short 'p'
          <> help "Which problem sets"
          <> showDefault
-         <> value [1]
+         <> value [1,2,4,7,8,9,10]
          <> metavar "[INT]" )
       <*> option auto
           ( long "identifier"
