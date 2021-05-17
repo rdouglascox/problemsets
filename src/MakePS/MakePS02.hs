@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS02 (mkps02) where
+module MakePS.MakePS02 (mkps02g) where
 
 
 import Text.LaTeX
@@ -17,7 +17,9 @@ import Printing.LaTeXPLProps
 import Printing.LaTeXTables
 import Tables.Tables
 
-import Random.PLprops
+import Random.PLprops ( plvalid2g, plequivsg )
+
+import System.Random ( RandomGen(split) )
 
 -- |tree building
 
@@ -25,36 +27,34 @@ import Random.PLprops
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps02 :: IO ()
-mkps02 = do
-         (q1q,q1a) <- getq1 
-         (q2q,q2a) <- getq2
-         renderFile "ps02q.tex" (ps02q (q1q,q2q)) -- render questions to tex
-         renderFile "ps02a.tex" (ps02a (q1q,q1a) (q2q,q2a)) -- render answers to tex
-
+mkps02g :: RandomGen g => g -> Int -> IO ()
+mkps02g g n = do
+              let (q1q,q1a) = getq1g g1
+              let (q2q,q2a) = getq2g g2
+              renderFile "ps02q.tex" (ps02q (q1q,q2q) n) -- render questions to tex
+              renderFile "ps02a.tex" (ps02a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+                  where (g1,g2) = split g
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
-getq1 :: IO (LaTeX,LaTeX)
-getq1 = do
-        p <- plequivs
-        let t = makeRawTable p
-        return (printprops p, makeTable t)
+getq1g :: RandomGen g => g -> (LaTeX,LaTeX)
+getq1g g = let p = plequivsg g in
+           let t = makeRawTable p in
+           (printprops p, makeTable t)
 
-getq2 :: IO (LaTeX,LaTeX)
-getq2 = do
-        p <- plvalid2
-        let t = makeRawTable p
-        return (printarg p, makeTable t)
+getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
+getq2g g = let p = plvalid2g g in
+           let t = makeRawTable p in
+           (printarg p, makeTable t)
 
 -- |document preamble
 
 -- |preamble for questions
-ps02pq :: LaTeX 
-ps02pq = docSettings <> title "Problem Set 02: PL Tables (Questions)" <> author "" <> date ""
+ps02pq :: Int -> LaTeX 
+ps02pq n = docSettings <> title "Problem Set 02: PL Tables (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
-ps02pa :: LaTeX 
-ps02pa = docSettings <> title "Problem Set 02: PL Tables (Answers)" <> author "" <> date ""
+ps02pa :: Int -> LaTeX 
+ps02pa n = docSettings <> title "Problem Set 02: PL Tables (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -67,12 +67,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps02q :: (LaTeX,LaTeX) -> LaTeX
-ps02q x = ps02pq <> document (maketitle <> questions x)
+ps02q :: (LaTeX,LaTeX) -> Int -> LaTeX
+ps02q x n = ps02pq n <> document (maketitle <> questions x)
 
 -- |with answers
-ps02a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps02a x y = ps02pa <> document (maketitle <> answers x y)
+ps02a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> Int -> LaTeX
+ps02a x y n = ps02pa n <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 

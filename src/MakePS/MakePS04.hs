@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS04 (mkps04) where
+module MakePS.MakePS04 (mkps04g) where
 
 
 import Text.LaTeX
@@ -16,43 +16,43 @@ import Text.LaTeX.Base.Math
 import Printing.LaTeXPLProps (printprops,printarg) 
 import Printing.LaTeXPLTrees (printtree) 
 
-import Random.PLprops (plcontraries, prepfc, plvalid, prepforvalidity)
+import System.Random ( RandomGen(split) )
+
+import Random.PLprops (plcontrariesg, prepfc, plvalidg, prepforvalidity)
 import Trees.PLtrees (mktree)
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps04 :: IO ()
-mkps04 = do
-         (q1q,q1a1,q1a2) <- getq1 
-         (q2q,q2a) <- getq2
-         renderFile "ps04q.tex" (ps04q (q1q,q2q)) -- render questions to tex
-         renderFile "ps04a.tex" (ps04a (q1q,q1a1,q1a2) (q2q,q2a)) -- render answers to tex
-
+mkps04g :: RandomGen g => g -> Int -> IO ()
+mkps04g g n = do
+              let (q1q,q1a1,q1a2) = getq1g g1
+              let (q2q,q2a) = getq2g g2
+              renderFile ("ps04" ++ "-" ++ (show n) ++ "q.tex") (ps04q (q1q,q2q) n) -- render questions to tex
+              renderFile ("ps04" ++ "-" ++ (show n) ++ "a.tex") (ps04a (q1q,q1a1,q1a2) (q2q,q2a) n) -- render answers to tex
+                  where (g1,g2) = split g
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
-getq1 :: IO (LaTeX,LaTeX,LaTeX)
-getq1 = do
-        p <- plcontraries
-        let t1 = mktree (prepfc p)
-        let t2 = mktree p
-        return (printprops p, printtree t2, printtree t1)
+getq1g :: RandomGen g => g -> (LaTeX,LaTeX,LaTeX)
+getq1g g = let p = plcontrariesg g in
+          let t1 = mktree (prepfc p) in
+          let t2 = mktree p in
+          (printprops p, printtree t2, printtree t1)
 
-getq2 :: IO (LaTeX,LaTeX)
-getq2 = do
-        p <- plvalid
-        let t = mktree (prepforvalidity p)
-        return (printprops p, printtree t)
+getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
+getq2g g = let p = plvalidg g in
+           let t = mktree (prepforvalidity p) in
+           (printprops p, printtree t)
 
 -- |document preamble
 
 -- |preamble for questions
-ps04pq :: LaTeX 
-ps04pq = docSettings <> title "Problem Set 04: PL Trees (Questions)" <> author "" <> date ""
+ps04pq :: Int -> LaTeX 
+ps04pq n = docSettings <> title "Problem Set 04: PL Trees (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
-ps04pa :: LaTeX 
-ps04pa = docSettings <> title "Problem Set 04: PL Trees (Answers)" <> author "" <> date ""
+ps04pa :: Int -> LaTeX 
+ps04pa n = docSettings <> title "Problem Set 04: PL Trees (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -65,12 +65,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps04q :: (LaTeX,LaTeX) -> LaTeX
-ps04q x = ps04pq <> document (maketitle <> questions x)
+ps04q :: (LaTeX,LaTeX) -> Int -> LaTeX
+ps04q x n = ps04pq n <> document (maketitle <> questions x)
 
 -- |with answers
-ps04a :: (LaTeX,LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps04a x y = ps04pa <> document (maketitle <> answers' x y)
+ps04a :: (LaTeX,LaTeX,LaTeX) -> (LaTeX,LaTeX) -> Int ->  LaTeX
+ps04a x y n = ps04pa n <> document (maketitle <> answers' x y)
 
 -- |DOCUMENT BODY
 

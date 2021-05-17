@@ -7,6 +7,39 @@ import Data.List
 import Printing.PLprop
 import Trees.PLtrees
 
+-- non IO versions
+
+plcontrariesg :: RandomGen g => g -> [Prop]
+plcontrariesg gen  = do
+                     head $ take 1 $ rcont' gen localSettings
+                        where localSettings = dSettings {numProps = 2
+                                                        , basics = "PQ"
+                                                        , maxConstr = 3
+                                                        ,includeCons = [NegConstr Negation
+                                                        , CondConstr Conditional
+                                                        , ConjConstr Conjunction
+                                                        , DisjConstr Disjunction]
+                                                        }
+
+plvalidg :: RandomGen g => g -> [Prop]
+plvalidg gen = do
+          head $ take 1 $ rvalid gen localSettings
+              where localSettings = dSettings {numProps = 3,minBranchSet = 4,maxBranchSet =5,maxConstr = 5}
+                                    
+
+plvalid2g :: RandomGen g => g -> [Prop]
+plvalid2g gen = do
+            head $ take 1 $ rvalid gen localSettings
+                where localSettings = dSettings {numProps = 3
+                                     ,basics = "XYZ"
+                                     ,minConstr = 2
+                                     ,maxConstr = 3
+                                     }
+
+plequivsg :: RandomGen g => g -> [Prop]
+plequivsg gen = do
+               head $ take 1 $ requivs gen localSettings
+                    where localSettings = dSettings {numProps = 2, basics = "LM", minBranchSet = 0}
 
 -- for trees
 
