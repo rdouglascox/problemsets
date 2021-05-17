@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Translations.RandomSentences (qa, qanda, rsentences, pltranslation) where
+module Translations.RandomSentences (qa, qanda, rsentences, pltranslationg) where
 
 import Translations.Sentences
 import System.Random
@@ -32,6 +32,15 @@ pltranslation = do
     let translation = printprop $ monadicLeftParse $ findandreplace' (makeTranslation s) (makeGlossary' (makeGlossary s))
     return (sentence, glossary <> newline <> newline <> translation)
 
+pltranslationg :: RandomGen g => g -> (LaTeX,LaTeX)
+pltranslationg g = 
+    let s = rSentence g in
+    let sentence = fromString $ ((caps . printSentence) s) in
+    let glossary = mconcat $ intersperse newline $ map fromString $ printGlossary' (makeGlossary' (makeGlossary s)) in
+    let translation = printprop $ monadicLeftParse $ findandreplace' (makeTranslation s) (makeGlossary' (makeGlossary s)) in
+    (sentence, glossary <> newline <> newline <> translation)
+
+
 rsentences = do
     s <- rSentence <$> newStdGen
     putStrLn ((caps . printSentence) s)
@@ -48,6 +57,10 @@ qanda = do
 qa = do 
     s <- rSentence <$> newStdGen
     return (((caps . printSentence) s), (printGlossary' (makeGlossary' (makeGlossary s))), findandreplace' (makeTranslation s) (makeGlossary' (makeGlossary s)))
+
+qag g = 
+    let s = rSentence g in
+    (((caps . printSentence) s), (printGlossary' (makeGlossary' (makeGlossary s))), findandreplace' (makeTranslation s) (makeGlossary' (makeGlossary s)))
 
 
 caps :: String -> String

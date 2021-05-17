@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS01 (mkps01) where
+module MakePS.MakePS01 (mkps01g) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -12,37 +12,39 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
+import System.Random ( RandomGen(split) )
 
 import Translations.RandomSentences
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
-mkps01 :: IO ()
-mkps01 = do
-         (q1q,q1a) <- getq1 
-         (q2q,q2a) <- getq2
-         renderFile "ps01q.tex" (ps01q (q1q,q2q)) -- render questions to tex
-         renderFile "ps01a.tex" (ps01a (q1q,q1a) (q2q,q2a)) -- render answers to tex
+mkps01g :: RandomGen g => g -> Int -> IO ()
+mkps01g g n  = do
+         let (q1q,q1a) = getq1g g1
+         let (q2q,q2a) = getq2g g2
+         renderFile ("ps01" ++ "-" ++ (show n) ++ "q.tex") (ps01q (q1q,q2q) n) -- render questions to tex
+         renderFile ("ps01" ++ "-" ++ (show n) ++ "a.tex") (ps01a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+              where (g1,g2) = split g
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
-getq1 :: IO (LaTeX,LaTeX)
-getq1 = pltranslation
+getq1g :: RandomGen g => g -> (LaTeX,LaTeX)
+getq1g = pltranslationg 
 
-getq2 :: IO (LaTeX,LaTeX)
-getq2 = pltranslation 
+getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
+getq2g = pltranslationg
 
 
 -- |document preamble
 
 -- |preamble for questions
-ps01pq :: LaTeX 
-ps01pq = docSettings <> title "Problem Set 01: PL Translations (Questions)" <> author "" <> date ""
+ps01pq :: Int -> LaTeX 
+ps01pq n = docSettings <> title "Problem Set 01: PL Translations (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
-ps01pa :: LaTeX 
-ps01pa = docSettings <> title "Problem Set 01: PL Translations (Answers)" <> author "" <> date ""
+ps01pa :: Int -> LaTeX 
+ps01pa n = docSettings <> title "Problem Set 01: PL Translations (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
@@ -55,12 +57,12 @@ docSettings = documentclass [] article
 -- |final latex document to render
 
 -- |only questions
-ps01q :: (LaTeX,LaTeX) -> LaTeX
-ps01q x = ps01pq <> document (maketitle <> questions x)
+ps01q :: (LaTeX,LaTeX) -> Int ->  LaTeX
+ps01q x n = ps01pq n <> document (maketitle <> questions x)
 
 -- |with answers
-ps01a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> LaTeX
-ps01a x y = ps01pa <> document (maketitle <> answers x y)
+ps01a :: (LaTeX,LaTeX) -> (LaTeX,LaTeX) -> Int -> LaTeX
+ps01a x y n = ps01pa n <> document (maketitle <> answers x y)
 
 -- |DOCUMENT BODY
 

@@ -2,7 +2,7 @@ module Main where
 
 import Control.Concurrent.Async ( async, wait,  mapConcurrently_, replicateConcurrently_ )
 
-import MakePS.MakePS01 ( mkps01 )
+import MakePS.MakePS01 ( mkps01g )
 import MakePS.MakePS02 ( mkps02g )
 import MakePS.MakePS04 ( mkps04g )
 import MakePS.MakePS07 ( mkps07g )
@@ -37,7 +37,7 @@ basic = do
        g <- newStdGen    -- get random generator
        let (num,_) = next g  -- use it to get a random number
        let seed = mkStdGen num
-       mapConcurrently_ id [mkps02g seed num, mkps04g seed num,mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
+       mapConcurrently_ id (allsets seed num)
        return()
 
 batch :: Int -> IO ()
@@ -46,8 +46,10 @@ batch n =  replicateConcurrently_ n basic
 basic2 :: Int -> IO ()
 basic2 num = do
        let seed = mkStdGen num
-       mapConcurrently_ id [mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
+       mapConcurrently_ id (allsets seed num)
        return()
+
+allsets seed num = [mkps01g seed num, mkps02g seed num, mkps04g seed num,mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
 
 batch2 :: Int -> Int -> IO ()
 batch2 n1 n2 =  replicateConcurrently_ n1 (basic2 n2)
