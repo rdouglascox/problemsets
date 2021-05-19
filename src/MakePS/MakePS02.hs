@@ -17,7 +17,9 @@ import Printing.LaTeXPLProps
 import Printing.LaTeXTables
 import Tables.Tables
 
-import Random.PLprops ( plvalid2g, plequivsg )
+import Random.PLprops ( plvalidg, plequivsg )
+
+import Settings.PLSettings
 
 import System.Random ( RandomGen(split) )
 
@@ -37,12 +39,12 @@ mkps02g g n = do
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1g :: RandomGen g => g -> (LaTeX,LaTeX)
-getq1g g = let p = plequivsg g in
+getq1g g = let p = plequivsg g settingPS02a in
            let t = makeRawTable p in
            (printprops p, makeTable t)
 
 getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
-getq2g g = let p = plvalid2g g in
+getq2g g = let p = plvalidg g settingPS02b in
            let t = makeRawTable p in
            (printarg p, makeTable t)
 

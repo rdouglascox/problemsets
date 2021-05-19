@@ -16,6 +16,8 @@ import Text.LaTeX.Base.Math
 import Printing.LaTeXPLProps (printprops,printarg) 
 import Printing.LaTeXPLTrees (printtree) 
 
+import Settings.PLSettings
+
 import System.Random ( RandomGen(split) )
 
 import Random.PLprops (plcontrariesg, prepfc, plvalidg, prepforvalidity)
@@ -34,13 +36,13 @@ mkps04g g n = do
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1g :: RandomGen g => g -> (LaTeX,LaTeX,LaTeX)
-getq1g g = let p = plcontrariesg g in
+getq1g g = let p = plcontrariesg g settingPS04a in
           let t1 = mktree (prepfc p) in
           let t2 = mktree p in
           (printprops p, printtree t2, printtree t1)
 
 getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
-getq2g g = let p = plvalidg g in
+getq2g g = let p = plvalidg g settingPS04b in
            let t = mktree (prepforvalidity p) in
            (printprops p, printtree t)
 

@@ -7,38 +7,27 @@ import Data.List
 import Printing.PLprop
 import Trees.PLtrees
 
+import Settings.PLSettings
+
 -- non IO versions
 
-plcontrariesg :: RandomGen g => g -> [Prop]
-plcontrariesg gen  = do
-                     head $ take 1 $ rcont' gen localSettings
-                        where localSettings = dSettings {numProps = 2
-                                                        , basics = "PQ"
-                                                        , maxConstr = 3
-                                                        ,includeCons = [NegConstr Negation
-                                                        , CondConstr Conditional
-                                                        , ConjConstr Conjunction
-                                                        , DisjConstr Disjunction]
-                                                        }
+plcontrariesg :: RandomGen g => g -> Settings -> [Prop]
+plcontrariesg gen s = do
+                     head $ take 1 $ rcont' gen s
 
-plvalidg :: RandomGen g => g -> [Prop]
-plvalidg gen = do
-          head $ take 1 $ rvalid gen localSettings
-              where localSettings = dSettings {numProps = 3,minBranchSet = 4,maxBranchSet =5,maxConstr = 5}
+plvalidg :: RandomGen g => g -> Settings -> [Prop]
+plvalidg gen s = do
+          head $ take 1 $ rvalid gen s
+              
                                     
+plvalid2g :: RandomGen g => g -> Settings -> [Prop]
+plvalid2g gen s = do
+            head $ take 1 $ rvalid gen s
 
-plvalid2g :: RandomGen g => g -> [Prop]
-plvalid2g gen = do
-            head $ take 1 $ rvalid gen localSettings
-                where localSettings = dSettings {numProps = 3
-                                     ,basics = "XYZ"
-                                     ,minConstr = 2
-                                     ,maxConstr = 3
-                                     }
 
-plequivsg :: RandomGen g => g -> [Prop]
-plequivsg gen = do
-               head $ take 1 $ requivs gen localSettings
+plequivsg :: RandomGen g => g -> Settings -> [Prop]
+plequivsg gen s = do
+               head $ take 1 $ requivs gen s
                     where localSettings = dSettings {numProps = 2, basics = "LM", minBranchSet = 0}
 
 -- for trees
@@ -48,14 +37,7 @@ plcontraries = do
                gen <- newStdGen
                let prop = head $ take 1 $ rcont' gen localSettings
                return (prop)
-    where localSettings = dSettings {numProps = 2
-                                    , basics = "PQ"
-                                    , maxConstr = 3
-                                    ,includeCons = [NegConstr Negation
-                                                 , CondConstr Conditional
-                                                 , ConjConstr Conjunction
-                                                 , DisjConstr Disjunction]
-                                    }
+ 
  
 prepfc :: [Prop] -> [Prop]
 prepfc [l,r] = [(Negation (Conjunction l r))]
@@ -136,47 +118,7 @@ rsplitAt g xs = let y = (fst $ randomR (0,(length xs)) g) in
 
 -- |Functions to construct a proposition from a list of random constructors
 
-data Constructor = NegConstr (Prop -> Prop)
-                 | ConjConstr (Prop -> Prop -> Prop)
-                 | DisjConstr (Prop -> Prop -> Prop)
-                 | CondConstr (Prop -> Prop -> Prop)
-                 | BiconConstr (Prop -> Prop -> Prop)
 
-instance Eq Constructor where
-    NegConstr _ == NegConstr _ = True
-    ConjConstr _ == ConjConstr _ = True
-    DisjConstr _ == DisjConstr _ = True
-    CondConstr _ == CondConstr _ = True
-    BiconConstr _ == BiconConstr _ = True
-    _ == _ = False
-
-data Settings = Settings {minConstr :: Int -- minimum connectives in props
-                         ,maxConstr :: Int -- maximum connectives in props
-                         ,numProps :: Int -- how many propositions at a time
-                         ,includeCons :: [Constructor] -- include connectives (possibly)
-                         ,excludeCons :: [Constructor] -- exclude connectives (certainly
-                         ,basics :: String -- basics
-                         ,minBranchSet :: Int -- minimum tree proof branches
-                         ,maxBranchSet :: Int -- maximum tree proof branches
-                         ,minPathSet :: Int -- minium path lenght
-                         ,maxPathSet :: Int -- maximum path length
-                         }
-
-dSettings = Settings {minConstr = 2
-                     ,maxConstr = 3
-                     ,numProps = 3
-                     ,includeCons = [NegConstr Negation
-                                  , CondConstr Conditional
-                                  , ConjConstr Conjunction
-                                  , DisjConstr Disjunction
-                                  , BiconConstr Biconditional]
-                     ,excludeCons = []
-                     ,basics = "ABC"
-                     ,minBranchSet = 2
-                     ,maxBranchSet = 100
-                     ,minPathSet = 0
-                     ,maxPathSet = 100
-                     }
 
 constructors :: Settings -> [Constructor]
 constructors s = (includeCons s) \\ (excludeCons s)
