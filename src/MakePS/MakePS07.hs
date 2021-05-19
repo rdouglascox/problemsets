@@ -43,7 +43,9 @@ import Printing.LaTeXGPLIModel (printmodels)
 
 import System.Random ( RandomGen(split) )
 
-import Random.GPLIprop (mplequivg, mplsatg, prepforequiv, gpltautstats, gpltaut,gplsat,gplisat,gplival,prepforvalidity,prepfortaut)
+import Settings.GPLISettings ( settingPS07b, settingPS07a )
+
+import Random.GPLIprop (mplequivg, mplsatg, prepforequiv,prepforvalidity,prepfortaut)
 import Trees.GPLItrees ( mktree, getmodels )
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
@@ -60,12 +62,12 @@ mkps07g g n = do
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
-getq1g g  =  let p = mplequivg g in
+getq1g g  =  let p = mplequivg g settingPS07a in
              let t = mktree (prepforequiv p) in
              (printprops p, printtree t)
 
 getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
-getq2g g = let  p = mplsatg g in
+getq2g g = let  p = mplsatg g settingPS07b in
            let t = mktree p in
            (printprops p, printtree t <> quote (printmodels $ getmodels t))
 
