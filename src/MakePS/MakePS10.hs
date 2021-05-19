@@ -22,6 +22,8 @@ import Printing.LaTeXGPLIModel (printmodel, printmodellns, printmodels)
 import Random.GPLIprop (gplisatg,gplivalg,prepforvalidity)
 import Trees.GPLItrees (mktree, getmodel, getmodels)
 
+import Settings.GPLISettings ( settingPS10b, settingPS10a )
+
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
@@ -36,12 +38,12 @@ mkps10g g n = do
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
-getq1g g = let p = gplisatg g in
+getq1g g = let p = gplisatg g settingPS10a in
            let t = mktree p in
            (printprops p, printtree t <> quote (printmodels $ getmodels t) )
 
 getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
-getq2g g = let p = gplivalg g in
+getq2g g = let p = gplivalg g settingPS10b in
            let t = mktree (prepforvalidity p) in
            (printarg p, printtree t)
 

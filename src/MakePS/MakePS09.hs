@@ -20,9 +20,9 @@ import Printing.LaTeXGPLIProps (printprops,printarg)
 import Printing.LaTeXGPLITrees (printtree) 
 import Printing.LaTeXGPLIModel (printmodels)
 
+import Settings.GPLISettings
 
-
-import Random.GPLIprop (gpltautstats, gpltautg,gplsatg,gplisat,gplival,prepforvalidity,prepfortaut)
+import Random.GPLIprop (gpltautg,gplsatg,prepforvalidity,prepfortaut)
 import Trees.GPLItrees (mktree, getmodels)
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
@@ -38,12 +38,12 @@ mkps09g g n = do
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
-getq1g g = let p = gpltautg g in
+getq1g g = let p = gpltautg g settingPS09a in
            let t = mktree (prepfortaut p) in
            (printprops p, printtree t)
 
 getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
-getq2g g = let p = gplsatg g in
+getq2g g = let p = gplsatg g settingPS09b in
            let t = mktree p in
            (printprops p, (printtree t <> quote (printmodels $ getmodels t)))
 

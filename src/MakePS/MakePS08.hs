@@ -20,7 +20,9 @@ import Printing.LaTeXGPLIModel (printmodels,printmodellns)
 
 import System.Random ( RandomGen(split) )
 
-import Random.GPLIprop (gplsat1, mplsat1, gplsat1g, mplsat1g)
+import Settings.GPLISettings
+
+import Random.GPLIprop (gplsatg, mplsatg)
 
 import Trees.GPLItrees ( mktree, getmodels )
 
@@ -40,13 +42,13 @@ mkps08g g n = do
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
 getq1g :: RandomGen g => g ->  (LaTeX,LaTeX)
-getq1g g = let p = mplsat1g g in
+getq1g g = let p = mplsatg g settingPS08a in
            let m = rmodelg g p in
            let a = meval p m in
            (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
 
 getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
-getq2g g = let p = gplsat1g g in
+getq2g g = let p = gplsatg g settingPS08b in
            let m = rmodelg g p in
            let a = meval p m in
            (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
