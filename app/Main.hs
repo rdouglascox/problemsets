@@ -45,19 +45,18 @@ basic ns = do
 batch :: Int -> [Int] -> IO ()
 batch n ns =  replicateConcurrently_ n (basic ns)
 
-basic2 :: Int -> IO ()
-basic2 num = do
-       let seed = mkStdGen num
-       mapConcurrently_ id (allsets seed num)
-       return()
-
+basic2 :: [Int] -> Int -> IO ()
+basic2 ns num = do
+          let seed = mkStdGen num
+          mapConcurrently_ id (get ns (allsets seed num))
+          return()
 
 allsets seed num = [mkps01g seed num, mkps02g seed num, mkps02g seed num, mkps04g seed num, mkps02g seed num, mkps02g seed num, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
 
 get ns xs = map (\n -> (fromJust $ lookup n (zip [1..] xs))) ns
 
-batch2 :: Int -> Int -> IO ()
-batch2 n1 n2 =  replicateConcurrently_ n1 (basic2 n2)
+batch2 :: Int -> [Int] -> [Int] -> IO ()
+batch2 n1 ns n2 = mapConcurrently_ (\x -> replicateConcurrently_ n1 (basic2 ns x)) n2
 
 main :: IO ()
 main = mode =<< execParser opts
@@ -68,14 +67,13 @@ main = mode =<< execParser opts
      <> header "problemsets - generate problem sets for logic" )
 
 mode :: MyOptions -> IO ()
-mode opts | ident opts /= 0 = batch2 (bsize opts) (ident opts)
+mode opts | not (null (ident opts)) = batch2 (bsize opts) (psets opts) (ident opts)
           | otherwise =  batch (bsize opts) (psets opts)
 
 data MyOptions = MyOptions
   { bsize      :: Int
   , psets      :: [Int]
-  , ident      :: Int
-  , file       :: String
+  , ident      :: [Int]
   }
 
 sample :: Parser MyOptions
@@ -99,13 +97,7 @@ sample = MyOptions
          <> short 'i'
          <> help "Problem set identifier"
          <> showDefault
-         <> value 0
-         <> metavar "INT" )
-      <*> strOption
-          ( long "file"
-         <> short 'f'
-         <> help "Identifier file"
-         <> showDefault
-         <> value "identifiers.txt"
-         <> metavar "FILENAME" )
+         <> value []
+         <> metavar "[INT]" )
+
 

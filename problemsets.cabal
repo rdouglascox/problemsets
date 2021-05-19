@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 94c21304c40c6125f1a1930018f78a4c534f42484f1a12707188946f460926aa
+-- hash: 46dc23e62332a715da31344791589b5b78842bafb0f2fdeab02c4fb4b2d9c8b0
 
 name:           problemsets
 version:        0.1.0.0
@@ -76,7 +76,7 @@ library
     , random
   default-language: Haskell2010
 
-executable problemsets-exe
+executable problemsets
   main-is: Main.hs
   other-modules:
       Paths_problemsets

@@ -33,7 +33,7 @@ library:
   source-dirs: src
 
 executables:
-  problemsets-exe:
+  problemsets:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
