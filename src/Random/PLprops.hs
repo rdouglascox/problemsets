@@ -31,14 +31,7 @@ plequivsg gen s = do
                     where localSettings = dSettings {numProps = 2, basics = "LM", minBranchSet = 0}
 
 -- for trees
-
-plcontraries :: IO ([Prop])
-plcontraries = do
-               gen <- newStdGen
-               let prop = head $ take 1 $ rcont' gen localSettings
-               return (prop)
- 
- 
+  
 prepfc :: [Prop] -> [Prop]
 prepfc [l,r] = [(Negation (Conjunction l r))]
 
