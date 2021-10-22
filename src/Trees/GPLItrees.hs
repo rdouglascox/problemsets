@@ -219,8 +219,8 @@ data TreeRule = DoubleNegationRule
               | ConditionalRule
               | BiconditionalRule
               | NegatedBiconditionalRule
-              | UniversalRule
               | ExistentialRule
+              | UniversalRule
               | SubstitutionRule
               deriving (Show,Eq,Ord)
 
@@ -228,8 +228,8 @@ data TreeRule = DoubleNegationRule
 getRule :: PTree -> Maybe TreeRule
 getRule t | null rules = Nothing
           | plrules rules = Just $ minimum rules
-          | (minimum rules) == UniversalRule && uniunsat t = Just $ UniversalRule
           | (minimum rules) == ExistentialRule = Just $ ExistentialRule
+          | (minimum rules) == UniversalRule && uniunsat t = Just $ UniversalRule
           | null (rulessansuni rules) = Nothing 
           | (minimum (rulessansuni rules)) == SubstitutionRule && idunsat t = Just $ SubstitutionRule
           | otherwise = Nothing 
