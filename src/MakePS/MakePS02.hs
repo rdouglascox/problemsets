@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS02 (mkps02g) where
+module MakePS.MakePS02 (mkps02g, mkps02string) where
 
 
 import Text.LaTeX
@@ -21,10 +21,22 @@ import Random.PLprops ( plvalidg, plequivsg )
 
 import Settings.PLSettings
 
-import System.Random ( RandomGen(split) )
+import System.Random 
 
 -- |tree building
 
+-- | just give me a string man!
+mkps02string :: IO (String, String)
+mkps02string = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps02q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps02a (q1q,q1a) (q2q,q2a) num)
+       return (questionstring,answerstring)
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 

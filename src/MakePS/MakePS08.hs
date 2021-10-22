@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS08 (mkps08g) where
+module MakePS.MakePS08 (mkps08g, mkps08string) where
 
 
 import Text.LaTeX
@@ -18,7 +18,7 @@ import Printing.LaTeXGPLIProps (printprops,printarg)
 import Printing.LaTeXGPLITrees (printtree)
 import Printing.LaTeXGPLIModel (printmodels,printmodellns)
 
-import System.Random ( RandomGen(split) )
+import System.Random
 
 import Settings.GPLISettings
 
@@ -28,6 +28,19 @@ import Trees.GPLItrees ( mktree, getmodels )
 
 import Models.Evaluator (meval)
 import Random.Models (rmodel,rmodelg)
+
+-- | just give me a string man!
+mkps08string :: IO (String, String)
+mkps08string = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps08q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps08a (q1q,q1a) (q2q,q2a) num)
+       return (questionstring,answerstring)
 
 
 -- |function to render questions and answers to .tex file

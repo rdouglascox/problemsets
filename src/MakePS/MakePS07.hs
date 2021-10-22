@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS07 (mkps07g) where
+module MakePS.MakePS07 (mkps07g, mkps07string) where
 
 import Text.LaTeX
     ( IsString(fromString),
@@ -36,12 +36,12 @@ import Text.LaTeX.Packages.Geometry
 import Text.LaTeX.Packages.Inputenc ( inputenc, utf8 )   
 import Text.LaTeX.Packages.Trees.Qtree ( qtree )
 import Text.LaTeX.Packages.AMSSymb ( amssymb )
-
+import Text.LaTeX.Base.Pretty
 import Printing.LaTeXGPLIProps (printprops,printarg)
 import Printing.LaTeXGPLITrees (printtree)
 import Printing.LaTeXGPLIModel (printmodels)
 
-import System.Random ( RandomGen(split) )
+import System.Random
 
 import Settings.GPLISettings ( settingPS07b, settingPS07a )
 
@@ -49,6 +49,20 @@ import Random.GPLIprop (mplequivg, mplsatg, prepforequiv,prepforvalidity,prepfor
 import Trees.GPLItrees ( mktree, getmodels )
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
+
+-- | just give me a string man!
+mkps07string :: IO (String, String)
+mkps07string = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps07q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps07a (q1q,q1a) (q2q,q2a) num)
+       return (questionstring,answerstring)
+
 
 -- |function to render questions and answers to .tex file
 mkps07g :: RandomGen g => g -> Int -> IO ()

@@ -35,7 +35,7 @@ plequivsg gen s = do
 plcontraries :: IO ([Prop])
 plcontraries = do
                gen <- newStdGen
-               let prop = head $ take 1 $ rcont' gen localSettings
+               let prop = head $ take 1 $ rcont' gen dSettings
                return (prop)
  
  

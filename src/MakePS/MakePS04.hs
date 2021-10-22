@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS04 (mkps04g) where
+module MakePS.MakePS04 (mkps04g, mkps04string) where
 
 
 import Text.LaTeX
@@ -18,12 +18,26 @@ import Printing.LaTeXPLTrees (printtree)
 
 import Settings.PLSettings
 
-import System.Random ( RandomGen(split) )
+import System.Random
 
 import Random.PLprops (plcontrariesg, prepfc, plvalidg, prepforvalidity)
 import Trees.PLtrees (mktree)
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
+
+-- | just give me a string man!
+mkps04string :: IO (String, String)
+mkps04string = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a1,q1a2) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps04q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps04a (q1q,q1a1,q1a2) (q2q,q2a) num)
+       return (questionstring,answerstring)
+
 
 -- |function to render questions and answers to .tex file
 mkps04g :: RandomGen g => g -> Int -> IO ()
