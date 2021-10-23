@@ -55,7 +55,7 @@ extslist ((c,is):xs)= fromString [c] <> fromString ": " <> predlists is : extsli
 -- | is a list of lists of length n. 
 
 predlists :: [[Int]] -> LaTeX
-predlists [] = autoBraces (fromString "empty") -- empty extension case
+predlists [] = autoBraces (fromString "") -- empty extension case
 predlists (x:xs) = if length x == 1
     then autoBraces (mconcat $ intersperse (fromString ", ") $ map (fromString . show) (concat (x:xs)))
     else autoBraces (mconcat $ intersperse (fromString ", ") (dotups (x:xs)))
