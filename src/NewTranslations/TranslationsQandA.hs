@@ -68,7 +68,7 @@ mpltrans g = let (g1,g2) = split g in
                 ,makeQandA g2 mplq2
                 ,makeQandA g3 mplq3
                 ,makeQandA g4 mplq4
-                ,makeQandA g5 mplq5] in
+                ,makeQandA g5 mplq4] in
                     (justquestions qanda,questionsandanswers qanda)
 
 gpltrans :: RandomGen g => g -> (LaTeX,LaTeX)
