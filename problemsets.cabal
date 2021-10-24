@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ae2a11ff5c1921003a8219bf9fe76196c779360d72a53a99cf67fc8edc655601
+-- hash: 2b2fcb4687381e737d6a01c275757e6760f101dddc1c9f8a8866992a9535513b
 
 name:           problemsets
 version:        0.1.0.0
@@ -34,11 +34,29 @@ library
       MakePS.MakePS01
       MakePS.MakePS02
       MakePS.MakePS04
+      MakePS.MakePS05
+      MakePS.MakePS06
       MakePS.MakePS07
       MakePS.MakePS08
       MakePS.MakePS09
       MakePS.MakePS10
+      MakePS.MakePS11
       Models.Evaluator
+      NewTranslations.EnglishL.Abs
+      NewTranslations.EnglishL.ErrM
+      NewTranslations.EnglishL.Lex
+      NewTranslations.EnglishL.Par
+      NewTranslations.EnglishL.ParData
+      NewTranslations.EnglishL.Print
+      NewTranslations.EnglishL.Skel
+      NewTranslations.EnglishL.Test
+      NewTranslations.Generators
+      NewTranslations.Glossary
+      NewTranslations.GPLIprop
+      NewTranslations.JustParses
+      NewTranslations.Print
+      NewTranslations.Translate
+      NewTranslations.TranslationsQandA
       Parsers.GPLIParser
       Parsers.GPLIToken
       Printing.LaTeXGPLIModel

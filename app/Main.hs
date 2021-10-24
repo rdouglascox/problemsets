@@ -7,10 +7,13 @@ import Data.Maybe
 import MakePS.MakePS01 ( mkps01g )
 import MakePS.MakePS02 ( mkps02g )
 import MakePS.MakePS04 ( mkps04g )
+import MakePS.MakePS05 ( mkps05g )
+import MakePS.MakePS06 ( mkps06g )
 import MakePS.MakePS07 ( mkps07g )
 import MakePS.MakePS08 ( mkps08g )
 import MakePS.MakePS09 ( mkps09g )
 import MakePS.MakePS10 ( mkps10g )
+import MakePS.MakePS11 ( mkps11g )
 
 import Options.Applicative
     ( (<**>),
@@ -51,7 +54,7 @@ basic2 ns num = do
           mapConcurrently_ id (get ns (allsets seed num))
           return()
 
-allsets seed num = [mkps01g seed num, mkps02g seed num, mkps02g seed num, mkps04g seed num, mkps02g seed num, mkps02g seed num, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num]
+allsets seed num = [mkps01g seed num, mkps02g seed num, mkps02g seed num, mkps04g seed num, mkps05g seed num, mkps06g seed num, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num, mkps11g seed num]
 
 get ns xs = map (\n -> (fromJust $ lookup n (zip [1..] xs))) ns
 
@@ -90,7 +93,7 @@ sample = MyOptions
          <> short 'p'
          <> help "Which problem sets"
          <> showDefault
-         <> value [1,2,4,7,8,9,10]
+         <> value [1,2,4,5,7,8,9,10,11]
          <> metavar "[INT]" )
       <*> option auto
           ( long "identifier"
