@@ -1,7 +1,5 @@
 module NewTranslations.JustParses (justParses) where
 
--- | function to return either an empt list or a list of Sentences
-
 import Prelude
   ( ($), (.)
   , Either(..)

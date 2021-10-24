@@ -21,11 +21,12 @@ makeQandA g f = let prop = f g in
     let prop' = capitalise prop in
     let tprops = translate prop in
         let gstrings = case tprops of
-                            [] -> ["no gloss"]
+                            [] -> ["oops. something has gone wrong."]
                             xs -> getglossary (head xs) in
                QandA prop' tprops gstrings
 
 capitalise :: String -> String
+capitalise [] = ""
 capitalise (x:xs) = toUpper x : xs
 
 sampleQandA :: IO ()
