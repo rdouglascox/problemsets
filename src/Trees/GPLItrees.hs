@@ -1052,13 +1052,13 @@ getnames' p = case p of
     te : tes' -> case te of
       Variable c -> fromterms tes'
       Constant c -> c : fromterms tes'
-  Negation pr -> getnames pr
-  Existential c pr -> getnames pr
-  Universal c pr -> getnames pr
-  Conjunction pr pr' -> getnames pr ++ getnames pr'
-  Disjunction pr pr' -> getnames pr ++ getnames pr'
-  Conditional pr pr' -> getnames pr ++ getnames pr'
-  Biconditional pr pr' -> getnames pr ++ getnames pr'
+  Negation pr -> getnames' pr
+  Existential c pr -> getnames' pr
+  Universal c pr -> getnames' pr
+  Conjunction pr pr' -> getnames' pr ++ getnames' pr'
+  Disjunction pr pr' -> getnames' pr ++ getnames' pr'
+  Conditional pr pr' -> getnames' pr ++ getnames' pr'
+  Biconditional pr pr' -> getnames' pr ++ getnames' pr'
   where fromterms [] = []
         fromterms (Variable c:xs) = fromterms xs
         fromterms (Constant c:xs) = c : fromterms xs

@@ -98,7 +98,7 @@ q1text = item Nothing <> "Use a tree to test whether the following is a tautolog
 
 -- | the text of q2
 q2text :: LaTeX
-q2text = item Nothing <> "Use a tree to test whether the following propositions are jointly satisfiable. If they are not, then read a countermodel off the tree."
+q2text = item Nothing <> "Use a tree to test whether the following propositions are jointly satisfiable. If they are, then read a countermodel off the tree."
 
 -- |template for just the questions
 
