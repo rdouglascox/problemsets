@@ -74,7 +74,7 @@ ps06a x n = ps06pa n <> document (maketitle <> answers x)
 
 -- | the text of q1
 q6text :: LaTeX
-q6text = item Nothing <> "Translate the following into MPL. Provide a glossary for your translation. (If the sentence is ambiguous, then provide a translation for every disambiguation of the sentence."
+q6text = item Nothing <> "Translate the following into MPL. Provide a glossary for your translation. (If the sentence is ambiguous, then provide a translation for every disambiguation of the sentence)."
 
 
 -- |template for just the questions

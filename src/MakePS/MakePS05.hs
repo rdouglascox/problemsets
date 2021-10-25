@@ -74,7 +74,7 @@ ps05a x n = ps05pa n <> document (maketitle <> answers x)
 
 -- | the text of q1
 q1text :: LaTeX
-q1text = item Nothing <> "Translate the following into MPL. Provide a glossary for your translation. (If the sentence is ambiguous, then provide a translation for every disambiguation of the sentence."
+q1text = item Nothing <> "Translate the following into MPL. Provide a glossary for your translation. (If the sentence is ambiguous, then provide a translation for every disambiguation of the sentence.)"
 
 
 -- |template for just the questions

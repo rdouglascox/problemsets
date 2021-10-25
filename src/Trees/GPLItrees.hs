@@ -1034,15 +1034,6 @@ aprop2prop xs = anaprops xs
 getnamesonpath :: Path -> String
 getnamesonpath p = sort $ nub $ concatMap getnames' p
 
--- | get names merely from atomics and negated atomics
-getnames :: Prop -> String
-getnames (Negation (Atomic (Predicate _) xs)) = h xs
-    where h (Constant x:xs) = x : (h xs)
-          h [] = []
-getnames (Atomic (Predicate _) xs) = h xs
-    where h (Constant x:xs) = x : (h xs)
-          h [] = []
-
 
 -- | get names from any prop
 getnames' :: Prop -> String
