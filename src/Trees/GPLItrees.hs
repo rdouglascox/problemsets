@@ -1029,7 +1029,10 @@ getallpaths1 acc (Leaf xs) = [acc ++ aprop2prop xs]
 getallpaths1 acc (DeadLeaf xs) = []
 
 aprop2prop :: [AProp] -> [Prop]
-aprop2prop xs = anaprops xs
+aprop2prop = map ap2p
+
+ap2p :: AProp -> Prop
+ap2p p = case p of { AProp pr b s -> pr }
 
 getnamesonpath :: Path -> String
 getnamesonpath p = sort $ nub $ concatMap getnames' p
@@ -1055,13 +1058,21 @@ getnames' p = case p of
         fromterms (Constant c:xs) = c : fromterms xs
 
 getpredsonpath :: Path -> String
-getpredsonpath p = sort $ nub $ concatMap getpreds p
+getpredsonpath p = removeid $ sort $ nub $ concatMap getpreds p
 
 getpreds :: Prop -> String
-getpreds (Negation (Atomic (Predicate z) xs)) = [z]
-getpreds (Atomic (Predicate z) xs) = [z]
+getpreds p = case p of 
+  Atomic (Predicate c) tes -> [c]
+  Negation pr -> getpreds pr
+  Existential c pr -> getpreds pr
+  Universal c pr -> getpreds pr
+  Conjunction pr pr' -> getpreds pr ++ getpreds pr'
+  Disjunction pr pr' -> getpreds pr ++ getpreds pr'
+  Conditional pr pr' -> getpreds pr ++ getpreds pr'
+  Biconditional pr pr' -> getpreds pr ++ getpreds pr'
 
-
+removeid :: String -> String
+removeid st = filter (/= 'I') st    
 
 temprefs :: Path -> [(Char,Int)]
 temprefs p = zip (getnamesonpath p) [1..]
