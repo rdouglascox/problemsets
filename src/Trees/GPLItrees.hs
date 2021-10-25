@@ -333,8 +333,9 @@ closure acc (Leaf xs) = if contra (acc ++ xs) || negid (acc ++ xs)
 closure acc (DeadLeaf xs) = DeadLeaf xs
 
 contra :: [AProp] -> Bool
-contra xs = let (anaprops,nprops) = toProps xs in
-              not $ Set.disjoint (Set.fromList anaprops) (Set.fromList nprops)
+contra xs = let a = toPropsPos xs in
+            let b = toPropsNeg xs in
+              not $ Set.disjoint (Set.fromList a) (Set.fromList b)
 
 negid :: [AProp] -> Bool
 negid xs = negid1 $ toProps1 xs
@@ -354,6 +355,19 @@ toProps :: [AProp] -> ([Prop],[Prop])
 toProps [] = ([],[])
 toProps ((AProp (Negation p) _ _) :xs) = (p : (fst $ toProps xs), (snd $ toProps xs))
 toProps ((AProp p _ _) :xs) = ((fst $ toProps xs), p : (snd $ toProps xs))
+
+toPropsPos :: [AProp] -> [Prop]
+toPropsPos = map tPP
+
+tPP :: AProp -> Prop
+tPP (AProp p _ _ ) = p
+
+toPropsNeg :: [AProp] -> [Prop]
+toPropsNeg = concatMap tPN
+
+tPN :: AProp -> [Prop]
+tPN (AProp (Negation p) _ _ ) = [p]
+tPN _ = []
 
 -- |THE TREE RULES
 
@@ -1061,7 +1075,7 @@ getpredsonpath :: Path -> String
 getpredsonpath p = removeid $ sort $ nub $ concatMap getpreds p
 
 getpreds :: Prop -> String
-getpreds p = case p of 
+getpreds p = case p of
   Atomic (Predicate c) tes -> [c]
   Negation pr -> getpreds pr
   Existential c pr -> getpreds pr
@@ -1072,7 +1086,7 @@ getpreds p = case p of
   Biconditional pr pr' -> getpreds pr ++ getpreds pr'
 
 removeid :: String -> String
-removeid st = filter (/= 'I') st    
+removeid = filter (/= 'I')
 
 temprefs :: Path -> [(Char,Int)]
 temprefs p = zip (getnamesonpath p) [1..]
