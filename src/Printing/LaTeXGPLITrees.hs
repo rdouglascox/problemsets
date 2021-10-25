@@ -35,8 +35,8 @@ gplitreetoLaTeX' (L.Branch xs (l,r)) = Node (Just $ nodetoLaTeX' $ xs) [gplitree
 nodetoLaTeX' :: [L.AProp] -> LaTeX
 nodetoLaTeX' [] = fromString "" 
 nodetoLaTeX' ((L.AProp p True subs):xs) = (proptoLaTeX p) <> checkmark <> (fromString $ reverse subs) <> lnbk <> (nodetoLaTeX' xs) 
-nodetoLaTeX' ((L.AProp (Universal x p) False subs):xs) = case subs of (y:ys) -> (proptoLaTeX (Universal x p)) <> checkmark <> (fromString "\\") <> (fromString $ reverse subs) <> lnbk <> (nodetoLaTeX' xs) 
-                                                                      [] -> (proptoLaTeX (Universal x p)) <> checkmark <> (fromString $ reverse subs) <> lnbk <> (nodetoLaTeX' xs) 
+nodetoLaTeX' ((L.AProp (Universal x p) False subs):xs) = case subs of (y:ys) -> (proptoLaTeX (Universal x p)) <> (fromString "\\") <> (fromString $ reverse subs) <> lnbk <> (nodetoLaTeX' xs) 
+                                                                      [] -> (proptoLaTeX (Universal x p)) <> (fromString $ reverse subs) <> lnbk <> (nodetoLaTeX' xs) 
  
 nodetoLaTeX' ((L.AProp p False subs):xs) = (proptoLaTeX p) <> (fromString $ reverse subs) <> lnbk <> (nodetoLaTeX' xs) 
 
