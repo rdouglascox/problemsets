@@ -1,31 +1,64 @@
 module NewTranslations.Translate (translate) where
 
 import NewTranslations.EnglishL.Abs
-import Data.GPLIprop
-import Data.List
-import Data.Maybe
-import NewTranslations.EnglishL.Par
-import Data.Char
-import NewTranslations.JustParses
+    ( Adj(..),
+      AdjPhrase(AdjPNegDisj1, AdjP1, AdjPConj1, AdjPConj2, AdjPDisj1,
+                AdjPDisj2),
+      CN(..),
+      CNs(..),
+      Clause(..),
+      IVerb(..),
+      InvClause(..),
+      NQuantPP(..),
+      NQuantPS(..),
+      Noun(..),
+      NounPhraseP(..),
+      NounPhraseS(..),
+      QuantPP(..),
+      QuantPS(..),
+      TVerb(..),
+      VerbPhrase(..),
+      VerbPhraseP(..),
+      VerbPhraseS(..),
+      VerbX(..) )
+import Data.GPLIprop ( Predicate(Predicate), Prop(..), Term(..) )
+import Data.Maybe ( fromJust )
+import Data.Char ( toLower )
+import NewTranslations.JustParses ( justParses )
 
-import NewTranslations.Glossary
+-- this module needs a lot of documentation to keep track of. basically, we are expecting
+-- output from the parser which is a little too fine-grained. the parser, for instance
+-- draws a distinction between 'John is not running' and 'John isn't running'. we shouldn't
+-- really care about the difference. so we translate from the output of the parser into
+-- an intermediate representation that contains all of the information we need for the 
+-- final translation into the logical language.
 
--- top level function. can work on the output of the generator to produce a list of props which are translations
+-- the function `translate` is the only function we export from this module. it takes a string
+-- representation of the English sentence to translate and then returns a list of propositions
+-- representing the translation of the sentence. 
 
-translate :: String -> [Prop]
+-- | translate EnglishL to GPLI
+translate :: String -- ^string representation of EnglishL sentence to translate 
+  -> [Prop] -- ^list of propositions representing the translations of the sentence
 translate xs = case justParses xs of
   [] -> []
   cl : cls -> concatMap tt (justParses xs)
 
+-- | convert failure represented by either into failure represented by empty list
+tt :: Clause -> [Prop]
 tt c = case buildLClause c of
   Left s -> []
   Right lc -> case tClause lc of
       Left s -> []
       Right c -> c
 
--- | CONVERSION TO INTERMEDIATE FORMAT
+-- phase 1: conversion to intermediate format
 
-data LClause' = LClause' ArgElement PredElement
+-- the datatype `LClause` represents the main format we want to translate the output of the
+-- parser into. the most important constructor here is `LClause` itself. this represents
+-- the basic case: a clause with one predicate, a subject quantifier, an object quantifier,
+-- or both, and a list of terms (variables and constants).
+
 data LClause = LClause Valance [PosQuant] Pred [Trm]
              | LClauseConjunction Valance LClause LClause
              | LClauseDisjunction Valance LClause LClause
@@ -35,8 +68,8 @@ data LClause = LClause Valance [PosQuant] Pred [Trm]
              | LClauseConjunction' Valance [PosQuant] (Pred,Pred) [Trm]
              | LClauseDisjunction' Valance [PosQuant] (Pred,Pred) [Trm]
              | LClauseExists Quants
+
 data Valance = Pos | Neg
-data Con = Or | And | NegOr
 data PosQuant = SubQuant Quants | ObjQuant Quants
 data Quants = Uni [Restriction] [Exclusion]
             | Exi [Restriction] [Exclusion]
@@ -52,10 +85,16 @@ data Quants = Uni [Restriction] [Exclusion]
 newtype Exclusion = Exclusion String
 newtype Restriction = Restriction String
 newtype Pred = Pred String
-
 data Trm = Const String | Var Char
 
--- | noun phrase return type. needs to register: is it quantificational? if so, what quantifier? is it in subject position or object position? is it single noun, or two nouns, what are they, how are they connected? we should be able to ignore the difference here between plural and singular rules
+data LClause' = LClause' ArgElement PredElement
+
+-- | noun phrase stuff
+
+-- noun phrase return type. needs to register: is it quantificational? if so, what quantifier?
+-- is it in subject position or object position? is it single noun, or two nouns, what are they,
+-- how are they connected? we should be able to ignore the difference here between plural and 
+-- singular rules
 
 data ArgElement = ArgElement ArgType (Either Quants NameArgs)
 
@@ -65,8 +104,7 @@ data NameArgs = NPSingle Trm
               | NPAnd Trm Trm
               | NPNegOr Trm Trm
 
--- | noun phrase stuff
-
+-- | build an `ArgElement` from an argtype (Subject | Object) and a singular noun phrase
 nps :: ArgType -> NounPhraseS -> ArgElement
 nps arg np = case np of
   NPS1 no -> ArgElement arg (Right (NPSingle (Const $ fromnoun no)))
@@ -113,6 +151,8 @@ getnumquantsS1 nq = case nq of
   NQuantPS11 cn -> AtMost1 [Restriction (fromcn cn)] []
   NQuantPS12 cn -> Exactly1 [Restriction (fromcn cn)][]
 
+
+-- | build an `ArgElement` from an argtype (Subject | Object) and a plural noun phrase
 npp :: ArgType -> NounPhraseP -> ArgElement
 npp arg np = case np of
   NPPConj1 no no' -> ArgElement arg (Right (NPAnd (Const $ fromnoun no)(Const $ fromnoun no')))
@@ -136,7 +176,13 @@ getnumquantP1 qp = case qp of
 fromcns :: CNs -> String
 fromcns (CNs st) = st
 
--- | verb phrases need a return type. they need to provide a range of information. they need to provide information as to whether the predicate type is singular, conjunctive, disjunctive, or negated disjunction. it also needs to provide information about whether its object is singular, conjunctive, disjunctive, or negated disjunction.
+-- | verb phrase stuff
+
+-- | verb phrases need a return type. they need to provide a range of information. 
+-- | they need to provide information as to whether the predicate type is singular, 
+-- | conjunctive, disjunctive, or negated disjunction. it also needs to provide 
+-- | information about whether its object is singular, conjunctive, disjunctive, 
+-- | or negated disjunction.
 
 data PredElement = PredElement Valance PredType (Maybe ArgElement)
 
@@ -145,38 +191,38 @@ data PredType = VPSingle Pred
               | VPAnd Pred Pred
               | VPNegOr Pred Pred
 
--- | verb phrase stuff
+-- | singular and plural verb phrases. these are a bit redundant.
 
 vps :: VerbPhraseS -> PredElement
 vps v = case v of
   VPS1 vp -> case vp of
-    VP1 vx -> PredElement Pos (VPSingle $ predfromVerbX vx) (argfromVerbX vx)
-    VPConj1 vx vx' -> PredElement Pos (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPConj2 vx vx' -> PredElement Pos (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPDisj1 vx vx' -> PredElement Pos (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPDisj2 vx vx' -> PredElement Pos (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPNegDisj1 vx vx' -> PredElement Pos (VPNegOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
+    VP1 vx -> PredElement Pos (VPSingle $ predfromVerbX vx) (argfromVerbX vx) -- e.g. "is jumping"
+    VPConj1 vx vx' -> PredElement Pos (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is running and jumping"
+    VPConj2 vx vx' -> PredElement Pos (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is both running and jumping"
+    VPDisj1 vx vx' -> PredElement Pos (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is running or jumping"
+    VPDisj2 vx vx' -> PredElement Pos (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is either running or jumping"
+    VPNegDisj1 vx vx' -> PredElement Pos (VPNegOr (predfromVerbX vx) (predfromVerbX vx')) Nothing --e.g. "is neither running nor jumping"
   VPS2 ap -> case ap of
-    AdjP1 adj -> PredElement Pos (VPSingle $ fromAdj adj) Nothing
-    AdjPConj1 adj adj' -> PredElement Pos (VPAnd (fromAdj adj)(fromAdj adj')) Nothing
-    AdjPConj2 adj adj' -> PredElement Pos (VPAnd (fromAdj adj)(fromAdj adj')) Nothing
-    AdjPDisj1 adj adj' -> PredElement Pos (VPOr (fromAdj adj)(fromAdj adj')) Nothing
-    AdjPDisj2 adj adj' -> PredElement Pos (VPOr (fromAdj adj)(fromAdj adj')) Nothing
-    AdjPNegDisj1 adj adj' -> PredElement Pos (VPNegOr (fromAdj adj)(fromAdj adj')) Nothing
+    AdjP1 adj -> PredElement Pos (VPSingle $ fromAdj adj) Nothing --e.g. "is sad"
+    AdjPConj1 adj adj' -> PredElement Pos (VPAnd (fromAdj adj)(fromAdj adj')) Nothing -- e.g. "is happy and sad"
+    AdjPConj2 adj adj' -> PredElement Pos (VPAnd (fromAdj adj)(fromAdj adj')) Nothing -- e.g. "is both happy and sad"
+    AdjPDisj1 adj adj' -> PredElement Pos (VPOr (fromAdj adj)(fromAdj adj')) Nothing -- e.g. "is happy or sad"
+    AdjPDisj2 adj adj' -> PredElement Pos (VPOr (fromAdj adj)(fromAdj adj')) Nothing -- e.g. "is either happy or sad"
+    AdjPNegDisj1 adj adj' -> PredElement Pos (VPNegOr (fromAdj adj)(fromAdj adj')) Nothing -- e.g. "is neither happy nor sad"
   VPS3 vp -> case vp of
-    VP1 vx -> PredElement Pos (VPSingle $ predfromVerbX vx) (argfromVerbX vx)
-    VPConj1 vx vx' -> PredElement Pos (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPConj2 vx vx' -> PredElement Pos (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPDisj1 vx vx' -> PredElement Pos (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPDisj2 vx vx' -> PredElement Pos (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPNegDisj1 vx vx' -> PredElement Pos (VPNegOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
+    VP1 vx -> PredElement Pos (VPSingle $ predfromVerbX vx) (argfromVerbX vx) -- e.g. "is jumping"
+    VPConj1 vx vx' -> PredElement Pos (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is running and jumping"
+    VPConj2 vx vx' -> PredElement Pos (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is both running and jumping"
+    VPDisj1 vx vx' -> PredElement Pos (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is running or jumping"
+    VPDisj2 vx vx' -> PredElement Pos (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is either running or jumping"
+    VPNegDisj1 vx vx' -> PredElement Pos (VPNegOr (predfromVerbX vx) (predfromVerbX vx')) Nothing --e.g. "is neither running nor jumping"
   VPS1Neg vp -> case vp of
-    VP1 vx -> PredElement Neg (VPSingle $ predfromVerbX vx) (argfromVerbX vx)
-    VPConj1 vx vx' -> PredElement Neg (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPConj2 vx vx' -> PredElement Neg (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPDisj1 vx vx' -> PredElement Neg (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPDisj2 vx vx' -> PredElement Neg (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
-    VPNegDisj1 vx vx' -> PredElement Neg (VPNegOr (predfromVerbX vx) (predfromVerbX vx')) Nothing
+    VP1 vx -> PredElement Neg (VPSingle $ predfromVerbX vx) (argfromVerbX vx) -- e.g. "is not jumping"
+    VPConj1 vx vx' -> PredElement Neg (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is not running and jumping"
+    VPConj2 vx vx' -> PredElement Neg (VPAnd (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is not both running and jumping"
+    VPDisj1 vx vx' -> PredElement Neg (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is not running or jumping"
+    VPDisj2 vx vx' -> PredElement Neg (VPOr (predfromVerbX vx) (predfromVerbX vx')) Nothing -- e.g. "is not either running or jumping"
+    VPNegDisj1 vx vx' -> PredElement Neg (VPNegOr (predfromVerbX vx) (predfromVerbX vx')) Nothing --e.g. "is not neither running nor jumping"
   VPS2Neg ap -> case ap of
     AdjP1 adj -> PredElement Neg (VPSingle $ fromAdj adj) Nothing
     AdjPConj1 adj adj' -> PredElement Neg (VPAnd (fromAdj adj)(fromAdj adj')) Nothing
@@ -278,31 +324,38 @@ fromIVerb (IVerb st) = Pred st
 fromTVerb :: TVerb -> Pred
 fromTVerb (TVerb st) = Pred st
 
--- | BUILD THE CLAUSE (using the Either monad)
+-- | build the clause from its parts (using the either monad)
 
+-- | unify representation of clauses whether plural or not
 buildLClause'S :: NounPhraseS -> VerbPhraseS -> LClause'
-buildLClause'S n v = LClause' (nps Subject n) (vps v)
+buildLClause'S n v = LClause' (nps Subject n) (vps v) 
 
 buildLClause'P :: NounPhraseP -> VerbPhraseP -> LClause'
 buildLClause'P n v = LClause' (npp Subject n) (vpp v)
 
+-- | the main clause building function. the cases described below
 buildClause :: LClause' -> Either String LClause
 buildClause (LClause' (ArgElement _ e) pe) = case e of
-  Left qu -> buildfromSubjQuant qu pe
+  Left qu -> buildfromSubjQuant qu pe -- a quantifier qu in subject position 
   Right na -> case na of
-    NPSingle trm -> buildfromSubArg trm pe
-    NPOr trm trm' -> buildfromNPOr trm trm' pe
-    NPAnd trm trm' -> buildfromNPAnd trm trm' pe
-    NPNegOr trm trm' -> buildfromNPOr trm trm' pe
+    NPSingle trm -> buildfromSubArg trm pe -- basic noun phrase case
+    NPOr trm trm' -> buildfromNPOr trm trm' pe -- disjunctive np case
+    NPAnd trm trm' -> buildfromNPAnd trm trm' pe -- conjunctive np case
+    NPNegOr trm trm' -> buildfromNPOr trm trm' pe -- negative disjunctive np case
 
+-- why split the cases like this? because things like conjunctive noun phrases
+-- are translated into two clauses conjoined
+
+-- e.g. something like 'some person' in the subject position
+-- note that LClauseDisjunction' etc. translate into things like @x(Fx v Gx)
 buildfromSubjQuant :: Quants -> PredElement -> Either String LClause
-buildfromSubjQuant qu (PredElement val pt mae) = case mae of
+buildfromSubjQuant qu (PredElement val pt mae) = case mae of -- no object case
   Nothing -> case pt of
-    VPSingle pr -> Right $ LClause val [SubQuant qu] pr [Var 'x']
-    VPOr pr pr' -> Right $ LClauseDisjunction' Pos  [SubQuant qu] (pr,pr') [Var 'x']
-    VPAnd pr pr' -> Right $ LClauseConjunction' Pos [SubQuant qu] (pr,pr') [Var 'x']
-    VPNegOr pr pr' -> Right $ LClauseDisjunction' Neg [SubQuant qu] (pr,pr') [Var 'x']
-  Just ae -> case ae of
+    VPSingle pr -> Right $ LClause val [SubQuant qu] pr [Var 'x'] -- e.g. "some person is / is not running"
+    VPOr pr pr' -> Right $ LClauseDisjunction' val [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not running or jumping"
+    VPAnd pr pr' -> Right $ LClauseConjunction' val [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not running and jumping"
+    VPNegOr pr pr' -> Right $ LClauseDisjunction' Neg [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not neither running nor jumping"
+  Just ae -> case ae of -- object case
     ArgElement at e -> case e of
       Left qu' -> case pt of
         VPSingle pr -> Right $ LClause val [SubQuant qu,ObjQuant qu'] pr [Var 'x',Var 'y']

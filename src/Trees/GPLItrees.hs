@@ -68,8 +68,7 @@ mktree ps = mk (closure [] (preptree ps)) -- will use (preptree ps) to convert t
 
 maybetree :: Int -> [Prop] -> Maybe PTree
 maybetree n ps = let (t,r) = maybetree1 n (Just (preptree ps),[]) in
-                     case t of Nothing -> Nothing
-                               Just x  -> Just x
+                     t
 
 maybetree1 :: Int -> (Maybe PTree,[TreeRule]) -> (Maybe PTree,[TreeRule])
 maybetree1 n (Just t,rs) | oversize n t = (Nothing,[])
