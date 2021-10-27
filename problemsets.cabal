@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2b2fcb4687381e737d6a01c275757e6760f101dddc1c9f8a8866992a9535513b
+-- hash: 98ff647d521a25d0bf4e086d96316bb37fcf400a29a2db5f7c338ec9a247622e
 
 name:           problemsets
 version:        0.1.0.0
@@ -41,6 +41,7 @@ library
       MakePS.MakePS09
       MakePS.MakePS10
       MakePS.MakePS11
+      MakePS.MakeTranslationTest
       Models.Evaluator
       NewTranslations.EnglishL.Abs
       NewTranslations.EnglishL.ErrM

@@ -138,6 +138,9 @@ conjnames1 g = let (g1,g2) = split g in
 intvp :: RandomGen g => g -> String
 intvp g = r g [rintverbs,radjs] g
 
+intvp' :: RandomGen g => g -> String
+intvp' g = r g [rintverbs] g
+
 -- | random transitive verb phrase (sing subj, non-quant object)
 trnvpS1 :: RandomGen g => g -> String
 trnvpS1 g = let (g1,g2) = split g in
@@ -169,8 +172,8 @@ trnvpP1 g = let (g1,g2) = split g in
 -- | random intransitive verb phrase in conj
 conjvpS :: RandomGen g => g -> String
 conjvpS g = let (g1,g2) = split g in
-           let a = intvp g1 in
-           let b = intvp g2 in
+           let a = intvp' g1 in
+           let b = intvp' g2 in
                if a == b then conjvpS g1 else
     r g ["is " ++ a ++ " and " ++ b
         ,"is both " ++ a ++ " and " ++ b
@@ -187,8 +190,8 @@ conjvpS g = let (g1,g2) = split g in
 
 conjvpP :: RandomGen g => g -> String
 conjvpP g = let (g1,g2) = split g in
-           let a = intvp g1 in
-           let b = intvp g2 in
+           let a = intvp' g1 in
+           let b = intvp' g2 in
                if a == b then conjvpP g1 else
     r g ["are " ++ a ++ " and " ++ b
         ,"are both " ++ a ++ " and " ++ b

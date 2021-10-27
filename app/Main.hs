@@ -14,6 +14,7 @@ import MakePS.MakePS08 ( mkps08g )
 import MakePS.MakePS09 ( mkps09g )
 import MakePS.MakePS10 ( mkps10g )
 import MakePS.MakePS11 ( mkps11g )
+import MakePS.MakeTranslationTest (mktranstestg)
 
 import Options.Applicative
     ( (<**>),
@@ -54,7 +55,7 @@ basic2 ns num = do
           mapConcurrently_ id (get ns (allsets seed num))
           return()
 
-allsets seed num = [mkps01g seed num, mkps02g seed num, mkps02g seed num, mkps04g seed num, mkps05g seed num, mkps06g seed num, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num, mkps11g seed num]
+allsets seed num = [mkps01g seed num, mkps02g seed num, mkps02g seed num, mkps04g seed num, mkps05g seed num, mkps06g seed num, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num, mkps11g seed num, mktranstestg seed num]
 
 get ns xs = map (\n -> (fromJust $ lookup n (zip [1..] xs))) ns
 

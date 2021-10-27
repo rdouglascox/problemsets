@@ -470,7 +470,7 @@ buildfromNPNotOr st1 st2 (PredElement val pt mae) = case mae of
           VPAnd pr pr' -> Left "I can't translate that"
           VPNegOr pr pr' -> Left "I can't translate that"
         NPNegOr trm trm' -> case pt of
-          VPSingle pr -> Right $ LClauseDisjunction Neg (LClauseDisjunction Neg (LClause val [] pr [st1,trm]) (LClause val [] pr [st2,trm])) (LClauseDisjunction Neg (LClause val [] pr [st1,trm']) (LClause val [] pr [st2,trm']))
+          VPSingle pr -> Right $ LClauseDisjunction Pos (LClauseDisjunction Neg (LClause val [] pr [st1,trm]) (LClause val [] pr [st2,trm])) (LClauseDisjunction Neg (LClause val [] pr [st1,trm']) (LClause val [] pr [st2,trm']))
           VPOr pr pr' -> Left "I can't translate that"
           VPAnd pr pr' -> Left "I can't translate that"
           VPNegOr pr pr' -> Left "I can't translate that"
@@ -854,7 +854,7 @@ addQuants [x] p = case x of
         [] -> do
           a <- getArgofProp p
           b <- getPredofProp p
-          return ([Conjunction (Existential 'x' (Conjunction (Atomic (Predicate (fromRestriction res)) [Variable 'x']) p )) (Universal 'x' $ Universal 'y' $ Conditional (Conjunction (Conjunction (Conjunction (Atomic (Predicate (fromRestriction res)) [Variable 'x']) (Atomic (Predicate (fromRestriction res)) [Variable 'y'])) (Atomic (Predicate b) [Variable 'x'])) (Atomic (Predicate b) [Variable 'y'])) (Atomic (Predicate 'I')[Variable 'x',Variable 'y'] ) )])
+          return ([Conjunction (Existential 'x' (Conjunction (Atomic (Predicate (fromRestriction res)) [Variable 'x']) p )) (Universal 'x' $ Universal 'y' $ Conditional (Conjunction (Conjunction (Conjunction (Atomic (Predicate (fromRestriction res)) [Variable 'x']) (Atomic (Predicate (fromRestriction res)) [Variable 'y'])) (Atomic (Predicate b) ([Variable 'x']++a))) (Atomic (Predicate b) ([Variable 'y']++a))) (Atomic (Predicate 'I')[Variable 'x',Variable 'y'] ) )])
         [ex] -> Left "I can't translate that combination of quantifiers"
         _ -> Left "Oops something went wrong"
       _ -> Left "Oops something went wrong"
@@ -867,7 +867,7 @@ addQuants [x] p = case x of
         [] -> do
           a <- getArgofProp p
           b <- getPredofProp p
-          return ( [Conjunction (Existential 'x' $ Existential 'y' $ Conjunction (Conjunction  (Conjunction (Conjunction (Atomic (Predicate (fromRestriction res)) [Variable 'x']) (Atomic (Predicate (fromRestriction res)) [Variable 'y'])) (Negation $ Atomic (Predicate 'I') [Variable 'x',Variable 'y'])) p ) (Atomic (Predicate b) [Variable 'z']) ) (Universal 'x' $ Universal 'y' $ Universal 'z' $ Conditional (Conjunction (Conjunction (Conjunction (Conjunction (Conjunction (Atomic (Predicate (fromRestriction res)) [Variable 'x']) (Atomic (Predicate (fromRestriction res)) [Variable 'y'])) (Atomic (Predicate (fromRestriction res)) [Variable 'z'])) (Atomic (Predicate b) [Variable 'x'])) (Atomic (Predicate b) [Variable 'y'])) (Atomic (Predicate b) [Variable 'z'])) (Conjunction (Conjunction (Atomic (Predicate 'I')[Variable 'x',Variable 'y'] ) (Atomic (Predicate 'I')[Variable 'x',Variable 'z'] )) (Atomic (Predicate 'I')[Variable 'y',Variable 'z'] ))) ])
+          return ( [Conjunction (Existential 'x' $ Existential 'y' $ Conjunction (Conjunction  (Conjunction (Conjunction (Atomic (Predicate (fromRestriction res)) [Variable 'x']) (Atomic (Predicate (fromRestriction res)) [Variable 'y'])) (Negation $ Atomic (Predicate 'I') [Variable 'x',Variable 'y'])) p ) (Atomic (Predicate b) ([Variable 'y'] ++ a)) ) (Universal 'x' $ Universal 'y' $ Universal 'z' $ Conditional (Conjunction (Conjunction (Conjunction (Conjunction (Conjunction (Atomic (Predicate (fromRestriction res)) [Variable 'x']) (Atomic (Predicate (fromRestriction res)) [Variable 'y'])) (Atomic (Predicate (fromRestriction res)) [Variable 'z'])) (Atomic (Predicate b) ([Variable 'x']++a))) (Atomic (Predicate b) ([Variable 'y']++a))) (Atomic (Predicate b) ([Variable 'z']++a))) (Conjunction (Conjunction (Atomic (Predicate 'I')[Variable 'x',Variable 'y'] ) (Atomic (Predicate 'I')[Variable 'x',Variable 'z'] )) (Atomic (Predicate 'I')[Variable 'y',Variable 'z'] ))) ])
         [ex] -> Left "I can't translate that combination of quantifiers"
         _ -> Left "Oops something went wrong"
       _ -> Left "Oops something went wrong"

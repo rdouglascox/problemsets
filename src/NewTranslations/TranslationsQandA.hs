@@ -1,4 +1,4 @@
-module NewTranslations.TranslationsQandA (makeQandA, QandA (..),mpltrans,gpltrans,gplitrans) where
+module NewTranslations.TranslationsQandA (makeQandA, QandA (..),mpltrans,gpltrans,gplitrans,transtest) where
 
 import NewTranslations.Generators
 import NewTranslations.Glossary (getglossary)
@@ -92,3 +92,19 @@ gplitrans g = let (g1,g2) = split g in
                 ,makeQandA g4 gpliq4
                 ,makeQandA g5 gpliq5] in
                     (justquestions qanda,questionsandanswers qanda)
+
+transtest :: RandomGen g => g -> (LaTeX,LaTeX)
+transtest g = let (g1,g2) = split g in
+    let (g3,g4) = split g1 in
+    let (g5,g6) = split g2 in
+    let qanda = map (makeQandA g) ttest ++ 
+                    map (makeQandA g1) ttest ++ 
+                    map (makeQandA g2) ttest ++ 
+                    map (makeQandA g3) ttest ++ 
+                    map (makeQandA g4) ttest ++ 
+                    map (makeQandA g5) ttest ++ 
+                    map (makeQandA g6) ttest in
+                    (justquestions qanda,questionsandanswers qanda)
+
+ttest :: RandomGen g => [g -> String]
+ttest = [mplq1,mplq2,mplq3,mplq4,mplq5,gplq1,gplq2,gplq3,gplq4,gplq5,gpliq1,gpliq2,gpliq3,gpliq4,gpliq5]
