@@ -74,7 +74,6 @@ intverbs = ["running"
             ,"clapping"
             ,"drumming"
             ,"escaping"
-            ,"frightened"
             ,"mapmaking"
             ,"quiltmaking"
             ,"vacillating"
@@ -88,7 +87,7 @@ radjs :: RandomGen g => g -> String
 radjs g = r g adjs
 
 adjs :: [String]
-adjs = ["happy", "sad","keen"]
+adjs = ["happy", "sad","keen","frightened"]
 
 rtransverbsS  :: RandomGen g => g -> String
 rtransverbsS g = r g transverbsS

@@ -67,6 +67,7 @@ data LClause = LClause Valance [PosQuant] Pred [Trm]
              | LClauseNegation LClause
              | LClauseConjunction' Valance [PosQuant] (Pred,Pred) [Trm]
              | LClauseDisjunction' Valance [PosQuant] (Pred,Pred) [Trm]
+             | LClauseNegDisjunction' Valance [PosQuant] (Pred,Pred) [Trm]
              | LClauseExists Quants
 
 data Valance = Pos | Neg
@@ -135,9 +136,9 @@ getquantS1 qp = case qp of
     QuantSpec4 no -> Uni [Restriction "person"][Exclusion (fromnoun no)]
     QuantSpec5 no -> Uni [Restriction "person"][Exclusion (fromnoun no)]
     QuantSpec6 no -> Exi [][Exclusion (fromnoun no)]
-    QuantSpec7 no -> Exi [Restriction "person"][Exclusion (fromnoun no)]
+    QuantSpec7 no -> Exi [][Exclusion (fromnoun no)]
     QuantSpec8 no -> Exi [Restriction "person"][Exclusion (fromnoun no)]
-    QuantSpec9 no -> Exi [][Exclusion (fromnoun no)]
+    QuantSpec9 no -> Exi [Restriction "person"][Exclusion (fromnoun no)]
     QuantSpec10 cn no -> Exi [Restriction (fromcn cn)][Exclusion (fromnoun no)]
     QuantSpec11 cn no -> Uni [Restriction (fromcn cn)][Exclusion (fromnoun no)]
 
@@ -352,13 +353,13 @@ buildfromSubjQuant :: Quants -> PredElement -> Either String LClause
 buildfromSubjQuant qu (PredElement val pt mae) = case mae of -- no object case
   Nothing -> case pt of
     VPSingle pr -> Right $ LClause val [SubQuant qu] pr [Var 'x'] -- e.g. "some person is / is not running"
-    VPOr pr pr' -> Right $ LClauseDisjunction' val [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not running or jumping"
-    VPAnd pr pr' -> Right $ LClauseConjunction' val [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not running and jumping"
-    VPNegOr pr pr' -> Right $ LClauseDisjunction' Neg [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not neither running nor jumping"
+    VPOr pr pr' -> Right $ LClauseDisjunction' val [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not running or jumping => #x(RxvJx) / #x~(RxvJx)"
+    VPAnd pr pr' -> Right $ LClauseConjunction' val [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not running and jumping => #x(Rx&Jx) / #x~(Rx&Jx)"
+    VPNegOr pr pr' -> Right $ LClauseNegDisjunction' val [SubQuant qu] (pr,pr') [Var 'x'] -- e.g. "some person is / is not neither running nor jumping"
   Just ae -> case ae of -- object case
     ArgElement at e -> case e of
       Left qu' -> case pt of
-        VPSingle pr -> Right $ LClause val [SubQuant qu,ObjQuant qu'] pr [Var 'x',Var 'y']
+        VPSingle pr -> Right $ LClause val [SubQuant qu,ObjQuant qu'] pr [Var 'x',Var 'y'] -- e.g. "some person loves some person"
         VPOr pr pr' -> Left "I can't translate that"
         VPAnd pr pr' -> Left "I can't translate that"
         VPNegOr pr pr' -> Left "I can't translate that"
@@ -387,10 +388,10 @@ buildfromSubjQuant qu (PredElement val pt mae) = case mae of -- no object case
 buildfromSubArg :: Trm -> PredElement -> Either String LClause
 buildfromSubArg tr (PredElement val pt mae) = case mae of
   Nothing -> case pt of
-    VPSingle pr -> Right $ LClause val [] pr [tr]
-    VPOr pr pr' -> Right $ LClauseDisjunction Pos (LClause val [] pr [tr]) (LClause val [] pr' [tr])
-    VPAnd pr pr' -> Right $ LClauseConjunction Pos (LClause val [] pr [tr]) (LClause val [] pr' [tr])
-    VPNegOr pr pr' -> Right $ LClauseDisjunction Neg (LClause val [] pr [tr]) (LClause val [] pr' [tr])
+    VPSingle pr -> Right $ LClause val [] pr [tr] -- e.g. "Ashley is running"
+    VPOr pr pr' -> Right $ LClauseDisjunction Pos (LClause val [] pr [tr]) (LClause val [] pr' [tr]) -- e.g. "Ashley is running or jumping"
+    VPAnd pr pr' -> Right $ LClauseConjunction Pos (LClause val [] pr [tr]) (LClause val [] pr' [tr]) -- e.g. "Ashley is running and jumping"
+    VPNegOr pr pr' -> Right $ LClauseDisjunction Neg (LClause val [] pr [tr]) (LClause val [] pr' [tr]) -- e.g. "Ashley is neither running nor jumping"
   Just ae -> case ae of
     ArgElement at e -> case e of
       Left qu' -> case pt of
@@ -423,7 +424,7 @@ buildfromSubArg tr (PredElement val pt mae) = case mae of
 buildfromNPOr :: Trm -> Trm -> PredElement -> Either String LClause
 buildfromNPOr st1 st2 (PredElement val pt mae) = case mae of
   Nothing -> case pt of
-    VPSingle pr -> Right $ LClauseDisjunction Pos (LClause val [] pr [st1]) (LClause val [] pr [st2])
+    VPSingle pr -> Right $ LClauseDisjunction Pos (LClause val [] pr [st1]) (LClause val [] pr [st2]) -- e.g. "Ashley or Brett are running"
     VPOr pr pr' -> Left "I can't translate that"
     VPAnd pr pr' -> Left "I can't translate that"
     VPNegOr pr pr' -> Left "I can't translate that"
@@ -459,10 +460,10 @@ buildfromNPOr st1 st2 (PredElement val pt mae) = case mae of
 buildfromNPAnd :: Trm -> Trm -> PredElement -> Either String LClause
 buildfromNPAnd st1 st2 (PredElement val pt mae) = case mae of
   Nothing -> case pt of
-    VPSingle pr -> Right $ LClauseConjunction Pos (LClause val [] pr [st1]) (LClause val [] pr [st2])
-    VPOr pr pr' -> Right $ LClauseConjunction Pos (LClauseDisjunction Pos (LClause val [] pr [st1]) (LClause val [] pr' [st1])) (LClauseDisjunction Pos (LClause val [] pr [st2]) (LClause val [] pr' [st2]))
-    VPAnd pr pr' -> Right $ LClauseConjunction Pos (LClauseConjunction Pos (LClause val [] pr [st1]) (LClause val [] pr' [st1])) (LClauseConjunction Pos (LClause val [] pr [st2]) (LClause val [] pr' [st2]))
-    VPNegOr pr pr' -> Right $ LClauseConjunction Pos (LClauseDisjunction Neg (LClause val [] pr [st1]) (LClause val [] pr' [st1])) (LClauseDisjunction Neg (LClause val [] pr [st2]) (LClause val [] pr' [st2]))
+    VPSingle pr -> Right $ LClauseConjunction Pos (LClause val [] pr [st1]) (LClause val [] pr [st2]) -- e.g. "Ashley and Brett are jumping"
+    VPOr pr pr' -> Right $ LClauseConjunction Pos (LClauseDisjunction Pos (LClause val [] pr [st1]) (LClause val [] pr' [st1])) (LClauseDisjunction Pos (LClause val [] pr [st2]) (LClause val [] pr' [st2])) -- e.g. "Ashley and Brett are running or jumping"
+    VPAnd pr pr' -> Right $ LClauseConjunction Pos (LClauseConjunction Pos (LClause val [] pr [st1]) (LClause val [] pr' [st1])) (LClauseConjunction Pos (LClause val [] pr [st2]) (LClause val [] pr' [st2])) -- e.g. "Ashley and Brett are running and jumping"
+    VPNegOr pr pr' -> Right $ LClauseConjunction Pos (LClauseDisjunction Neg (LClause val [] pr [st1]) (LClause val [] pr' [st1])) (LClauseDisjunction Neg (LClause val [] pr [st2]) (LClause val [] pr' [st2])) -- e.g. "Ashley and Brett are neither running nor jumping"
   Just ae -> case ae of
     ArgElement at e -> case e of
       Left qu -> case pt of
@@ -495,7 +496,7 @@ buildfromNPAnd st1 st2 (PredElement val pt mae) = case mae of
 buildfromNPNotOr :: Trm -> Trm -> PredElement -> Either String LClause
 buildfromNPNotOr st1 st2 (PredElement val pt mae) = case mae of
   Nothing -> case pt of
-    VPSingle pr -> Right $ LClauseDisjunction Neg (LClause val [] pr [st1]) (LClause val [] pr [st2])
+    VPSingle pr -> Right $ LClauseDisjunction Neg (LClause val [] pr [st1]) (LClause val [] pr [st2]) -- e.g. "Neither Ashley nor Brett are running"
     VPOr pr pr' -> Left "I can't translate that"
     VPAnd pr pr' -> Left "I can't translate that"
     VPNegOr pr pr' -> Left "I can't translate that"
@@ -720,6 +721,9 @@ tClause cl = case cl of
   LClauseDisjunction' va pqs (pr,pr') trms -> case va of
     Pos -> addQuants pqs $ Disjunction (Atomic (Predicate (fromverbgloss (fromPred pr))) (fromTerms trms)) (Atomic (Predicate (fromverbgloss (fromPred pr'))) (fromTerms trms))
     Neg -> addQuants pqs $ Negation $ Disjunction (Atomic (Predicate (fromverbgloss (fromPred pr))) (fromTerms trms)) (Atomic (Predicate (fromverbgloss (fromPred pr'))) (fromTerms trms))
+  LClauseNegDisjunction' va pqs (pr,pr') trms -> case va of
+    Pos -> addQuants pqs $ Negation $ Disjunction (Atomic (Predicate (fromverbgloss (fromPred pr))) (fromTerms trms)) (Atomic (Predicate (fromverbgloss (fromPred pr'))) (fromTerms trms))
+    Neg -> addQuants pqs $ Negation $ Negation $ Disjunction (Atomic (Predicate (fromverbgloss (fromPred pr))) (fromTerms trms)) (Atomic (Predicate (fromverbgloss (fromPred pr'))) (fromTerms trms))
   LClauseExists q -> doQuant q
 
 doQuant :: Quants -> Either String [Prop]
