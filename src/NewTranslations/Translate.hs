@@ -389,9 +389,11 @@ buildfromSubArg :: Trm -> PredElement -> Either String LClause
 buildfromSubArg tr (PredElement val pt mae) = case mae of
   Nothing -> case pt of
     VPSingle pr -> Right $ LClause val [] pr [tr] -- e.g. "Ashley is running"
-    VPOr pr pr' -> Right $ LClauseDisjunction Pos (LClause val [] pr [tr]) (LClause val [] pr' [tr]) -- e.g. "Ashley is running or jumping"
-    VPAnd pr pr' -> Right $ LClauseConjunction Pos (LClause val [] pr [tr]) (LClause val [] pr' [tr]) -- e.g. "Ashley is running and jumping"
-    VPNegOr pr pr' -> Right $ LClauseDisjunction Neg (LClause val [] pr [tr]) (LClause val [] pr' [tr]) -- e.g. "Ashley is neither running nor jumping"
+    VPOr pr pr' -> Right $ LClauseDisjunction val (LClause Pos [] pr [tr]) (LClause Pos [] pr' [tr]) -- e.g. "Ashley is running or jumping"
+    VPAnd pr pr' -> Right $ LClauseConjunction val (LClause Pos [] pr [tr]) (LClause Pos [] pr' [tr]) -- e.g. "Ashley is running and jumping"
+    VPNegOr pr pr' -> case val of 
+      Pos -> Right $ LClauseDisjunction Neg (LClause Pos [] pr [tr]) (LClause Pos [] pr' [tr]) -- e.g. "Ashley is neither running nor jumping"
+      Neg -> Right $ LClauseDisjunction Pos (LClause Pos [] pr [tr]) (LClause Pos [] pr' [tr]) -- e.g. "Ashley is neither running nor jumping"
   Just ae -> case ae of
     ArgElement at e -> case e of
       Left qu' -> case pt of
