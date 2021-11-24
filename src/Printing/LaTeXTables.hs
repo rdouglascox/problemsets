@@ -15,16 +15,6 @@ import Data.PLprop
 import Tables.Tables
 import Data.List
 
-
-type MatrixHeader = [Prop]
-type BodyHeader = [Prop]
-type Matrix = [[Bool]]
-type Body = [[Bool]]
-
-type RawTable = (MatrixHeader,BodyHeader,Matrix,Body)
-
-
-
 -- CenterColumn, VerticalLine, DVerticalLine
 
 makeTable :: RawTable -> LaTeX
@@ -36,16 +26,16 @@ makeSpec :: ([Prop],[Prop]) -> [TableSpec]
 makeSpec (mh,bh) = [VerticalLine] <> (intersperse VerticalLine [CenterColumn | x <- mh]) <> [DVerticalLine] <> (intersperse VerticalLine [CenterColumn | x <- bh]) <> [VerticalLine]
 
 makeHeaderRow :: ([Prop],[Prop]) -> LaTeX
-makeHeaderRow (mh,bh) = (foldl1 (&) (map printprop (mh ++ bh))) <> tabularnewline   
+makeHeaderRow (mh,bh) = foldl1 (&) (map printprop (mh ++ bh)) <> tabularnewline   
 
 unify [] [] = []
-unify (x:xs) (y:ys) = [x ++ y] ++ unify xs ys 
+unify (x:xs) (y:ys) = (x ++ y): unify xs ys 
 
 makeBodyRows :: ([[Bool]],[[Bool]]) -> LaTeX
 makeBodyRows (m,b) = mconcat $ map makeRow (unify m b)
 
 makeRow :: [Bool] -> LaTeX 
-makeRow bs = (foldl1 (&) (map printBool bs)) <> tabularnewline 
+makeRow bs = foldl1 (&) (map printBool bs) <> tabularnewline 
 
 printBool :: Bool -> LaTeX
 printBool True = fromString "T"

@@ -1,4 +1,4 @@
-module Tables.Tables (makeRawTable, getbasics, taut, sat, norow, norow') where
+module Tables.Tables (makeRawTable, getbasics, taut, sat, norow, norow', RawTable, MatrixHeader, Matrix, Body,  BodyHeader, ) where
 
 import Data.PLprop
 import Data.List

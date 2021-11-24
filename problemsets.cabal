@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 702132010618fc907e22a99018ab79504495ae09715eca3a4c0caeb66d66142d
+-- hash: 04561e061e92776d8c3593bc300010a202c271d3cca26661086d70b31c48cc7c
 
 name:           problemsets
 version:        0.1.0.0
@@ -61,6 +61,7 @@ library
       NewTranslations.TranslationsQandA
       Parsers.GPLIParser
       Parsers.GPLIToken
+      Printing.HTMLTables
       Printing.LaTeXGPLIModel
       Printing.LaTeXGPLIProps
       Printing.LaTeXGPLITrees
@@ -136,6 +137,7 @@ executable problemsets
       NewTranslations.TranslationsQandA
       Parsers.GPLIParser
       Parsers.GPLIToken
+      Printing.HTMLTables
       Printing.LaTeXGPLIModel
       Printing.LaTeXGPLIProps
       Printing.LaTeXGPLITrees

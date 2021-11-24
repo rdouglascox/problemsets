@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS02 (mkps02g, mkps02string) where
+module MakePS.MakePS02 (mkps02g, mkps02string, mkps02html) where
 
 
 import Text.LaTeX
@@ -13,15 +13,60 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 
+import qualified Printing.HTMLTables as PH
+import qualified Printing.UnicodePLProps as UP
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
 import Printing.LaTeXPLProps
 import Printing.LaTeXTables
 import Tables.Tables
+
 
 import Random.PLprops ( plvalidg, plequivsg )
 
 import Settings.PLSettings
 
 import System.Random 
+
+mkps02html :: IO H.Html
+mkps02html = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps02q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps02a (q1q,q1a) (q2q,q2a) num)
+       let (q1qh,q1ah) = getq1gh g1
+       let (q2qh,q2ah) = getq2gh g2
+       return (htmltemplate $ QandASet q1qh q2qh q1ah q2ah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: H.Html
+                         ,htmlQ2 :: H.Html
+                         ,htmlQA1 :: H.Html
+                         ,htmlQA2 :: H.Html
+                         ,latexQS :: String
+                         ,latexQAS :: String}
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Use a truth table to test whether the following propositions are equivalient." :: Text)
+       htmlQ1 qa
+       H5.p $ H.toHtml ("Q2. Use a truth table to test whether the following argument is valid." :: Text)
+       htmlQ2 qa
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Use a truth table to test whether the following propositions are equivalient." :: Text)
+       htmlQ1 qa
+       htmlQA1 qa
+       H5.p $ H.toHtml ("Q2. Use a truth table to test whether the following argument is valid." :: Text)
+       htmlQ2 qa
+       htmlQA2 qa
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
 
 -- |tree building
 
@@ -45,8 +90,8 @@ mkps02g :: RandomGen g => g -> Int -> IO ()
 mkps02g g n = do
               let (q1q,q1a) = getq1g g1
               let (q2q,q2a) = getq2g g2
-              renderFile ("ps02" ++ "-" ++ (show n) ++ "q.tex") (ps02q (q1q,q2q) n) -- render questions to tex
-              renderFile ("ps02" ++ "-" ++ (show n) ++ "a.tex") (ps02a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+              renderFile ("ps02" ++ "-" ++ show n ++ "q.tex") (ps02q (q1q,q2q) n) -- render questions to tex
+              renderFile ("ps02" ++ "-" ++ show n ++ "a.tex") (ps02a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
                   where (g1,g2) = split g
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
@@ -59,6 +104,18 @@ getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
 getq2g g = let p = plvalidg g settingPS02b in
            let t = makeRawTable p in
            (printarg p, makeTable t)
+
+--
+
+getq1gh :: RandomGen g => g -> (H.Html,H.Html)
+getq1gh g = let p = plequivsg g settingPS02a in
+           let t = makeRawTable p in
+           (H.toHtml $ UP.printprops p, PH.makeTable t)
+
+getq2gh :: RandomGen g => g -> (H.Html,H.Html)
+getq2gh g = let p = plvalidg g settingPS02b in
+           let t = makeRawTable p in
+           (H.toHtml $  UP.printarg p, PH.makeTable t)
 
 -- |document preamble
 
