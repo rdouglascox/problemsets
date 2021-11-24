@@ -2,14 +2,14 @@ module Tables.Tables (makeRawTable, getbasics, taut, sat, norow, norow', RawTabl
 
 import Data.PLprop
 import Data.List
-import Data.Char 
+import Data.Char
 import System.Random
 
 -- matrix function
 
 table :: Int -> [[Bool]]
 table x = iterate expand [[]] !! x
-    where 
+    where
     expand xs = map (True:) xs ++ map (False:) xs
 
 -- an assignment is just a pair of a proposition (a basic prop) and a truth value
@@ -19,12 +19,12 @@ type Assignment = [(Prop,Bool)]
 -- here's how we make an assignment etc
 
 getass :: Assignment -> Prop -> Bool
-getass (x:xs) p = if fst x == p 
+getass (x:xs) p = if fst x == p
                   then snd x
                   else getass xs p
 
 makeass :: [Prop] -> [Bool] -> Assignment
-makeass ps bs = zip ps bs 
+makeass = zip
 
 makeassignments :: [Prop] -> [[Bool]] -> [Assignment]
 makeassignments ps bss = let basics = sortbasics ps in
@@ -49,7 +49,7 @@ val ass (Negation x) = not $ val ass x
 val ass (Conjunction x y) = (val ass x) && (val ass y)
 val ass (Disjunction x y) = (val ass x) || (val ass y)
 val ass (Conditional x y) = (not (val ass x)) || (val ass y)
-val ass (Biconditional x y) = (val ass x) == (val ass y) 
+val ass (Biconditional x y) = (val ass x) == (val ass y)
 
 eval :: Prop -> Assignment -> Bool
 eval x y = val y x
@@ -65,14 +65,14 @@ type Body = [[Bool]]
 
 type RawTable = (MatrixHeader,BodyHeader,Matrix,Body)
 
- 
+
 makeRawTable :: [Prop] -> RawTable
-makeRawTable ps = (makeMatrixHeader,makeBodyHeader,makeMatrix,makeBody) 
+makeRawTable ps = (makeMatrixHeader,makeBodyHeader,makeMatrix,makeBody)
     where makeMatrixHeader = sortbasics (concatMap getbasics ps)
           makeBodyHeader = ps
           makeMatrix = table $ length $ makeMatrixHeader
           makeBody = transpose $ map (getcolumn ass) ps
-              where ass = makeassignments ps makeMatrix 
+              where ass = makeassignments ps makeMatrix
 
 -- Semantic Functions
 
@@ -82,20 +82,20 @@ makeTableBody ps = makeBody
           makeBodyHeader = ps
           makeMatrix = table $ length $ makeMatrixHeader
           makeBody = transpose $ map (getcolumn ass) ps
-              where ass = makeassignments ps makeMatrix 
+              where ass = makeassignments ps makeMatrix
 
 sat :: [Prop] -> Bool
-sat ps = or (map and (makeTableBody ps)) 
+sat ps = or (map and (makeTableBody ps))
 
 taut :: [Prop] -> Bool
 taut ps = and (map and (makeTableBody ps))
 
 norow :: [Prop] -> Bool
-norow ps = not $ or (map row (makeTableBody ps)) 
+norow ps = not $ or (map row (makeTableBody ps))
 
 norow' :: [Prop] -> Bool
-norow' ps = (not $ or (map row (makeTableBody ps))) && (not $ taut [(head $ reverse ps)]) 
+norow' ps = (not $ or (map row (makeTableBody ps))) && (not $ taut [(head $ reverse ps)])
 
 row :: [Bool] -> Bool
-row x = if and (tail $ reverse x)  && (head $ reverse x) == False then False else True 
- 
+row x = if and (tail $ reverse x)  && (head $ reverse x) == False then False else True
+
