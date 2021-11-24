@@ -29,6 +29,14 @@ dependencies:
 - combinatorial
 - optparse-applicative
 - blaze-html
+- diagrams-svg
+- diagrams-lib
+- diagrams-contrib
+- diagrams-core
+- svg-builder
+- SVGFonts
+- text
+
 
 library:
   source-dirs:

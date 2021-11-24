@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7dd02a6598cfdff8852601e86d031e8027eca9f175d7158fc898a7a61f2fd858
+-- hash: 17d4dc4dc4be3ad35c9013e2a8c53a2511187ca7b4a9a4b18aad333b85750205
 
 name:           problemsets
 version:        0.1.0.0
@@ -61,6 +61,7 @@ library
       NewTranslations.TranslationsQandA
       Parsers.GPLIParser
       Parsers.GPLIToken
+      Printing.HTMLPLTrees
       Printing.HTMLTables
       Printing.LaTeXGPLIModel
       Printing.LaTeXGPLIProps
@@ -69,6 +70,8 @@ library
       Printing.LaTeXPLTrees
       Printing.LaTeXTables
       Printing.PLprop
+      Printing.RenderPTree
+      Printing.RenderSVG
       Printing.TextGPLIModel
       Printing.TextGPLITree
       Printing.UnicodeLogicSymbols
@@ -91,14 +94,21 @@ library
       src
   build-depends:
       HaTeX
+    , SVGFonts
     , array
     , async
     , base >=4.7 && <5
     , blaze-html
     , combinatorial
     , containers
+    , diagrams-contrib
+    , diagrams-core
+    , diagrams-lib
+    , diagrams-svg
     , optparse-applicative
     , random
+    , svg-builder
+    , text
   default-language: Haskell2010
 
 executable problemsets
@@ -137,6 +147,7 @@ executable problemsets
       NewTranslations.TranslationsQandA
       Parsers.GPLIParser
       Parsers.GPLIToken
+      Printing.HTMLPLTrees
       Printing.HTMLTables
       Printing.LaTeXGPLIModel
       Printing.LaTeXGPLIProps
@@ -145,6 +156,8 @@ executable problemsets
       Printing.LaTeXPLTrees
       Printing.LaTeXTables
       Printing.PLprop
+      Printing.RenderPTree
+      Printing.RenderSVG
       Printing.TextGPLIModel
       Printing.TextGPLITree
       Printing.UnicodeLogicSymbols
@@ -169,15 +182,22 @@ executable problemsets
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HaTeX
+    , SVGFonts
     , array
     , async
     , base >=4.7 && <5
     , blaze-html
     , combinatorial
     , containers
+    , diagrams-contrib
+    , diagrams-core
+    , diagrams-lib
+    , diagrams-svg
     , optparse-applicative
     , problemsets
     , random
+    , svg-builder
+    , text
   default-language: Haskell2010
 
 test-suite problemsets-test
@@ -190,13 +210,20 @@ test-suite problemsets-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HaTeX
+    , SVGFonts
     , array
     , async
     , base >=4.7 && <5
     , blaze-html
     , combinatorial
     , containers
+    , diagrams-contrib
+    , diagrams-core
+    , diagrams-lib
+    , diagrams-svg
     , optparse-applicative
     , problemsets
     , random
+    , svg-builder
+    , text
   default-language: Haskell2010

@@ -16,9 +16,10 @@ import Text.LaTeX.Base.Math
 import Printing.LaTeXPLProps (printprops,printarg) 
 import Printing.LaTeXPLTrees (printtree) 
 
-import Settings.PLSettings
+import Settings.PLSettings ( settingPS04a, settingPS04b )
 
 import System.Random
+    ( mkStdGen, newStdGen, RandomGen(split, next) )
 
 import Random.PLprops (plcontrariesg, prepfc, plvalidg, prepforvalidity)
 import Trees.PLtrees (mktree)
@@ -44,8 +45,8 @@ mkps04g :: RandomGen g => g -> Int -> IO ()
 mkps04g g n = do
               let (q1q,q1a1,q1a2) = getq1g g1
               let (q2q,q2a) = getq2g g2
-              renderFile ("ps04" ++ "-" ++ (show n) ++ "q.tex") (ps04q (q1q,q2q) n) -- render questions to tex
-              renderFile ("ps04" ++ "-" ++ (show n) ++ "a.tex") (ps04a (q1q,q1a1,q1a2) (q2q,q2a) n) -- render answers to tex
+              renderFile ("ps04" ++ "-" ++ show n ++ "q.tex") (ps04q (q1q,q2q) n) -- render questions to tex
+              renderFile ("ps04" ++ "-" ++ show n ++ "a.tex") (ps04a (q1q,q1a1,q1a2) (q2q,q2a) n) -- render answers to tex
                   where (g1,g2) = split g
 -- |here we get the random prop(s), make the tree, return the LaTeX versions
 
@@ -59,6 +60,9 @@ getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
 getq2g g = let p = plvalidg g settingPS04b in
            let t = mktree (prepforvalidity p) in
            (printprops p, printtree t)
+
+-- | html versions for the above (using HT.printtree)
+
 
 -- |document preamble
 

@@ -39,7 +39,18 @@ packages:
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
-# extra-deps: []
+extra-deps: 
+  - SVGFonts-1.8.0.1@sha256:66a29cebd825bdac6ed1da83bd3a310ba6e8db5d63d6511015d644b9a8ec48b8,3019
+  - diagrams-contrib-1.4.4@sha256:5b742805bc672fa9afc204678ef675e94cafa27470a9d8f59fc26c0ff1edb90d,4731
+  - diagrams-core-1.5.0@sha256:eae2e82ad2e5ddbbfc9875067a0810dc4ebf35549ca6d0018a536d94b3aa7bf1,2973
+  - diagrams-lib-1.4.4@sha256:1129be254377b926ce2e932113e4bd06256de878d163fbcbacacf1be97bdf3b0,8220
+  - diagrams-svg-1.4.3@sha256:407ff78cb7bd1f44c68b0059036186f17a281a053901e29d0139ab151e703247,3159
+  - svg-builder-0.1.1@sha256:22de54d326a6b6912e461e1302edb9108b02aac0b6a6368fcdc3c4a224d487fd,1440
+  - active-0.2.0.15@sha256:22e235aefdd47121db743e138d309d7529b0eea545f9add8c113ce8f15ccf83e,1767
+  - dual-tree-0.2.3.0@sha256:bba5476c1cefc3802708a72ab22b5eab9e182cc065507f4a1f673ebdfc694bad,2884
+  - force-layout-0.4.0.6@sha256:4adae4a45a09a9378ea87930f082a968767a2bc95f6b2122e11966c57046a01c,1287
+  - monoid-extras-0.6.1@sha256:15312b3ed40481fc879fc7021857421794403763325d5c05b8536198012170b1,2197
+  - newtype-generics-0.6.1@sha256:9c3ee37721c24bcb62a96eee99da4bb1b8c49728059c3da2f21a381dc205dfbc,2023
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
@@ -64,3 +75,10 @@ packages:
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+
+# Nix stuff
+#
+nix:
+  enable: true
+  pure: false
+  packages: [zlib]

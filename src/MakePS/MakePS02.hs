@@ -105,7 +105,7 @@ getq2g g = let p = plvalidg g settingPS02b in
            let t = makeRawTable p in
            (printarg p, makeTable t)
 
---
+-- html versions of the above
 
 getq1gh :: RandomGen g => g -> (H.Html,H.Html)
 getq1gh g = let p = plequivsg g settingPS02a in
