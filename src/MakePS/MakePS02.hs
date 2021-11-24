@@ -53,16 +53,16 @@ htmltemplate :: QandASet -> H.Html
 htmltemplate qa = do
        H5.h2 $ H.toHtml ("Just the Questions" :: String)
        H5.p $ H.toHtml ("Q1. Use a truth table to test whether the following propositions are equivalient." :: Text)
-       htmlQ1 qa
+       H5.p $ htmlQ1 qa
        H5.p $ H.toHtml ("Q2. Use a truth table to test whether the following argument is valid." :: Text)
-       htmlQ2 qa
+       H5.p $ htmlQ2 qa
        H5.h2 $ H.toHtml ("Questions and Answers" :: String)
        H5.p $ H.toHtml ("Q1. Use a truth table to test whether the following propositions are equivalient." :: Text)
-       htmlQ1 qa
-       htmlQA1 qa
+       H5.p $ htmlQ1 qa
+       H5.p $ htmlQA1 qa
        H5.p $ H.toHtml ("Q2. Use a truth table to test whether the following argument is valid." :: Text)
-       htmlQ2 qa
-       htmlQA2 qa
+       H5.p $ htmlQ2 qa
+       H5.p $ htmlQA2 qa
        H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
        H5.p $ H.toHtml (latexQS qa)
        H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
