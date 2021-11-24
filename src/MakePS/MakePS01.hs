@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS01 (mkps01g,mkps01string) where
+module MakePS.MakePS01 (mkps01g,mkps01string,blazetest, mkps01html) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -11,10 +11,62 @@ import Text.LaTeX.Base.Pretty         -- prettyLaTeX
 import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
+import qualified Data.String as S
 
 import System.Random
+import Control.Monad
+
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
 
 import Translations.RandomSentences
+
+-- | for integration with problemsets online, we make html with embedded latex
+mkps01html :: IO H.Html
+mkps01html = do
+       g <- newStdGen -- get random generator
+       let (num,_) = next g
+       let seed = mkStdGen num
+       let (g1,g2) = split seed
+       let (q1q,q1a) = pltranslationg g1
+       let (q2q,q2a) = pltranslationg g2
+       let questionstring = prettyLaTeX (ps01q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps01a (q1q,q1a) (q2q,q2a) num)
+       let (q1qh,q1ah) = pltranslationgStr g1
+       let (q2qh,q2ah) = pltranslationgStr g2
+       return (htmltemplate $ QandASet q1qh q2qh q1ah q2ah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: String
+                         ,htmlQ2 :: String
+                         ,htmlQA1 :: String
+                         ,htmlQA2 :: String
+                         ,latexQS :: String
+                         ,latexQAS :: String} deriving (Show)
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Translate the following into PL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlQ1 qa)
+       H5.p $ H.toHtml ("Q2. Translate the following into PL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlQ2 qa)
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Translate the following into PL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlQ1 qa)
+       mapM_ (H5.p . H.toHtml) (S.lines (htmlQA1 qa))
+       H5.p $ H.toHtml ("Q2. Translate the following into PL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlQ2 qa)
+       mapM_ (H5.p . H.toHtml) (S.lines (htmlQA2 qa))
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
+
+blazetest :: H.Html
+blazetest = H.toHtml ("hello blaze!" :: Text)
+
+
+
 
 -- | just give me a string man!
 mkps01string :: IO (String, String)
@@ -22,50 +74,43 @@ mkps01string = do
        g <- newStdGen    -- get random generator
        let (num,_) = next g  -- use it to get a random number
        let seed = mkStdGen num
-       let (g1,g2) = split seed        
-       let (q1q,q1a) = getq1g g1
-       let (q2q,q2a) = getq2g g2
+       let (g1,g2) = split seed
+       let (q1q,q1a) = pltranslationg g1
+       let (q2q,q2a) = pltranslationg g2
        let questionstring = prettyLaTeX (ps01q (q1q,q2q) num)
        let answerstring = prettyLaTeX (ps01a (q1q,q1a) (q2q,q2a) num)
        return (questionstring,answerstring)
-   
+
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
 mkps01g :: RandomGen g => g -> Int -> IO ()
 mkps01g g n  = do
-         let (q1q,q1a) = getq1g g1
-         let (q2q,q2a) = getq2g g2
-         renderFile ("ps01" ++ "-" ++ (show n) ++ "q.tex") (ps01q (q1q,q2q) n) -- render questions to tex
-         renderFile ("ps01" ++ "-" ++ (show n) ++ "a.tex") (ps01a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+         let (q1q,q1a) = pltranslationg g1
+         let (q2q,q2a) = pltranslationg g2
+         renderFile ("ps01" ++ "-" ++ show n ++ "q.tex") (ps01q (q1q,q2q) n) -- render questions to tex
+         renderFile ("ps01" ++ "-" ++ show n ++ "a.tex") (ps01a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
               where (g1,g2) = split g
 
--- |here we get the random prop(s), make the tree, return the LaTeX versions
-
-getq1g :: RandomGen g => g -> (LaTeX,LaTeX)
-getq1g = pltranslationg 
-
-getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
-getq2g = pltranslationg
 
 
 -- |document preamble
 
 -- |preamble for questions
-ps01pq :: Int -> LaTeX 
+ps01pq :: Int -> LaTeX
 ps01pq n = docSettings <> title "Problem Set 01: PL Translations (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
-ps01pa :: Int -> LaTeX 
+ps01pa :: Int -> LaTeX
 ps01pa n = docSettings <> title "Problem Set 01: PL Translations (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
-docSettings = documentclass [] article 
-            <> usepackage [] amssymb 
-            <> usepackage [utf8] inputenc 
-            <> usepackage [] qtree 
+docSettings = documentclass [] article
+            <> usepackage [] amssymb
+            <> usepackage [utf8] inputenc
+            <> usepackage [] qtree
             <> importGeometry [GWidth (Cm 18)]
 
 -- |final latex document to render

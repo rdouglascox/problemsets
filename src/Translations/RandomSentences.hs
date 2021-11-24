@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Translations.RandomSentences (qa, qanda, rsentences, pltranslationg) where
+module Translations.RandomSentences (qa, qanda, rsentences, pltranslationg, pltranslationgStr) where
 
 import Translations.Sentences
 import System.Random
@@ -21,21 +21,31 @@ import Text.LaTeX.Base.Math
 
 import Translations.MonadicParserLeft
 import Printing.LaTeXPLProps
-
+import qualified Printing.UnicodePLProps as U
 
 
 pltranslation :: IO (LaTeX,LaTeX)
 pltranslation = do
     s <- rSentence <$> newStdGen
-    let sentence = fromString $ ((caps . printSentence) s)
+    let sentence = fromString $ (caps . printSentence) s
     let glossary = mconcat $ intersperse newline $ map fromString $ printGlossary' (makeGlossary' (makeGlossary s))
     let translation = printprop $ monadicLeftParse $ findandreplace' (makeTranslation s) (makeGlossary' (makeGlossary s))
     return (sentence, glossary <> newline <> newline <> translation)
 
+-- | string version of pl translations
+pltranslationgStr :: RandomGen g => g -> (String,String)
+pltranslationgStr g = 
+    let s = rSentence g in
+    let sentence = (caps . printSentence) s in
+    let glossary = mconcat $ intersperse "\n" $ map fromString $ printGlossary' (makeGlossary' (makeGlossary s)) in
+    let translation = U.printprop $ monadicLeftParse $ findandreplace' (makeTranslation s) (makeGlossary' (makeGlossary s)) in
+    (sentence, glossary ++ "\n\n" ++ translation)
+
+-- | Latex version of pl translations
 pltranslationg :: RandomGen g => g -> (LaTeX,LaTeX)
 pltranslationg g = 
     let s = rSentence g in
-    let sentence = fromString $ ((caps . printSentence) s) in
+    let sentence = fromString $ (caps . printSentence) s in
     let glossary = mconcat $ intersperse newline $ map fromString $ printGlossary' (makeGlossary' (makeGlossary s)) in
     let translation = printprop $ monadicLeftParse $ findandreplace' (makeTranslation s) (makeGlossary' (makeGlossary s)) in
     (sentence, glossary <> newline <> newline <> translation)

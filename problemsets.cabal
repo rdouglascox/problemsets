@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 98ff647d521a25d0bf4e086d96316bb37fcf400a29a2db5f7c338ec9a247622e
+-- hash: 702132010618fc907e22a99018ab79504495ae09715eca3a4c0caeb66d66142d
 
 name:           problemsets
 version:        0.1.0.0
@@ -27,6 +27,82 @@ source-repository head
 
 library
   exposed-modules:
+      MakePS.MakePS01
+  other-modules:
+      Data.GPLIModel
+      Data.GPLIprop
+      Data.GPLITree
+      Data.PLprop
+      MakePS.MakePS02
+      MakePS.MakePS04
+      MakePS.MakePS05
+      MakePS.MakePS06
+      MakePS.MakePS07
+      MakePS.MakePS08
+      MakePS.MakePS09
+      MakePS.MakePS10
+      MakePS.MakePS11
+      MakePS.MakeTranslationTest
+      Models.Evaluator
+      NewTranslations.EnglishL.Abs
+      NewTranslations.EnglishL.ErrM
+      NewTranslations.EnglishL.Lex
+      NewTranslations.EnglishL.Par
+      NewTranslations.EnglishL.ParData
+      NewTranslations.EnglishL.Print
+      NewTranslations.EnglishL.Skel
+      NewTranslations.EnglishL.Test
+      NewTranslations.Generators
+      NewTranslations.Glossary
+      NewTranslations.GPLIprop
+      NewTranslations.JustParses
+      NewTranslations.Print
+      NewTranslations.Translate
+      NewTranslations.TranslationsQandA
+      Parsers.GPLIParser
+      Parsers.GPLIToken
+      Printing.LaTeXGPLIModel
+      Printing.LaTeXGPLIProps
+      Printing.LaTeXGPLITrees
+      Printing.LaTeXPLProps
+      Printing.LaTeXPLTrees
+      Printing.LaTeXTables
+      Printing.PLprop
+      Printing.TextGPLIModel
+      Printing.TextGPLITree
+      Printing.UnicodeLogicSymbols
+      Printing.UnicodePLProps
+      Random.GPLIprop
+      Random.Models
+      Random.PLprops
+      Settings.GPLISettings
+      Settings.PLSettings
+      Tables.Tables
+      Translations.MonadicParserLeft
+      Translations.Names
+      Translations.RandomSentences
+      Translations.Sentences
+      Translations.Verbs
+      Trees.GPLItrees
+      Trees.PLtrees
+      Paths_problemsets
+  hs-source-dirs:
+      src
+  build-depends:
+      HaTeX
+    , array
+    , async
+    , base >=4.7 && <5
+    , blaze-html
+    , combinatorial
+    , containers
+    , optparse-applicative
+    , random
+  default-language: Haskell2010
+
+executable problemsets
+  main-is: Main.hs
+  other-modules:
       Data.GPLIModel
       Data.GPLIprop
       Data.GPLITree
@@ -69,6 +145,8 @@ library
       Printing.PLprop
       Printing.TextGPLIModel
       Printing.TextGPLITree
+      Printing.UnicodeLogicSymbols
+      Printing.UnicodePLProps
       Random.GPLIprop
       Random.Models
       Random.PLprops
@@ -82,33 +160,17 @@ library
       Translations.Verbs
       Trees.GPLItrees
       Trees.PLtrees
-  other-modules:
-      Paths_problemsets
-  hs-source-dirs:
-      src
-  build-depends:
-      HaTeX
-    , array
-    , async
-    , base >=4.7 && <5
-    , combinatorial
-    , containers
-    , optparse-applicative
-    , random
-  default-language: Haskell2010
-
-executable problemsets
-  main-is: Main.hs
-  other-modules:
       Paths_problemsets
   hs-source-dirs:
       app
+      src
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HaTeX
     , array
     , async
     , base >=4.7 && <5
+    , blaze-html
     , combinatorial
     , containers
     , optparse-applicative
@@ -129,6 +191,7 @@ test-suite problemsets-test
     , array
     , async
     , base >=4.7 && <5
+    , blaze-html
     , combinatorial
     , containers
     , optparse-applicative
