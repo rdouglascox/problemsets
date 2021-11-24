@@ -12,7 +12,7 @@ import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Base.Math
 import qualified Data.String as S
-
+import Data.List
 import System.Random
 import Control.Monad
 
@@ -32,14 +32,16 @@ mkps01html = do
        let (q2q,q2a) = pltranslationg g2
        let questionstring = prettyLaTeX (ps01q (q1q,q2q) num)
        let answerstring = prettyLaTeX (ps01a (q1q,q1a) (q2q,q2a) num)
-       let (q1qh,q1ah) = pltranslationgStr g1
-       let (q2qh,q2ah) = pltranslationgStr g2
-       return (htmltemplate $ QandASet q1qh q2qh q1ah q2ah questionstring answerstring)
+       let (q1qh,q1gh,q1th) = pltranslationgStr g1
+       let (q2qh,q2gh,q2th) = pltranslationgStr g2
+       return (htmltemplate $ QandASet q1qh q2qh q1gh q2gh q1th q2th questionstring answerstring)
 
 data QandASet = QandASet {htmlQ1 :: String
                          ,htmlQ2 :: String
-                         ,htmlQA1 :: String
-                         ,htmlQA2 :: String
+                         ,htmlQG1 :: String
+                         ,htmlQG2 :: String
+                         ,htmlTG1 :: String
+                         ,htmlTG2 :: String
                          ,latexQS :: String
                          ,latexQAS :: String} deriving (Show)
 
@@ -53,10 +55,16 @@ htmltemplate qa = do
        H5.h2 $ H.toHtml ("Questions and Answers" :: String)
        H5.p $ H.toHtml ("Q1. Translate the following into PL. Provide a glossary for your translation." :: Text)
        H5.p $ H.toHtml (htmlQ1 qa)
-       mapM_ (H5.p . H.toHtml) (S.lines (htmlQA1 qa))
+       H5.p $ H.toHtml ("Glossary:" :: String)
+       H5.p $ mconcat $ intersperse H5.br $ map H.toHtml (S.lines (htmlQG1 qa))
+       H5.p $ H.toHtml ("Translation:" :: String)
+       H5.p $ H.toHtml (htmlTG1 qa)
        H5.p $ H.toHtml ("Q2. Translate the following into PL. Provide a glossary for your translation." :: Text)
        H5.p $ H.toHtml (htmlQ2 qa)
-       mapM_ (H5.p . H.toHtml) (S.lines (htmlQA2 qa))
+       H5.p $ H.toHtml ("Glossary:" :: String)
+       H5.p $ mconcat $ intersperse H5.br $ map H.toHtml (S.lines (htmlQG2 qa))
+       H5.p $ H.toHtml ("Translation:" :: String)
+       H5.p $ H.toHtml (htmlTG2 qa)
        H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
        H5.p $ H.toHtml (latexQS qa)
        H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)

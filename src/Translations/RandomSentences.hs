@@ -33,13 +33,13 @@ pltranslation = do
     return (sentence, glossary <> newline <> newline <> translation)
 
 -- | string version of pl translations
-pltranslationgStr :: RandomGen g => g -> (String,String)
+pltranslationgStr :: RandomGen g => g -> (String,String,String)
 pltranslationgStr g = 
     let s = rSentence g in
     let sentence = (caps . printSentence) s in
     let glossary = mconcat $ intersperse "\n" $ map fromString $ printGlossary' (makeGlossary' (makeGlossary s)) in
     let translation = U.printprop $ monadicLeftParse $ findandreplace' (makeTranslation s) (makeGlossary' (makeGlossary s)) in
-    (sentence, glossary ++ "\n\n" ++ translation)
+    (sentence, glossary, translation)
 
 -- | Latex version of pl translations
 pltranslationg :: RandomGen g => g -> (LaTeX,LaTeX)
