@@ -7,10 +7,10 @@ printprop :: Prop -> String
 printprop p = case p of
     Basic x -> x
     Negation p -> uNeg ++ printprop p
-    Conjunction l r -> printprop l ++ uAnd ++ printprop r
-    Disjunction l r -> printprop l ++ uOr ++ printprop r
-    Conditional l r -> printprop l ++ uIf ++ printprop r
-    Biconditional l r -> printprop l ++ uIff ++ printprop r
+    Conjunction l r -> "(" ++ printprop l ++ uAnd ++ printprop r ++ ")"
+    Disjunction l r -> "(" ++ printprop l ++ uOr ++ printprop r ++ ")"
+    Conditional l r -> "(" ++ printprop l ++ uIf ++ printprop r ++ ")"
+    Biconditional l r -> "(" ++ printprop l ++ uIff ++ printprop r ++ ")"
 
 printprops :: [Prop] -> String
 printprops [] = ""
