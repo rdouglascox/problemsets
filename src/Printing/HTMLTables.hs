@@ -17,7 +17,7 @@ makeTable (mh,bh,m,b) = let mhhtml = map (H.toHtml . printprop) mh in
                         let bhtml = map (map (H.toHtml . printBool)) b in
                         let header = mhhtml <> bhhtml in
                         let body = unify mhtml bhtml in
-                        H5.table $ forM_ body (H5.tr . mapM_ H5.td)
+                        H5.table $ H5.th $ mapM_ H5.td header <> forM_ body (H5.tr . mapM_ H5.td)
 
 unify :: [[a]] -> [[a]] -> [[a]]
 unify [] [] = []

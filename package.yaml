@@ -35,6 +35,7 @@ library:
     - src
   exposed-modules: 
     - MakePS.MakePS01
+    - MakePS.MakePS02
 
 executables:
   problemsets:
