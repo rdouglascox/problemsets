@@ -34,7 +34,7 @@ dependencies:
 - diagrams-contrib
 - diagrams-core
 - svg-builder
-- SVGFonts
+- SVGFonts >= 1.8.0.1
 - text
 
 
@@ -44,6 +44,7 @@ library:
   exposed-modules: 
     - MakePS.MakePS01
     - MakePS.MakePS02
+    - MakePS.MakePS04
 
 executables:
   problemsets:

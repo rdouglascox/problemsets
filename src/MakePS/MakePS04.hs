@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS04 (mkps04g, mkps04string) where
+module MakePS.MakePS04 (mkps04g, mkps04string, mkps04html) where
 
 
 import Text.LaTeX
@@ -24,6 +24,58 @@ import System.Random
 import Random.PLprops (plcontrariesg, prepfc, plvalidg, prepforvalidity)
 import Trees.PLtrees (mktree)
 
+import qualified Printing.HTMLPLTrees as PHT
+import qualified Printing.UnicodePLProps as PHP
+
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
+
+mkps04html :: IO H.Html
+mkps04html = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a1,q1a2) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps04q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps04a (q1q,q1a1,q1a2) (q2q,q2a) num)
+       (q1qh,q1ah,q1a2h) <- getq1gh g1
+       (q2qh,q2ah) <- getq2gh g2
+       return (htmltemplate $ QandASet q1qh q2qh q1ah q1a2h q2ah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: H.Html
+                         ,htmlQ2 :: H.Html
+                         ,htmlQA1a :: H.Html
+                         ,htmlQA1b :: H.Html
+                         ,htmlQA2 :: H.Html
+                         ,latexQS :: String
+                         ,latexQAS :: String}
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Use a tree to test whether the following are contraries. If they are not, then read a countermodel off the tree." :: Text)
+       H5.p $ htmlQ1 qa
+       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree.." :: Text)
+       H5.p $ htmlQ2 qa
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Use a tree to test whether the following are contraries. If they are not, then read a countermodel off the tree." :: Text)
+       H5.p $ htmlQ1 qa
+       H5.p $ H.toHtml ("First tree (are the propositions jointly satisfiable?):" :: String)
+       H5.p $ htmlQA1a qa
+       H5.p $ H.toHtml ("Second tree (are the propositions contradictories?):" :: String)
+       H5.p $ htmlQA1b qa
+       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree.." :: Text)
+       H5.p $ htmlQ2 qa
+       H5.p $ H.toHtml ("Tree:" :: String)
+       H5.p $ htmlQA2 qa
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
+
+
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- | just give me a string man!
@@ -38,7 +90,6 @@ mkps04string = do
        let questionstring = prettyLaTeX (ps04q (q1q,q2q) num)
        let answerstring = prettyLaTeX (ps04a (q1q,q1a1,q1a2) (q2q,q2a) num)
        return (questionstring,answerstring)
-
 
 -- |function to render questions and answers to .tex file
 mkps04g :: RandomGen g => g -> Int -> IO ()
@@ -61,8 +112,21 @@ getq2g g = let p = plvalidg g settingPS04b in
            let t = mktree (prepforvalidity p) in
            (printprops p, printtree t)
 
--- | html versions for the above (using HT.printtree)
+-- | html versions for the above (using PHT.printtree and PHP.printprops)
 
+getq1gh :: RandomGen g => g -> IO (H.Html,H.Html,H.Html)
+getq1gh g = do let p = plcontrariesg g settingPS04a
+               let t1 = mktree (prepfc p) 
+               let t2 = mktree p 
+               ht1 <- PHT.printtree t1
+               ht2 <- PHT.printtree t2
+               return (H.toHtml $ PHP.printprops p, ht2, ht1)
+
+getq2gh :: RandomGen g => g -> IO (H.Html,H.Html)
+getq2gh g = do let p = plvalidg g settingPS04b 
+               let t = mktree (prepforvalidity p)
+               ht <- PHT.printtree t
+               return (H.toHtml $ PHP.printprops p, ht)
 
 -- |document preamble
 

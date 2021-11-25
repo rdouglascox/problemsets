@@ -47,7 +47,7 @@ text' font s
   # SF.svgText def { SF.textFont = font }
   # SF.fit_height 1
   # SF.set_envelope
-  # lw none # fc black # centerXY
+  # lw none # centerXY # fc (sRGB24read "#2c3e50") # lc (sRGB24read "#2c3e50")
 
 propDiagram' font x = text' font x # pad 1.2
 

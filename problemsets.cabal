@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 17d4dc4dc4be3ad35c9013e2a8c53a2511187ca7b4a9a4b18aad333b85750205
+-- hash: 3fd97fc4c12b0c290da1c59d2b702aeb3046a85988a069c9b74a493d2ed42ddd
 
 name:           problemsets
 version:        0.1.0.0
@@ -29,12 +29,12 @@ library
   exposed-modules:
       MakePS.MakePS01
       MakePS.MakePS02
+      MakePS.MakePS04
   other-modules:
       Data.GPLIModel
       Data.GPLIprop
       Data.GPLITree
       Data.PLprop
-      MakePS.MakePS04
       MakePS.MakePS05
       MakePS.MakePS06
       MakePS.MakePS07
@@ -94,7 +94,7 @@ library
       src
   build-depends:
       HaTeX
-    , SVGFonts
+    , SVGFonts >=1.8.0.1
     , array
     , async
     , base >=4.7 && <5
@@ -182,7 +182,7 @@ executable problemsets
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HaTeX
-    , SVGFonts
+    , SVGFonts >=1.8.0.1
     , array
     , async
     , base >=4.7 && <5
@@ -210,7 +210,7 @@ test-suite problemsets-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HaTeX
-    , SVGFonts
+    , SVGFonts >=1.8.0.1
     , array
     , async
     , base >=4.7 && <5
