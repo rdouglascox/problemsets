@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- | gpl translations
+
 module MakePS.MakePS06 (mkps06g,mkps06string) where
 
 import Text.LaTeX

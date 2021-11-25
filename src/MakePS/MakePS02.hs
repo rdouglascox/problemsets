@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- pl truth tables
+
 module MakePS.MakePS02 (mkps02g, mkps02string, mkps02html) where
 
 

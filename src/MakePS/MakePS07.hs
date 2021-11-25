@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- | mpl trees
+
 module MakePS.MakePS07 (mkps07g, mkps07string) where
 
 import Text.LaTeX
@@ -36,12 +38,13 @@ import Text.LaTeX.Packages.Geometry
 import Text.LaTeX.Packages.Inputenc ( inputenc, utf8 )   
 import Text.LaTeX.Packages.Trees.Qtree ( qtree )
 import Text.LaTeX.Packages.AMSSymb ( amssymb )
-import Text.LaTeX.Base.Pretty
+import Text.LaTeX.Base.Pretty ( prettyLaTeX )
 import Printing.LaTeXGPLIProps (printprops,printarg)
 import Printing.LaTeXGPLITrees (printtree)
 import Printing.LaTeXGPLIModel (printmodels)
 
 import System.Random
+    ( mkStdGen, newStdGen, RandomGen(split, next) )
 
 import Settings.GPLISettings ( settingPS07b, settingPS07a )
 
@@ -69,8 +72,8 @@ mkps07g :: RandomGen g => g -> Int -> IO ()
 mkps07g g n = do
          let (q1q,q1a) =  getq1g g1
          let (q2q,q2a) = getq2g g2
-         renderFile ("ps07" ++ "-" ++ (show n) ++ "q.tex") (ps07q (q1q,q2q) n) -- render questions to tex
-         renderFile ("ps07" ++ "-" ++ (show n) ++ "a.tex") (ps07a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
+         renderFile ("ps07" ++ "-" ++ show n ++ "q.tex") (ps07q (q1q,q2q) n) -- render questions to tex
+         renderFile ("ps07" ++ "-" ++ show n ++ "a.tex") (ps07a (q1q,q1a) (q2q,q2a) n) -- render answers to tex
          where (g1,g2) = split g
 
 -- |here we get the random prop(s), make the tree, return the LaTeX versions

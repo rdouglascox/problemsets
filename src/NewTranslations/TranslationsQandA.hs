@@ -1,6 +1,21 @@
-module NewTranslations.TranslationsQandA (makeQandA, QandA (..),mpltrans,gpltrans,gplitrans,transtest) where
+module NewTranslations.TranslationsQandA (makeQandA, QandA (..),mpltrans,gpltrans,gplitrans,transtest,mpltransh,gpltransh,gplitransh) where
 
 import NewTranslations.Generators
+    ( mplq1,
+      mplq2,
+      mplq3,
+      mplq4,
+      mplq5,
+      gplq1,
+      gplq2,
+      gplq3,
+      gplq4,
+      gplq5,
+      gpliq1,
+      gpliq2,
+      gpliq3,
+      gpliq4,
+      gpliq5 )
 import NewTranslations.Glossary (getglossary)
 import NewTranslations.Translate (translate)
 import System.Random ( newStdGen, RandomGen, split )
@@ -8,8 +23,13 @@ import Data.GPLIprop ( Prop )
 import NewTranslations.Print ( printProp )
 import Data.Char ( toUpper )
 import Text.LaTeX
-import Printing.LaTeXGPLIProps
-import Data.List
+    ( IsString(fromString), enumerate, item, newline, quote, LaTeX )
+import Printing.LaTeXGPLIProps ( printprops )
+import Data.List ( intersperse )
+
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
+import qualified Printing.UnicodeGPLIProps as UP
 
 data QandA = QandA String TranProps GlosStrings
 
@@ -38,6 +58,16 @@ sampleQandA = do
 printQandA :: QandA -> String
 printQandA (QandA q t g) = "\n" ++ q ++ "\n\n" ++ unlines (map printProp t) ++ "\n" ++ unlines g
 
+-- | produce HTML questions / question and answer pairs (as html lists)
+
+justquestionsh :: [QandA] -> H.Html
+justquestionsh x = H5.ol $ mapM_ (H5.li . H.toHtml) (extractquestions x)
+
+questionsandanswersh :: [QandA] -> H.Html
+questionsandanswersh x = H5.ol $ mapM_ (H5.li . displayquandah) x
+
+displayquandah :: QandA -> H.Html
+displayquandah (QandA q t g) = H.toHtml q <> H5.p (H.toHtml $ UP.printprops t) <> H5.p (mconcat (intersperse H5.br (map H.toHtml g)))
 
 -- | produce LaTeX questions / question and answer pairs (as itemized)
 
@@ -92,6 +122,41 @@ gplitrans g = let (g1,g2) = split g in
                 ,makeQandA g4 gpliq4
                 ,makeQandA g5 gpliq5] in
                     (justquestions qanda,questionsandanswers qanda)
+
+mpltransh :: RandomGen g => g -> (H.Html,H.Html)
+mpltransh g = let (g1,g2) = split g in
+    let (g3,g4) = split g1 in
+    let (g5,g6) = split g2 in
+    let qanda = [makeQandA g1 mplq1
+                ,makeQandA g2 mplq2
+                ,makeQandA g3 mplq3
+                ,makeQandA g4 mplq4
+                ,makeQandA g5 mplq4] in
+                    (justquestionsh qanda,questionsandanswersh qanda)
+
+gpltransh :: RandomGen g => g -> (H.Html,H.Html)
+gpltransh g = let (g1,g2) = split g in
+    let (g3,g4) = split g1 in
+    let (g5,g6) = split g2 in
+    let qanda = [makeQandA g1 gplq1
+                ,makeQandA g2 gplq2
+                ,makeQandA g3 gplq3
+                ,makeQandA g4 gplq4
+                ,makeQandA g5 gplq5] in
+                    (justquestionsh qanda,questionsandanswersh qanda)
+
+gplitransh :: RandomGen g => g -> (H.Html,H.Html)
+gplitransh g = let (g1,g2) = split g in
+    let (g3,g4) = split g1 in
+    let (g5,g6) = split g2 in
+    let qanda = [makeQandA g1 gpliq1
+                ,makeQandA g2 gpliq2
+                ,makeQandA g3 gpliq3
+                ,makeQandA g4 gpliq4
+                ,makeQandA g5 gpliq5] in
+                    (justquestionsh qanda,questionsandanswersh qanda)
+
+-- | testing translations
 
 transtest :: RandomGen g => g -> (LaTeX,LaTeX)
 transtest g = let (g1,g2) = split g in

@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MakePS.MakePS04 (mkps04g, mkps04string, mkps04html) where
+-- pl truth trees
 
+module MakePS.MakePS04 (mkps04g, mkps04string, mkps04html) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands

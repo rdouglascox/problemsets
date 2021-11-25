@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- | mpl translations
+
 module MakePS.MakePS05 (mkps05g,mkps05string) where
 
 import Text.LaTeX
@@ -18,6 +20,42 @@ import NewTranslations.TranslationsQandA
 
 import Translations.RandomSentences
 
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
+import qualified Data.String as S
+
+-- | html output
+
+-- | just give me a string man!
+mkps05html :: IO H.Html
+mkps05html = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (q,qa) = mpltrans seed
+       let (qh,qah) = mpltransh seed
+       let questionstring = prettyLaTeX (ps05q q num)
+       let answerstring = prettyLaTeX (ps05a qa num)
+       return (htmltemplate $ QandASet qh qah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: H.Html
+                         ,htmlA1 :: H.Html
+                         ,latexQS :: String
+                         ,latexQAS :: String}
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Translate the following into MPL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlQ1 qa)
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Translate the following into PL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlA1 qa)
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
+
 -- | just give me a string man!
 mkps05string :: IO (String, String)
 mkps05string = do
@@ -28,7 +66,8 @@ mkps05string = do
        let questionstring = prettyLaTeX (ps05q q num)
        let answerstring = prettyLaTeX (ps05a qa num)
        return (questionstring,answerstring)
-   
+
+ 
 
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 

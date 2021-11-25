@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- pl translations
+
 module MakePS.MakePS01 (mkps01g,mkps01string,blazetest, mkps01html) where
 
 import Text.LaTeX
@@ -69,11 +71,6 @@ htmltemplate qa = do
        H5.p $ H.toHtml (latexQS qa)
        H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
        H5.p $ H.toHtml (latexQAS qa)
-
-blazetest :: H.Html
-blazetest = H.toHtml ("hello blaze!" :: Text)
-
-
 
 
 -- | just give me a string man!

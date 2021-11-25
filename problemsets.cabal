@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3fd97fc4c12b0c290da1c59d2b702aeb3046a85988a069c9b74a493d2ed42ddd
+-- hash: 1e55dad4529f4dd119e0b2cb9effd104f2cc67ab5c8d1a8810cf2f0354364132
 
 name:           problemsets
 version:        0.1.0.0
@@ -30,12 +30,12 @@ library
       MakePS.MakePS01
       MakePS.MakePS02
       MakePS.MakePS04
+      MakePS.MakePS05
   other-modules:
       Data.GPLIModel
       Data.GPLIprop
       Data.GPLITree
       Data.PLprop
-      MakePS.MakePS05
       MakePS.MakePS06
       MakePS.MakePS07
       MakePS.MakePS08
@@ -74,6 +74,7 @@ library
       Printing.RenderSVG
       Printing.TextGPLIModel
       Printing.TextGPLITree
+      Printing.UnicodeGPLIProps
       Printing.UnicodeLogicSymbols
       Printing.UnicodePLProps
       Random.GPLIprop
@@ -160,6 +161,7 @@ executable problemsets
       Printing.RenderSVG
       Printing.TextGPLIModel
       Printing.TextGPLITree
+      Printing.UnicodeGPLIProps
       Printing.UnicodeLogicSymbols
       Printing.UnicodePLProps
       Random.GPLIprop
