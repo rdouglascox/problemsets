@@ -53,6 +53,7 @@ data QandASet = QandASet {htmlQ1 :: H.Html
 
 htmltemplate :: QandASet -> H.Html
 htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 2: PL Truth Tables" :: String)
        H5.h2 $ H.toHtml ("Just the Questions" :: String)
        H5.p $ H.toHtml ("Q1. Use a truth table to test whether the following propositions are equivalient." :: Text)
        H5.p $ htmlQ1 qa

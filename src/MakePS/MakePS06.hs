@@ -2,7 +2,7 @@
 
 -- | gpl translations
 
-module MakePS.MakePS06 (mkps06g,mkps06string) where
+module MakePS.MakePS06 (mkps06g,mkps06string,mkps06html) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -20,13 +20,50 @@ import NewTranslations.TranslationsQandA
 
 import Translations.RandomSentences
 
+
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
+import qualified Data.String as S
+
+-- | html output
+
+mkps06html :: IO H.Html
+mkps06html = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (q,qa) = gpltrans seed
+       let (qh,qah) = gpltransh seed
+       let questionstring = prettyLaTeX (ps06q q num)
+       let answerstring = prettyLaTeX (ps06a qa num)
+       return (htmltemplate $ QandASet qh qah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: H.Html
+                         ,htmlA1 :: H.Html
+                         ,latexQS :: String
+                         ,latexQAS :: String}
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 6: Translations from English into GPL" :: String)
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Translate the following into GPL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlQ1 qa)
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Translate the following into GPL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlA1 qa)
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
+
 -- | just give me a string man!
 mkps06string :: IO (String, String)
 mkps06string = do
        g <- newStdGen    -- get random generator
        let (num,_) = next g  -- use it to get a random number
        let seed = mkStdGen num
-       let (q,qa) = mpltrans seed
+       let (q,qa) = gpltrans seed
        let questionstring = prettyLaTeX (ps06q q num)
        let answerstring = prettyLaTeX (ps06a qa num)
        return (questionstring,answerstring)

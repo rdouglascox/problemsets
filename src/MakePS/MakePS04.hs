@@ -55,6 +55,7 @@ data QandASet = QandASet {htmlQ1 :: H.Html
 
 htmltemplate :: QandASet -> H.Html
 htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 4: PL Truth Trees" :: String)
        H5.h2 $ H.toHtml ("Just the Questions" :: String)
        H5.p $ H.toHtml ("Q1. Use a tree to test whether the following are contraries. If they are not, then read a countermodel off the tree." :: Text)
        H5.p $ htmlQ1 qa
@@ -67,7 +68,7 @@ htmltemplate qa = do
        H5.p $ htmlQA1a qa
        H5.p $ H.toHtml ("Second tree (are the propositions contradictories?):" :: String)
        H5.p $ htmlQA1b qa
-       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree.." :: Text)
+       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree." :: Text)
        H5.p $ htmlQ2 qa
        H5.p $ H.toHtml ("Tree:" :: String)
        H5.p $ htmlQA2 qa

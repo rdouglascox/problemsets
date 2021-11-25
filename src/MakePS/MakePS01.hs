@@ -2,7 +2,7 @@
 
 -- pl translations
 
-module MakePS.MakePS01 (mkps01g,mkps01string,blazetest, mkps01html) where
+module MakePS.MakePS01 (mkps01g,mkps01string,mkps01html) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -49,6 +49,7 @@ data QandASet = QandASet {htmlQ1 :: String
 
 htmltemplate :: QandASet -> H.Html
 htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 1: Translations from English into PL" :: String)
        H5.h2 $ H.toHtml ("Just the Questions" :: String)
        H5.p $ H.toHtml ("Q1. Translate the following into PL. Provide a glossary for your translation." :: Text)
        H5.p $ H.toHtml (htmlQ1 qa)

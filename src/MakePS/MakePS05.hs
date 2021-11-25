@@ -2,7 +2,7 @@
 
 -- | mpl translations
 
-module MakePS.MakePS05 (mkps05g,mkps05string) where
+module MakePS.MakePS05 (mkps05g,mkps05string,mkps05html) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -26,7 +26,6 @@ import qualified Data.String as S
 
 -- | html output
 
--- | just give me a string man!
 mkps05html :: IO H.Html
 mkps05html = do
        g <- newStdGen    -- get random generator
@@ -45,11 +44,12 @@ data QandASet = QandASet {htmlQ1 :: H.Html
 
 htmltemplate :: QandASet -> H.Html
 htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 5: Translations from English into MPL" :: String)
        H5.h2 $ H.toHtml ("Just the Questions" :: String)
        H5.p $ H.toHtml ("Q1. Translate the following into MPL. Provide a glossary for your translation." :: Text)
        H5.p $ H.toHtml (htmlQ1 qa)
        H5.h2 $ H.toHtml ("Questions and Answers" :: String)
-       H5.p $ H.toHtml ("Q1. Translate the following into PL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml ("Q1. Translate the following into MPL. Provide a glossary for your translation." :: Text)
        H5.p $ H.toHtml (htmlA1 qa)
        H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
        H5.p $ H.toHtml (latexQS qa)

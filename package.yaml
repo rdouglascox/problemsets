@@ -46,6 +46,8 @@ library:
     - MakePS.MakePS02
     - MakePS.MakePS04
     - MakePS.MakePS05
+    - MakePS.MakePS06
+    - MakePS.MakePS11
 
 executables:
   problemsets:

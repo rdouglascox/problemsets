@@ -2,7 +2,7 @@
 
 -- | gpli translations
 
-module MakePS.MakePS11 (mkps11g,mkps11string) where
+module MakePS.MakePS11 (mkps11g,mkps11string,mkps11html) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -20,18 +20,54 @@ import NewTranslations.TranslationsQandA
 
 import Translations.RandomSentences
 
+
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
+import qualified Data.String as S
+
+-- | html output
+
+mkps11html :: IO H.Html
+mkps11html = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (q,qa) = gplitrans seed
+       let (qh,qah) = gplitransh seed
+       let questionstring = prettyLaTeX (ps11q q num)
+       let answerstring = prettyLaTeX (ps11a qa num)
+       return (htmltemplate $ QandASet qh qah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: H.Html
+                         ,htmlA1 :: H.Html
+                         ,latexQS :: String
+                         ,latexQAS :: String}
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 11: Translations from English into GPLI" :: String)
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Translate the following into GPL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlQ1 qa)
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Translate the following into GPL. Provide a glossary for your translation." :: Text)
+       H5.p $ H.toHtml (htmlA1 qa)
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
+
 -- | just give me a string man!
 mkps11string :: IO (String, String)
 mkps11string = do
        g <- newStdGen    -- get random generator
        let (num,_) = next g  -- use it to get a random number
        let seed = mkStdGen num
-       let (q,qa) = mpltrans seed
+       let (q,qa) = gplitrans seed
        let questionstring = prettyLaTeX (ps11q q num)
        let answerstring = prettyLaTeX (ps11a qa num)
        return (questionstring,answerstring)
    
-
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
 
 -- |function to render questions and answers to .tex file
@@ -89,7 +125,6 @@ q11atemp :: LaTeX -> LaTeX
 q11atemp q = q
 
 -- |template for questions and answers
-
 
 -- |only questions template -- expects each question in order
 questions :: LaTeX -> LaTeX

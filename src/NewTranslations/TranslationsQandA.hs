@@ -67,7 +67,7 @@ questionsandanswersh :: [QandA] -> H.Html
 questionsandanswersh x = H5.ol $ mapM_ (H5.li . displayquandah) x
 
 displayquandah :: QandA -> H.Html
-displayquandah (QandA q t g) = H.toHtml q <> H5.p (H.toHtml $ UP.printprops t) <> H5.p (mconcat (intersperse H5.br (map H.toHtml g)))
+displayquandah (QandA q t g) = H5.p (H.toHtml q) <> H5.p (H.toHtml ("Translation: " :: String)) <> H5.p (H.toHtml $ UP.printprops t) <> H5.p (H.toHtml ("Glossary: " :: String)) <> mconcat (intersperse H5.br (map H.toHtml g)) <> H5.br <> H5.br
 
 -- | produce LaTeX questions / question and answer pairs (as itemized)
 
