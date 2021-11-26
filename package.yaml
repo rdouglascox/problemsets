@@ -47,6 +47,10 @@ library:
     - MakePS.MakePS04
     - MakePS.MakePS05
     - MakePS.MakePS06
+    - MakePS.MakePS07
+    - MakePS.MakePS08
+    - MakePS.MakePS09
+    - MakePS.MakePS10
     - MakePS.MakePS11
 
 executables:

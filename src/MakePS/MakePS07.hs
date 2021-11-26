@@ -2,7 +2,7 @@
 
 -- | mpl trees
 
-module MakePS.MakePS07 (mkps07g, mkps07string) where
+module MakePS.MakePS07 (mkps07g, mkps07string, mkps07html) where
 
 import Text.LaTeX
     ( IsString(fromString),
@@ -51,7 +51,59 @@ import Settings.GPLISettings ( settingPS07b, settingPS07a )
 import Random.GPLIprop (mplequivg, mplsatg, prepforequiv,prepforvalidity,prepfortaut)
 import Trees.GPLItrees ( mktree, getmodels )
 
+
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
+import qualified Printing.UnicodeGPLIProps as U
+import qualified Printing.RenderSVGGPLI as R
+import qualified Printing.TextGPLIModel as T
+import qualified Printing.HTMLGPLITrees as PHT
+import qualified Printing.HTMLGPLIModel as HM
+
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
+
+mkps07html :: IO H.Html
+mkps07html = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps07q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps07a (q1q,q1a) (q2q,q2a) num)
+       (q1qh,q1ah) <- getq1gh g1
+       (q2qh,q2ah) <- getq2gh g2
+       return (htmltemplate $ QandASet q1qh q2qh q1ah q2ah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: H.Html
+                         ,htmlQ2 :: H.Html
+                         ,htmlQA1 :: H.Html
+                         ,htmlQA2 :: H.Html
+                         ,latexQS :: String
+                         ,latexQAS :: String}
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 7: MPL Truth Trees" :: String)
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Use a tree to test whether the following are equivalent. If they are not, then read a countermodel off the tree." :: String)
+       H5.p $ htmlQ1 qa
+       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following propositions are jointly satisfiable. If they are not, then read a countermodel off the tree." :: String)
+       H5.p $ htmlQ2 qa
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Use a tree to test whether the following are equivalent. If they are not, then read a countermodel off the tree." :: String)
+       H5.p $ htmlQ1 qa
+       H5.p $ H.toHtml ("Tree:" :: String)
+       H5.p $ htmlQA1 qa
+       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following propositions are jointly satisfiable. If they are not, then read a countermodel off the tree." :: String)
+       H5.p $ htmlQ2 qa
+       H5.p $ H.toHtml ("Tree:" :: String)
+       H5.p $ htmlQA2 qa
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
 
 -- | just give me a string man!
 mkps07string :: IO (String, String)
@@ -87,6 +139,23 @@ getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
 getq2g g = let  p = mplsatg g settingPS07b in
            let t = mktree p in
            (printprops p, printtree t <> quote (printmodels $ getmodels t))
+
+-- | html versions of the above
+
+getq1gh :: RandomGen g => g -> IO (H.Html,H.Html)
+getq1gh g  = do
+             let p = mplequivg g settingPS07a
+             let t = mktree (prepforequiv p)
+             pt <- PHT.printtree t
+             return (H.toHtml $ U.printprops p, pt)
+
+getq2gh :: RandomGen g => g -> IO (H.Html,H.Html)
+getq2gh g = do
+            let  p = mplsatg g settingPS07b
+            let t = mktree p
+            pt <- PHT.printtree t
+            return (H.toHtml $ U.printprops p, pt <> H5.br <> H5.p ( HM.printmodels (getmodels t))) 
+
 
 -- |document preamble
 

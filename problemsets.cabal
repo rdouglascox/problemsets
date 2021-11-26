@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d66a46674aa68103104526acecd8645989ba5e58ef17f5a8f7d2b0136ce28fbf
+-- hash: 06155f8799b6ce0557c3e1dca6bcadabe2bbaeab2f5a57845d184074225558b1
 
 name:           problemsets
 version:        0.1.0.0
@@ -32,16 +32,16 @@ library
       MakePS.MakePS04
       MakePS.MakePS05
       MakePS.MakePS06
+      MakePS.MakePS07
+      MakePS.MakePS08
+      MakePS.MakePS09
+      MakePS.MakePS10
       MakePS.MakePS11
   other-modules:
       Data.GPLIModel
       Data.GPLIprop
       Data.GPLITree
       Data.PLprop
-      MakePS.MakePS07
-      MakePS.MakePS08
-      MakePS.MakePS09
-      MakePS.MakePS10
       MakePS.MakeTranslationTest
       Models.Evaluator
       NewTranslations.EnglishL.Abs
@@ -61,6 +61,8 @@ library
       NewTranslations.TranslationsQandA
       Parsers.GPLIParser
       Parsers.GPLIToken
+      Printing.HTMLGPLIModel
+      Printing.HTMLGPLITrees
       Printing.HTMLPLTrees
       Printing.HTMLTables
       Printing.LaTeXGPLIModel
@@ -71,7 +73,9 @@ library
       Printing.LaTeXTables
       Printing.PLprop
       Printing.RenderPTree
+      Printing.RenderPTreeGPLI
       Printing.RenderSVG
+      Printing.RenderSVGGPLI
       Printing.TextGPLIModel
       Printing.TextGPLITree
       Printing.UnicodeGPLIProps
@@ -148,6 +152,8 @@ executable problemsets
       NewTranslations.TranslationsQandA
       Parsers.GPLIParser
       Parsers.GPLIToken
+      Printing.HTMLGPLIModel
+      Printing.HTMLGPLITrees
       Printing.HTMLPLTrees
       Printing.HTMLTables
       Printing.LaTeXGPLIModel
@@ -158,7 +164,9 @@ executable problemsets
       Printing.LaTeXTables
       Printing.PLprop
       Printing.RenderPTree
+      Printing.RenderPTreeGPLI
       Printing.RenderSVG
+      Printing.RenderSVGGPLI
       Printing.TextGPLIModel
       Printing.TextGPLITree
       Printing.UnicodeGPLIProps

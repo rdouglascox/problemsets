@@ -59,7 +59,7 @@ htmltemplate qa = do
        H5.h2 $ H.toHtml ("Just the Questions" :: String)
        H5.p $ H.toHtml ("Q1. Use a tree to test whether the following are contraries. If they are not, then read a countermodel off the tree." :: Text)
        H5.p $ htmlQ1 qa
-       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree.." :: Text)
+       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree." :: Text)
        H5.p $ htmlQ2 qa
        H5.h2 $ H.toHtml ("Questions and Answers" :: String)
        H5.p $ H.toHtml ("Q1. Use a tree to test whether the following are contraries. If they are not, then read a countermodel off the tree." :: Text)

@@ -2,7 +2,7 @@
 
 -- | gpli trees
 
-module MakePS.MakePS10 (mkps10g, mkps10string) where
+module MakePS.MakePS10 (mkps10g, mkps10string, mkps10html) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -25,7 +25,58 @@ import Trees.GPLItrees (mktree, getmodel, getmodels)
 
 import Settings.GPLISettings ( settingPS10b, settingPS10a )
 
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
+import qualified Printing.UnicodeGPLIProps as U
+import qualified Printing.RenderSVGGPLI as R
+import qualified Printing.TextGPLIModel as T
+import qualified Printing.HTMLGPLITrees as PHT
+import qualified Printing.HTMLGPLIModel as HM
+
 -- |GENERAL DOCUMENT BUILDING FUNCTIONS
+
+mkps10html :: IO H.Html
+mkps10html = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps10q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps10a (q1q,q1a) (q2q,q2a) num)
+       (q1qh,q1ah) <- getq1gh g1
+       (q2qh,q2ah) <- getq2gh g2
+       return (htmltemplate $ QandASet q1qh q2qh q1ah q2ah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: H.Html
+                         ,htmlQ2 :: H.Html
+                         ,htmlQA1 :: H.Html
+                         ,htmlQA2 :: H.Html
+                         ,latexQS :: String
+                         ,latexQAS :: String}
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 10: GPLI Truth Trees" :: String)
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Use a tree to test whether the following propositions are jointly satisfiable. If they are, then read a model off the tree." :: String)
+       H5.p $ htmlQ1 qa
+       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree." :: String)
+       H5.p $ htmlQ2 qa
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Use a tree to test whether the following propositions are jointly satisfiable. If they are, then read a model off the tree." :: String)
+       H5.p $ htmlQ1 qa
+       H5.p $ H.toHtml ("Tree:" :: String)
+       H5.p $ htmlQA1 qa
+       H5.p $ H.toHtml ("Q2. Use a tree to test whether the following argument is valid. If it is not, then read a countermodel off the tree." :: String)
+       H5.p $ htmlQ2 qa
+       H5.p $ H.toHtml ("Tree:" :: String)
+       H5.p $ htmlQA2 qa
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
 
 -- | just give me a string man!
 mkps10string :: IO (String, String)
@@ -61,6 +112,20 @@ getq2g :: RandomGen g => g ->  (LaTeX,LaTeX)
 getq2g g = let p = gplivalg g settingPS10b in
            let t = mktree (prepforvalidity p) in
            (printarg p, printtree t)
+
+getq1gh :: RandomGen g => g -> IO (H.Html,H.Html)
+getq1gh g  = do
+             let p = gplisatg g settingPS10a
+             let t = mktree p
+             pt <- PHT.printtree t
+             return (H.toHtml $ U.printprops p, pt)
+
+getq2gh :: RandomGen g => g -> IO (H.Html,H.Html)
+getq2gh g = do
+            let p = gplivalg g settingPS10b
+            let t = mktree p
+            pt <- PHT.printtree t
+            return (H.toHtml $ U.printprops p, pt <> H5.br <> H5.p (HM.printmodels (getmodels t)))
 
 -- |document preamble
 

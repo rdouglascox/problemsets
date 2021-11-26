@@ -2,7 +2,7 @@
 
 -- | mpl models
 
-module MakePS.MakePS08 (mkps08g, mkps08string) where
+module MakePS.MakePS08 (mkps08g, mkps08string, mkps08html) where
 
 import Text.LaTeX
 import Text.LaTeX.Base.Commands
@@ -29,6 +29,56 @@ import Trees.GPLItrees ( mktree, getmodels )
 
 import Models.Evaluator (meval)
 import Random.Models (rmodel,rmodelg)
+
+import qualified Text.Blaze.Html as H
+import qualified Text.Blaze.Html5 as H5
+import qualified Printing.UnicodeGPLIProps as U
+import qualified Printing.RenderSVGGPLI as R
+import qualified Printing.TextGPLIModel as T
+import qualified Printing.HTMLGPLITrees as PHT
+import qualified Printing.HTMLGPLIModel as HM
+
+mkps08html :: IO H.Html
+mkps08html = do
+       g <- newStdGen    -- get random generator
+       let (num,_) = next g  -- use it to get a random number
+       let seed = mkStdGen num
+       let (g1,g2) = split seed        
+       let (q1q,q1a) = getq1g g1
+       let (q2q,q2a) = getq2g g2
+       let questionstring = prettyLaTeX (ps08q (q1q,q2q) num)
+       let answerstring = prettyLaTeX (ps08a (q1q,q1a) (q2q,q2a) num)
+       let (q1qh,q1ah) = getq1gh g1
+       let (q2qh,q2ah) = getq2gh g2
+       return (htmltemplate $ QandASet q1qh q2qh q1ah q2ah questionstring answerstring)
+
+data QandASet = QandASet {htmlQ1 :: H.Html
+                         ,htmlQ2 :: H.Html
+                         ,htmlQA1 :: H.Html
+                         ,htmlQA2 :: H.Html
+                         ,latexQS :: String
+                         ,latexQAS :: String}
+
+htmltemplate :: QandASet -> H.Html
+htmltemplate qa = do
+       H5.h1 $ H.toHtml ("Problem Set 8: MPL and GPL Models" :: String)
+       H5.h2 $ H.toHtml ("Just the Questions" :: String)
+       H5.p $ H.toHtml ("Q1. Is the following proposition true or false in the given model? Briefly explain your anwser." :: String)
+       H5.p $ htmlQ1 qa
+       H5.p $ H.toHtml ("Q2. Is the following proposition true or false in the given model? Briefly explain your answer.." :: String)
+       H5.p $ htmlQ2 qa
+       H5.h2 $ H.toHtml ("Questions and Answers" :: String)
+       H5.p $ H.toHtml ("Q1. Is the following proposition true or false in the given model? Briefly explain your anwser." :: String)
+       H5.p $ htmlQ1 qa
+       H5.p $ htmlQA1 qa
+       H5.p $ H.toHtml ("Q2. Is the following proposition true or false in the given model? Briefly explain your answer.." :: String)
+       H5.p $ htmlQ2 qa
+       H5.p $ htmlQA2 qa
+       H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQS qa)
+       H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
+       H5.p $ H.toHtml (latexQAS qa)
+
 
 -- | just give me a string man!
 mkps08string :: IO (String, String)
@@ -67,16 +117,28 @@ getq2g g = let p = gplsatg g settingPS08b in
            let a = meval p m in
            (printprops p <> newline <> newline <> printmodellns m, fromString (show a))
 
+getq1gh :: RandomGen g => g -> (H.Html,H.Html)
+getq1gh g = let p = mplsatg g settingPS08a in
+           let m = rmodelg g p in
+           let a = meval p m in
+           (H.toHtml (U.printprops p) <> H5.br <> H5.br <> HM.printmodel m, H.toHtml (show a))
+
+getq2gh :: RandomGen g => g -> (H.Html,H.Html)
+getq2gh g = let p = gplsatg g settingPS08b in
+           let m = rmodelg g p in
+           let a = meval p m in
+           (H.toHtml (U.printprops p) <> H5.br <> H5.br <> HM.printmodel m, H.toHtml (show a))
+
 
 -- |document preamble
 
 -- |preamble for questions
 ps08pq :: Int -> LaTeX
-ps08pq n = docSettings <> title "Problem Set 08: MPL Models (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
+ps08pq n = docSettings <> title "Problem Set 08: MPL and GPL Models (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
 ps08pa :: Int -> LaTeX
-ps08pa n = docSettings <> title "Problem Set 08: MPL Models (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
+ps08pa n = docSettings <> title "Problem Set 08: MPL and GPL Models (Answers)" <> author "" <> date (fromString $ "#" ++ show n)
 
 -- |shared document settings
 docSettings :: LaTeX
