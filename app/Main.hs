@@ -6,6 +6,7 @@ import Data.Maybe
 
 import MakePS.MakePS01 ( mkps01g )
 import MakePS.MakePS02 ( mkps02g )
+import MakePS.MakePS03 ( mkps03g )
 import MakePS.MakePS04 ( mkps04g )
 import MakePS.MakePS05 ( mkps05g )
 import MakePS.MakePS06 ( mkps06g )
@@ -55,9 +56,9 @@ basic2 ns num = do
           mapConcurrently_ id (get ns (allsets seed num))
           return()
 
-allsets seed num = [mkps01g seed num, mkps02g seed num, mkps02g seed num, mkps04g seed num, mkps05g seed num, mkps06g seed num, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num, mkps11g seed num, mktranstestg seed num]
+allsets seed num = [mkps01g seed num, mkps02g seed num, mkps03g seed num, mkps04g seed num, mkps05g seed num, mkps06g seed num, mkps07g seed num, mkps08g seed num, mkps09g seed num, mkps10g seed num, mkps11g seed num, mktranstestg seed num]
 
-get ns xs = map (\n -> (fromJust $ lookup n (zip [1..] xs))) ns
+get ns xs = map (\n -> fromJust $ lookup n (zip [1..] xs)) ns
 
 batch2 :: Int -> [Int] -> [Int] -> IO ()
 batch2 n1 ns n2 = mapConcurrently_ (\x -> replicateConcurrently_ n1 (basic2 ns x)) n2

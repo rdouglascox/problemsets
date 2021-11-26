@@ -28,7 +28,10 @@ plvalid2g gen s = do
 plequivsg :: RandomGen g => g -> Settings -> [Prop]
 plequivsg gen s = do
                head $ take 1 $ requivs gen s
-                    where localSettings = dSettings {numProps = 2, basics = "LM", minBranchSet = 0}
+
+justanrprop :: RandomGen g => g -> Settings -> Prop
+justanrprop gen s = do
+               head $ head $ take 1 $ requivs gen s
 
 -- for trees
   

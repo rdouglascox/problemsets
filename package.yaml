@@ -44,6 +44,7 @@ library:
   exposed-modules: 
     - MakePS.MakePS01
     - MakePS.MakePS02
+    - MakePS.MakePS03
     - MakePS.MakePS04
     - MakePS.MakePS05
     - MakePS.MakePS06
