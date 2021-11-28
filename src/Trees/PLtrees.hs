@@ -236,7 +236,7 @@ allnb :: Tree [TProp] -> Tree [TProp]
 allnb = (lp (ap conjrule)) . (lp (ap negdisjrule)) . (lp (ap negcondrule)) . (lp (ap doublenegrule))  
 
 allb :: Tree [TProp] -> Tree [TProp]
-allb = (lp allnb) . (lp (ap negbiconrule)) . (lp allnb) . (lp (ap condrule)) . (lp allnb) . (lp (ap negconjrule)) . (lp allnb) . (lp (ap disjrule)) . (lp allnb)   
+allb = (lp allnb) . (lp (ap negbiconrule)) . (lp allnb) . (lp (ap bicondrule)) . (lp allnb) . (lp (ap condrule)) . (lp allnb) . (lp (ap negconjrule)) . (lp allnb) . (lp (ap disjrule)) . (lp allnb)   
 
 -- prep tree
 

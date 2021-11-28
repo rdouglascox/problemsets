@@ -29,7 +29,7 @@ import Printing.LaTeXPLTrees (printtree)
 
 import NormalForms.PLnormalforms
 
-import Random.PLprops (justanrprop, prepforequiv )
+import Random.PLprops (justanrprop, prepforequiv' )
 
 import Settings.PLSettings
 
@@ -49,12 +49,15 @@ mkps03html = do
        let answerstring = prettyLaTeX (ps03a (q1q,q1a) (q2q,q2a) (q3q,q3a) num)
        (q1qh,q1ah) <- getq1gh g1
        (q2qh,q2ah) <- getq2gh g2
-       return (htmltemplate $ QandASet q1qh q2qh q1ah q2ah questionstring answerstring)
+       (q3qh,q3ah) <- getq3gh g3
+       return (htmltemplate $ QandASet q1qh q2qh q3qh q1ah q2ah q3ah questionstring answerstring)
 
 data QandASet = QandASet {htmlQ1 :: H.Html
                          ,htmlQ2 :: H.Html
+                         ,htmlQ3
                          ,htmlQA1 :: H.Html
                          ,htmlQA2 :: H.Html
+                         ,htmlQA3 :: H.Html
                          ,latexQS :: String
                          ,latexQAS :: String}
 
@@ -67,7 +70,7 @@ htmltemplate qa = do
        H5.p $ H.toHtml ("Q2. Convert the following proposition into conjunctive normal form. Then show that the proposition in conjunctive normal form is equivalent to the original proposition (using either a truth table, a truth tree, or both)." :: Text)
        H5.p $ htmlQ2 qa
        H5.p $ H.toHtml ("Q3. Convert the following proposition into disjunctive normal form. Then show that the proposition in disjunctive normal form is equivalent to the original proposition (using either a truth table, a truth tree, or both)." :: Text)
-       H5.p $ htmlQ2 qa
+       H5.p $ htmlQ3 qa
        H5.h2 $ H.toHtml ("Questions and Answers" :: String)
        H5.p $ H.toHtml ("Q1. Convert the following proposition into negation normal form. Then show that the proposition in negation normal form is equivalent to the original proposition (using either a truth table, a truth tree, or both)." :: Text)
        H5.p $ htmlQ1 qa
@@ -76,8 +79,8 @@ htmltemplate qa = do
        H5.p $ htmlQ2 qa
        H5.p $ htmlQA2 qa
        H5.p $ H.toHtml ("Q3. Convert the following proposition into disjunctive normal form. Then show that the proposition in disjunctive normal form is equivalent to the original proposition (using either a truth table, a truth tree, or both)." :: Text)
-       H5.p $ htmlQ2 qa
-       H5.p $ htmlQA2 qa
+       H5.p $ htmlQ3 qa
+       H5.p $ htmlQA3 qa
        H5.h2 $ H.toHtml ("Just the Questions (LaTeX)" :: String)
        H5.p $ H.toHtml (latexQS qa)
        H5.h2 $ H.toHtml ("Questions and Answers (LaTeX)" :: String)
@@ -104,21 +107,21 @@ getq1g :: RandomGen g => g -> (LaTeX,LaTeX)
 getq1g g = let p = justanrprop g dSettings in
            let n = nnf p in
            let t = makeRawTable [p,n] in
-           let tr = mktree (prepforequiv [p,n]) in
+           let tr = mktree (prepforequiv' p n) in
            (printprop p, printprop n <> makeTable t <> printtree tr)
 
 getq2g :: RandomGen g => g -> (LaTeX,LaTeX)
 getq2g g = let p = justanrprop g dSettings in
            let c = cnf p in
            let t = makeRawTable [p,c] in
-           let tr = mktree (prepforequiv [p,c]) in
+           let tr = mktree (prepforequiv' p c) in
            (printprop p, printprop c <> makeTable t <> printtree tr )
 
 getq3g :: RandomGen g => g -> (LaTeX,LaTeX)
 getq3g g = let p = justanrprop g dSettings in
            let d = dnf p in
            let t = makeRawTable [p,d] in
-           let tr = mktree (prepforequiv [p,d]) in
+           let tr = mktree (prepforequiv' p d ) in
            (printprop p, printprop d <> makeTable t <> printtree tr)
 
 -- html versions of the above
@@ -128,27 +131,27 @@ getq1gh g = do
            let p = justanrprop g dSettings
            let n = nnf p
            let t = makeRawTable [p,n]
-           let tr = mktree (prepforequiv [p,n])
+           let tr = mktree (prepforequiv' p n)
            tree <- PHT.printtree tr
-           return (H.toHtml $ UP.printprops [p], H.toHtml (UP.printprops [p]) <> PH.makeTable t <> tree)
+           return (H5.p $ H.toHtml $ UP.printprops [p], H5.p (H.toHtml ("Negation normal form: " :: String)) <> H5.p (H.toHtml (UP.printprops [n])) <> PH.makeTable t <> H5.p (H.toHtml ("Tree: " :: String)) <> tree)
 
 getq2gh :: RandomGen g => g -> IO (H.Html,H.Html)
 getq2gh g = do
            let p = justanrprop g dSettings
            let c = cnf p
            let t = makeRawTable [p,c]
-           let tr = mktree (prepforequiv [p,c])
+           let tr = mktree (prepforequiv' p c)
            tree <- PHT.printtree tr
-           return (H.toHtml $  UP.printprops [p], H.toHtml ( UP.printprops [p]) <> PH.makeTable t <> tree)
+           return (H5.p $ H.toHtml $  UP.printprops [p], H5.p (H.toHtml ("Conjunctive normal form: " :: String)) <> H5.p (H.toHtml ( UP.printprops [c])) <> PH.makeTable t <> H5.p (H.toHtml ("Tree: " :: String)) <> tree)
 
 getq3gh :: RandomGen g => g -> IO (H.Html,H.Html)
 getq3gh g = do
            let p = justanrprop g dSettings
            let d = dnf p
            let t = makeRawTable [p,d]
-           let tr = mktree (prepforequiv [p,d])
+           let tr = mktree (prepforequiv' p d)
            tree <- PHT.printtree tr
-           return (H.toHtml $  UP.printprops [p], H.toHtml (UP.printprops [p]) <> PH.makeTable t <> tree)
+           return (H5.p $ H.toHtml $  UP.printprops [p], H5.p (H.toHtml ("Disjunctive normal form: " :: String)) <> H5.p (H.toHtml (UP.printprops [d])) <> PH.makeTable t <> H5.p (H.toHtml ("Tree: " :: String)) <> tree)
 
 -- |document preamble
 

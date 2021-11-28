@@ -31,7 +31,7 @@ plequivsg gen s = do
 
 justanrprop :: RandomGen g => g -> Settings -> Prop
 justanrprop gen s = do
-               head $ head $ take 1 $ requivs gen s
+               head $ head $ take 1 $ nrprops gen s
 
 -- for trees
   
@@ -90,6 +90,9 @@ requivs gen s = map unequiv $ filter (allpathsclosed . mktree) $ filter (superfi
 
 prepforequiv :: [Prop] -> [Prop]
 prepforequiv [l,r] = [(Negation (Biconditional l r))]
+
+prepforequiv' :: Prop -> Prop -> [Prop]
+prepforequiv' l r = [(Negation (Biconditional l r))]
 
 unequiv :: [Prop] -> [Prop]
 unequiv [(Negation (Biconditional l r))] = [l,r]

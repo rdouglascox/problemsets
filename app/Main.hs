@@ -95,7 +95,7 @@ sample = MyOptions
          <> short 'p'
          <> help "Which problem sets"
          <> showDefault
-         <> value [1,2,4,5,7,8,9,10,11]
+         <> value [1,2,3,4,5,7,8,9,10,11]
          <> metavar "[INT]" )
       <*> option auto
           ( long "identifier"

@@ -7,5 +7,3 @@ data Prop = Basic String
           | Conditional Prop Prop
           | Biconditional Prop Prop
           deriving (Show,Eq,Ord)
-
-
