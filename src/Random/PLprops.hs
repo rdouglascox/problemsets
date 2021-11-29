@@ -5,7 +5,8 @@ import Data.PLprop
 import Tables.Tables (getbasics, taut, sat, norow, norow')
 import Data.List
 import Printing.PLprop
-import Trees.PLtrees
+import qualified Trees.PLtreesNew as NT
+import Trees.PLtrees 
 
 import Settings.PLSettings
 
@@ -42,11 +43,11 @@ unfc :: [Prop] -> [Prop]
 unfc [(Negation (Conjunction l r))] = [l,r]
 
 rcont :: RandomGen g => g -> Settings -> [[Prop]]
-rcont gen s = filter (allpathsclosed . mktree) $ map unfc $ filter (allpathsclosed .mktree) $ filter (superfilter s) $ map prepfc $ nrprops gen s 
+rcont gen s = filter (allpathsclosed . NT.mktree) $ map unfc $ filter (allpathsclosed .NT.mktree) $ filter (superfilter s) $ map prepfc $ nrprops gen s 
 
 
 rcont' :: RandomGen g => g -> Settings -> [[Prop]]
-rcont' gen s = filter (allpathsclosed . mktree) $ filter (superfilter s) $ map unfc $ filter (superfilter s) $ map prepfc $ nrprops gen s 
+rcont' gen s = filter (allpathsclosed . NT.mktree) $ filter (superfilter s) $ map unfc $ filter (superfilter s) $ map prepfc $ nrprops gen s 
 
 plvalid :: IO ([Prop])
 plvalid = do
@@ -68,7 +69,7 @@ plvalid2 = do
                                      }
 
 rvalid :: RandomGen g => g -> Settings -> [[Prop]]
-rvalid gen s = map unvalid $ filter (allpathsclosed .mktree) $ filter (superfilter s) $ map prepforvalidity $ nrprops gen s
+rvalid gen s = map unvalid $ filter (allpathsclosed .NT.mktree) $ filter (superfilter s) $ map prepforvalidity $ nrprops gen s
 
 prepforvalidity :: [Prop] -> [Prop]
 prepforvalidity xs = reverse (tail $ reverse xs) ++ [(Negation (head $ reverse xs))] 
@@ -86,7 +87,7 @@ plequivs = do
     where localSettings = dSettings {numProps = 2, basics = "LM", minBranchSet = 0}
 
 requivs :: RandomGen g => g -> Settings -> [[Prop]]
-requivs gen s = map unequiv $ filter (allpathsclosed . mktree) $ filter (superfilter s) $ map prepforequiv $ nrprops gen s 
+requivs gen s = map unequiv $ filter (allpathsclosed . NT.mktree) $ filter (superfilter s) $ map prepforequiv $ nrprops gen s 
 
 prepforequiv :: [Prop] -> [Prop]
 prepforequiv [l,r] = [(Negation (Biconditional l r))]
@@ -100,7 +101,7 @@ unequiv [(Negation (Biconditional l r))] = [l,r]
 
 superfilter :: Settings -> [Prop] -> Bool
 superfilter s ps = (minBranch (minBranchSet s) tree) && (maxBranch (maxBranchSet s) tree) && (minPath (minPathSet s) tree) && (maxPath (maxPathSet s) tree)
-    where tree = mktree ps
+    where tree = NT.mktree ps
 
 
 -- HELPERS
@@ -311,7 +312,7 @@ isValid' = norow'
 -- Tree Filters
 
 hasnbranches :: Int -> [Prop] -> Bool
-hasnbranches n ps = if nbranches (mktree ps) == n then True else False
+hasnbranches n ps = if nbranches (NT.mktree ps) == n then True else False
 
 
 

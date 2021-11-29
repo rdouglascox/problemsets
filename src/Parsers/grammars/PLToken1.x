@@ -1,5 +1,5 @@
 {
-module Token where
+module Parsers.PLToken1 where
 }
 
 %wrapper "basic"
@@ -20,7 +20,7 @@ tokens :-
   
 {
 
-data GPLIToken = BasicSymbol String 
+data PLToken = BasicSymbol String 
                | NegationSymbol
                | ConjunctionSymbol
                | DisjunctionSymbol

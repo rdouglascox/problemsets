@@ -23,7 +23,7 @@ import System.Random
     ( mkStdGen, newStdGen, RandomGen(split, next) )
 
 import Random.PLprops (plcontrariesg, prepfc, plvalidg, prepforvalidity)
-import Trees.PLtrees (mktree)
+import Trees.PLtreesNew (mktree)
 
 import qualified Printing.HTMLPLTrees as PHT
 import qualified Printing.UnicodePLProps as PHP

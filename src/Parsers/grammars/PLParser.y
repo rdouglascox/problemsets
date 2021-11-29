@@ -1,12 +1,13 @@
 {
-module HappyParser (happyParser) where
-import Token
-import Props (Prop (..))
+module Parsers.PLParser (happyParser) where
+import Parsers.PLToken1
+import Data.PLprop (Prop (..))
 }
 
 %name happyParser
-%tokentype { Token }
+%tokentype { PLToken }
 %error { parseError }
+%monad {Maybe}
 
 %token
     basic        { BasicSymbol $$ }
@@ -29,8 +30,8 @@ Prop : basic         { Basic $1 }
 
 {
 
-parseError :: [Token] -> a
-parseError _ = error "Parse Error"
+parseError :: [PLToken] -> Maybe a
+parseError _ = Nothing
 
 }
 

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2fe0f2221863427dbcf1848b90ec8a53b80896546023c0b58ca8f2d2ce39a92e
+-- hash: da8d60d615f018c9a03404dd89941e40e7f57f5e4a16a0a33a75c88eea3309b0
 
 name:           problemsets
 version:        0.1.0.0
@@ -38,11 +38,13 @@ library
       MakePS.MakePS09
       MakePS.MakePS10
       MakePS.MakePS11
+      Forms.PLtrees
   other-modules:
       Data.GPLIModel
       Data.GPLIprop
       Data.GPLITree
       Data.PLprop
+      Data.PLTree
       MakePS.MakeTranslationTest
       Models.Evaluator
       NewTranslations.EnglishL.Abs
@@ -63,6 +65,8 @@ library
       NormalForms.PLnormalforms
       Parsers.GPLIParser
       Parsers.GPLIToken
+      Parsers.PLParser
+      Parsers.PLToken1
       Printing.HTMLGPLIModel
       Printing.HTMLGPLITrees
       Printing.HTMLPLTrees
@@ -96,6 +100,7 @@ library
       Translations.Verbs
       Trees.GPLItrees
       Trees.PLtrees
+      Trees.PLtreesNew
       Paths_problemsets
   hs-source-dirs:
       src
@@ -125,6 +130,8 @@ executable problemsets
       Data.GPLIprop
       Data.GPLITree
       Data.PLprop
+      Data.PLTree
+      Forms.PLtrees
       MakePS.MakePS01
       MakePS.MakePS02
       MakePS.MakePS03
@@ -156,6 +163,8 @@ executable problemsets
       NormalForms.PLnormalforms
       Parsers.GPLIParser
       Parsers.GPLIToken
+      Parsers.PLParser
+      Parsers.PLToken1
       Printing.HTMLGPLIModel
       Printing.HTMLGPLITrees
       Printing.HTMLPLTrees
@@ -189,6 +198,7 @@ executable problemsets
       Translations.Verbs
       Trees.GPLItrees
       Trees.PLtrees
+      Trees.PLtreesNew
       Paths_problemsets
   hs-source-dirs:
       app

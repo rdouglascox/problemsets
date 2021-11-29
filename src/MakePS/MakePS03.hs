@@ -24,7 +24,7 @@ import Printing.LaTeXPLProps
 import Printing.LaTeXTables
 import Tables.Tables
 
-import Trees.PLtrees (mktree)
+import Trees.PLtreesNew (mktree)
 import Printing.LaTeXPLTrees (printtree) 
 
 import NormalForms.PLnormalforms

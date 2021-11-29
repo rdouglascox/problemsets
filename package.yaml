@@ -53,7 +53,7 @@ library:
     - MakePS.MakePS09
     - MakePS.MakePS10
     - MakePS.MakePS11
-
+    - Forms.PLtrees
 executables:
   problemsets:
     main:                Main.hs

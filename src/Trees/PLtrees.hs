@@ -11,20 +11,14 @@ PL.
 -}
 
 
-module Trees.PLtrees (mktree,minBranch,maxBranch,maxPath,minPath,allpathsclosed,maxpath,nbranches,TProp(..),Tree(..)) where
+module Trees.PLtrees (mktree,mktreeSafe,minBranch,maxBranch,maxPath,minPath,allpathsclosed,maxpath,nbranches,TProp(..),Tree(..)) where
 
 import Data.List
 import Data.PLprop
 import System.Random
 import Printing.PLprop
+import Data.PLTree
 
-
--- |Binary branching trees
-data Tree a = Leaf a | DeadLeaf a | Branch a (Tree a, Tree a)
-    deriving (Eq,Show)
-
--- |Trees are built from "tagged" propositions
-type TProp = (Prop,Bool)
 
 addb :: ([TProp],[TProp]) -> Tree [TProp] -> Tree [TProp]
 addb ([],[]) x = x
@@ -246,6 +240,21 @@ preptree xs = Leaf (map (\x -> (x,False)) xs)
 -- |Returns a tree proof from a given list of propositions.
 mktree :: [Prop] -> Tree [TProp]
 mktree t = lp allb (preptree t)
+
+
+mktreeSafe :: [Prop] -> Maybe (Tree [TProp])
+mktreeSafe t = lpSafe allb (Just (preptree t))
+
+lpSafe :: (Tree [TProp] -> Tree [TProp]) -> Maybe (Tree [TProp]) -> Maybe (Tree [TProp])
+lpSafe rule t = do
+    tree <- t
+    if nbranches tree > 100 
+        then Nothing
+        else if rule tree == rule (rule tree) 
+             then return (rule tree)
+            else lpSafe rule (Just (rule tree))
+
+
 
 -- text printer
 
