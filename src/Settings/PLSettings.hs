@@ -6,11 +6,11 @@ data Settings = Settings {minConstr :: Int -- minimum connectives in props
                          ,maxConstr :: Int -- maximum connectives in props
                          ,numProps :: Int -- how many propositions at a time
                          ,includeCons :: [Constructor] -- include connectives (possibly)
-                         ,excludeCons :: [Constructor] -- exclude connectives (certainly
+                         ,excludeCons :: [Constructor] -- exclude connectives (certainly)
                          ,basics :: String -- basics
                          ,minBranchSet :: Int -- minimum tree proof branches
                          ,maxBranchSet :: Int -- maximum tree proof branches
-                         ,minPathSet :: Int -- minium path lenght
+                         ,minPathSet :: Int -- minium path length
                          ,maxPathSet :: Int -- maximum path length
                          }
 

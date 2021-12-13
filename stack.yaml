@@ -78,7 +78,7 @@ extra-deps:
 
 # Nix stuff
 #
-# nix:
-#  enable: true
-#  pure: false
-#  packages: [zlib]
+nix:
+  enable: true
+  pure: false
+  packages: [zlib]

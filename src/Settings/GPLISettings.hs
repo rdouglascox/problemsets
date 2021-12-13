@@ -231,14 +231,6 @@ settingPS10b =
       maxPathSet = 40,
       includeRules = [SubstitutionRule]
     }
-    
-
-
-
-
-
-
-
 
 data Constructor = NegConstr (Prop -> Prop)
                  | UniConstr (Char -> Prop -> Prop)
