@@ -34,6 +34,9 @@ renderTProp (p, False) = renderProp p
 renderTProps :: [P.TProp] -> [String]
 renderTProps = map renderTProp
 
+renderTPropsOpen :: [P.TProp] -> [String]
+renderTPropsOpen xs = map renderTProp xs ++ ["↑"]
+
 renderTPropsClosed :: [P.TProp] -> [String]
 renderTPropsClosed xs = map renderTProp xs ++ ["x"]
 
@@ -59,14 +62,16 @@ nodeDiagram font xs = vsep 0 (map (propDiagram' font)  xs) # center # bg white #
 renderTProps' font = nodeDiagram font . renderTProps
 renderTPropsClosed' font = nodeDiagram font . renderTPropsClosed
 
+renderTPropsOpen' font = nodeDiagram font . renderTPropsOpen
+
 -- | render proof tree to a tree of diagrams
 
 renderPTree' font (P.Branch xs (l, r)) = Node (renderTProps' font xs) [renderPTree' font l, renderPTree' font r]
-renderPTree' font (P.Leaf xs) = Node (renderTProps' font xs) []
+renderPTree' font (P.Leaf xs) = Node (renderTPropsOpen' font xs) []
 renderPTree' font (P.DeadLeaf xs) = Node (renderTPropsClosed' font xs) []
 
 renderPTree'' font (P.Branch xs (l, r)) = Node (renderTProps' font xs) [Node (text "" # moveOriginBy 0.99) [renderPTree'' font l, renderPTree'' font r]]
-renderPTree'' font (P.Leaf xs) = Node (renderTProps' font xs) []
+renderPTree'' font (P.Leaf xs) = Node (renderTPropsOpen' font xs) []
 renderPTree'' font (P.DeadLeaf xs) = Node (renderTPropsClosed' font xs) []
 
 -- | render tree of diagrams to tree diagram
@@ -75,4 +80,4 @@ renderPTree font t = renderTree id
              (~~)
              (symmLayout' (with & slWidth  .~ fromMaybe (0,0) . extentX
                      & slHeight .~ fromMaybe (0,0) . extentY) (renderPTree'' font t))
-  # centerXY # pad 1.1 # lw thin
+  # centerXY # pad 1.1 # lw 1

@@ -31,11 +31,17 @@ printAProps = map printAProp
 
 printAProp :: P.AProp -> String
 printAProp (P.AProp p True s) = G.printprop p ++ "✓" ++ " " ++ sort s 
-printAProp (P.AProp p False s) = G.printprop p ++ " " ++ sort s 
+printAProp (P.AProp p False s) = case p of
+                                   (Universal c q) -> case s of
+                                       [] -> G.printprop p
+                                       _ -> G.printprop p ++ "\\" ++ sort s
+                                   _ -> G.printprop p ++ " " ++ sort s 
 
 printAPropsClosed :: [P.AProp] -> [String]
 printAPropsClosed xs = map printAProp xs ++ ["x"]
 
+printAPropsOpen :: [P.AProp] -> [String]
+printAPropsOpen xs = map printAProp xs ++ ["↑"]
 
 -- | functions for rendering tree diagrams
 
@@ -59,14 +65,16 @@ nodeDiagram font xs = vsep 0 (map (propDiagram' font)  xs) # center # bg white #
 renderTProps' font = nodeDiagram font . printAProps
 renderTPropsClosed' font = nodeDiagram font . printAPropsClosed
 
+renderTPropsOpen' font = nodeDiagram font . printAPropsOpen
+
 -- | render proof tree to a tree of diagrams
 
 renderPTree' font (P.Branch xs (l, r)) = Node (renderTProps' font xs) [renderPTree' font l, renderPTree' font r]
-renderPTree' font (P.Leaf xs) = Node (renderTProps' font xs) []
+renderPTree' font (P.Leaf xs) = Node (renderTPropsOpen' font xs) []
 renderPTree' font (P.DeadLeaf xs) = Node (renderTPropsClosed' font xs) []
 
 renderPTree'' font (P.Branch xs (l, r)) = Node (renderTProps' font xs) [Node (text "" # moveOriginBy 0.99) [renderPTree'' font l, renderPTree'' font r]]
-renderPTree'' font (P.Leaf xs) = Node (renderTProps' font xs) []
+renderPTree'' font (P.Leaf xs) = Node (renderTPropsOpen' font xs) []
 renderPTree'' font (P.DeadLeaf xs) = Node (renderTPropsClosed' font xs) []
 
 -- | render tree of diagrams to tree diagram
@@ -75,4 +83,4 @@ renderPTree font t = renderTree id
              (~~)
              (symmLayout' (with & slWidth  .~ fromMaybe (0,0) . extentX
                      & slHeight .~ fromMaybe (0,0) . extentY) (renderPTree'' font t))
-  # centerXY # pad 1.1 # lw thin
+  # centerXY # pad 1.1 # lw 1
