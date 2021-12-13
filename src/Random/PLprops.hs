@@ -91,7 +91,7 @@ plequivsg gen s =
 
 justanrprop :: RandomGen g => g -> Settings -> Prop
 justanrprop gen s =
-               head $ head $ take 1 $ nrprops gen s
+               head $ take 1 $ rprops' gen s
 
 -- for trees
 
