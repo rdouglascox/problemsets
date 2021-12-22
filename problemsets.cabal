@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: da8d60d615f018c9a03404dd89941e40e7f57f5e4a16a0a33a75c88eea3309b0
+-- hash: 533385197d65ae9503dd7589d235de2315d8f64bda6923acb57d23c8e9113d88
 
 name:           problemsets
 version:        0.1.0.0
@@ -39,6 +39,7 @@ library
       MakePS.MakePS10
       MakePS.MakePS11
       Forms.PLtrees
+      Forms.GPLItrees
   other-modules:
       Data.GPLIModel
       Data.GPLIprop
@@ -131,6 +132,7 @@ executable problemsets
       Data.GPLITree
       Data.PLprop
       Data.PLTree
+      Forms.GPLItrees
       Forms.PLtrees
       MakePS.MakePS01
       MakePS.MakePS02

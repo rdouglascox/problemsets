@@ -54,6 +54,7 @@ library:
     - MakePS.MakePS10
     - MakePS.MakePS11
     - Forms.PLtrees
+    - Forms.GPLItrees
 executables:
   problemsets:
     main:                Main.hs

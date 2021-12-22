@@ -16,6 +16,7 @@ module Trees.GPLItrees
      , multiuni
      , maybetree
      , mktree
+     , mktreeSafe
      , mktree'
      , printPTree
      , treeisoversized
@@ -48,6 +49,8 @@ import Data.GPLIModel
 import Printing.TextGPLITree
 import Printing.TextGPLIModel
 
+-- currently getting this wrong: ((Gba->#xGxa)&(Gbb<->Gbb))
+
 -- |MAIN TREE BUILDING FUNCTIONS
 
 -- |Make a tree given a list of propositions. (May not terminate on some inputs)
@@ -57,9 +60,8 @@ mktree ps = mk (closure [] (preptree ps)) -- will use (preptree ps) to convert t
                      then t
                      else mk (getapplyRule t)
 
-
-
-
+mktreeSafe :: [Prop] -> Maybe PTree
+mktreeSafe = maybetree 1000 
 
 
 
@@ -72,9 +74,9 @@ maybetree n ps = let (t,r) = maybetree1 n (Just (preptree ps),[]) in
 
 maybetree1 :: Int -> (Maybe PTree,[TreeRule]) -> (Maybe PTree,[TreeRule])
 maybetree1 n (Just t,rs) | oversize n t = (Nothing,[])
-                         | finished t = ((Just $ closure [] t),rs)
-                         | otherwise = maybetree1 n (getapplyRule' (Just t,(rs)))
-
+                         | finished t = (Just $ closure [] t,rs)
+                         | otherwise = maybetree1 n (getapplyRule' (Just t,rs))
+maybetree1 n (Nothing,rs) = (Nothing,rs)
 
 
 -- | Filter out oversized trees (by total number of propositions on the tree)
@@ -1034,7 +1036,7 @@ d2 = Disjunction a1 a2
 type Path = [Prop]
 
 getallopenpaths :: PTree -> [Path]
-getallopenpaths t = getallpaths1 [] t
+getallopenpaths = getallpaths1 []
 
 getallpaths1 :: [Prop] -> PTree -> [[Prop]]
 getallpaths1 acc (Branch xs (l, r)) = getallpaths1 (acc ++ aprop2prop xs) l ++ getallpaths1 (acc ++ aprop2prop xs) r

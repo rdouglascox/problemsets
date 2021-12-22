@@ -1,16 +1,16 @@
-module Forms.PLtrees where
+module Forms.GPLItrees where
 
 -- this module is just a helper module for the website, it includes the relevant functions for parsing and displaying trees on forms
 
 -- the function should take text as input, and return HTML. this keeps most of the heavy lifting outside of the webapp code
 
-import Parsers.PLToken1
-import Parsers.PLParser
+import Parsers.GPLIToken
+import Parsers.GPLIParser
 
-import Data.PLprop
-import Trees.PLtreesNew 
+import Data.GPLIprop
+import Trees.GPLItrees
 import qualified Data.Text as T
-import Printing.HTMLPLTrees
+import Printing.HTMLGPLITrees
 import qualified Text.Blaze.Html as H
 import qualified Text.Blaze.Html5 as H5
 import Data.List
@@ -30,7 +30,6 @@ treeformHTML t = do
             case mtree of
                 Nothing -> return $ H5.p (H.toHtml "Sorry, that tree got too big.")
                 Just t -> printtree t
-
 
 treeformHTMLa :: T.Text -> IO H.Html
 treeformHTMLa t = do

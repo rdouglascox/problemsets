@@ -1,12 +1,13 @@
 {
-module Parsers.GPLIParser (happyGPLIParser) where
+module Parsers.GPLIParser (happyParser) where
 import Parsers.GPLIToken
 import Data.GPLIprop
 }
 
-%name happyGPLIParser
+%name happyParser
 %tokentype { GPLIToken }
 %error { parseError }
+%monad {Maybe}
 
 %token
     pred         { PredicateSymbol $$ }
