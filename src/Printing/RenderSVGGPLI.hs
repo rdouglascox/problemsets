@@ -20,8 +20,8 @@ renderme n x = renderText $ renderDia SVG (SVGOptions (mkWidth (n * 25)) Nothing
 
 renderTree :: PTree -> IO Text
 renderTree t = do
---    font <- SF.loadFont "/home/STIX.svg" -- change this on the server
-    font <- SF.loadFont "./STIX.svg"
+    font <- SF.loadFont "/home/STIX.svg" -- change this on the server
+--    font <- SF.loadFont "./STIX.svg"
     gen <- newStdGen 
     let tree = renderPTree font t
     return (renderme (width tree) tree)
