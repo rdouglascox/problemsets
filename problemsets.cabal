@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c72c1e546b4277f8d7758069e4c13456e514422f6639b80c301b87569dccab98
+-- hash: d94b4d4031556f6f4959c2cfdff0b5ab4072c70312e2c65119b1f78cc7afc8f1
 
 name:           problemsets
 version:        0.1.0.0
@@ -47,6 +47,8 @@ library
       Settings.PLSettings
       Printing.UnicodePLProps
       Printing.UnicodeGPLIProps
+      Printing.PLprop
+      Printing.GPLIprop
   other-modules:
       Data.GPLIModel
       Data.GPLIprop
@@ -85,7 +87,6 @@ library
       Printing.LaTeXPLProps
       Printing.LaTeXPLTrees
       Printing.LaTeXTables
-      Printing.PLprop
       Printing.RenderPTree
       Printing.RenderPTreeGPLI
       Printing.RenderSVG
