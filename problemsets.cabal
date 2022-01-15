@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0259ae9340ea4596c39d0575d4a5d8786a6711f895714b341f8383ef2b2b5a17
+-- hash: bec1e846af4d5cfc4bf290a2d5087b71d5b222c2c219d67e95d5dd288cebe099
 
 name:           problemsets
 version:        0.1.0.0
@@ -41,6 +41,10 @@ library
       Forms.PLtrees
       Forms.GPLItrees
       Forms.PLtables
+      Random.GPLIprop
+      Random.PLprop
+      Settings.GPLISettings
+      Settings.PLSettings
   other-modules:
       Data.GPLIModel
       Data.GPLIprop
@@ -89,11 +93,8 @@ library
       Printing.UnicodeGPLIProps
       Printing.UnicodeLogicSymbols
       Printing.UnicodePLProps
-      Random.GPLIprop
       Random.Models
       Random.PLprops
-      Settings.GPLISettings
-      Settings.PLSettings
       Tables.Tables
       Translations.MonadicParserLeft
       Translations.Names

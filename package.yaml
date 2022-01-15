@@ -56,6 +56,10 @@ library:
     - Forms.PLtrees
     - Forms.GPLItrees
     - Forms.PLtables
+    - Random.GPLIprop
+    - Random.PLprop
+    - Settings.GPLISettings
+    - Settings.PLSettings
 executables:
   problemsets:
     main:                Main.hs
