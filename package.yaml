@@ -63,7 +63,6 @@ library:
     - Printing.UnicodePLProps
     - Printing.UnicodeGPLIProps
     - Printing.PLprop
-    - Printing.GPLIprop
 executables:
   problemsets:
     main:                Main.hs
