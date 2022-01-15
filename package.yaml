@@ -60,6 +60,8 @@ library:
     - Random.PLprops
     - Settings.GPLISettings
     - Settings.PLSettings
+    - Printing.UnicodePLProps
+    - Printing.UnicodeGPLIProps
 executables:
   problemsets:
     main:                Main.hs
