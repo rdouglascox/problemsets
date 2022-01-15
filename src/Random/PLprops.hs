@@ -10,6 +10,9 @@ import Trees.PLtrees
 
 import Settings.PLSettings
 
+rPL :: RandomGen g => g -> Settings -> [Prop]
+rPL gen s = head $ take 1 $ nrprops gen s
+
 -- functions to generate random lists of lists of propositions, depending on
 -- settings for basics to choose from, the number of connectives to draw from,
 -- the list of connectives to draw from, and the number of propositions to include

@@ -1,4 +1,4 @@
-module Random.GPLIprop (rprops1, printProp, prepforequiv, prepforvalidity, prepfortaut, mplsatg, mplequivg, gpltautg, gplsatg, gplisatg, gplivalg) where
+module Random.GPLIprop (rGPLI, rprops1, printProp, prepforequiv, prepforvalidity, prepfortaut, mplsatg, mplequivg, gpltautg, gplsatg, gplisatg, gplivalg) where
 
 import Data.GPLIprop
 import System.Random
@@ -8,6 +8,10 @@ import Data.Maybe
 import Data.List
 
 import Settings.GPLISettings
+
+
+rGPLI :: RandomGen g => g -> Settings -> [Prop]
+rGPLI gen s = head $ take 1 $ nrprops gen s
 
 -- |Q and A 
 
