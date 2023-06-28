@@ -15,6 +15,7 @@ import Text.LaTeX.Packages.AMSSymb
 import Text.LaTeX.Packages.Fontenc
 import Text.LaTeX.Base.Math
 import Text.LaTeX.Packages.AMSFonts
+import Data.PLprop
 
 import Printing.LaTeXPLProps (printprops,printarg) 
 import Printing.LaTeXPLTrees (printtree) 
@@ -107,7 +108,7 @@ mkps04g g n = do
 
 getq1g :: RandomGen g => g -> (LaTeX,LaTeX,LaTeX)
 getq1g g = let p = plcontrariesg g settingPS04a in
-          let t1 = mktree (prepfc p) in
+          let t1 = mktree (map Negation p) in
           let t2 = mktree p in
           (printprops p, printtree t2, printtree t1)
 
