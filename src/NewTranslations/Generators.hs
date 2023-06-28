@@ -252,7 +252,7 @@ qpS1 g = let (g1,g2) = split g in
             ,"nobody"
             ,"everyone"
             ,"someone"
-            ,"noone"
+            ,"no one"
             ,"every " ++ rcnS g1
             ,"some " ++ rcnS g1
             ,"no " ++ rcnS g1

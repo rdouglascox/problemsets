@@ -20,12 +20,17 @@ printtree x = tree id (pltreetoLaTeX x)
 pltreetoLaTeX :: L.Tree [L.TProp] -> Tree LaTeX
 pltreetoLaTeX (L.Leaf xs) = Leaf $ nodetoLaTeX $ xs 
 pltreetoLaTeX (L.DeadLeaf xs) = Leaf $ deadnodetoLaTeX $ xs 
-pltreetoLaTeX (L.Branch xs (l,r)) = Node (Just $ nodetoLaTeX $ xs) [pltreetoLaTeX l, pltreetoLaTeX r]
+pltreetoLaTeX (L.Branch xs (l,r)) = Node (Just $ nodetoLaTeX' $ xs) [pltreetoLaTeX l, pltreetoLaTeX r]
 
 nodetoLaTeX :: [L.TProp] -> LaTeX
 nodetoLaTeX [] = fromString "o" 
 nodetoLaTeX ((p,True):xs) = (printprop p) <> checkmark <> lnbk <> (nodetoLaTeX xs) 
 nodetoLaTeX ((p,False):xs) = (printprop p) <> lnbk <> (nodetoLaTeX xs) 
+
+nodetoLaTeX' :: [L.TProp] -> LaTeX
+nodetoLaTeX' [] = fromString "" 
+nodetoLaTeX' ((p,True):xs) = (printprop p) <> checkmark <> lnbk <> (nodetoLaTeX' xs) 
+nodetoLaTeX' ((p,False):xs) = (printprop p) <> lnbk <> (nodetoLaTeX' xs) 
 
 deadnodetoLaTeX :: [L.TProp] -> LaTeX
 deadnodetoLaTeX [] = fromString "x" 

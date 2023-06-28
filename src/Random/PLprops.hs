@@ -99,10 +99,10 @@ justanrprop gen s =
 -- for trees
 
 prepfc :: [Prop] -> [Prop]
-prepfc [l,r] = [Negation (Conjunction l r)]
+prepfc [l,r] = [(Conjunction (Negation l) (Negation r))]
 
 unfc :: [Prop] -> [Prop]
-unfc [Negation (Conjunction l r)] = [l,r]
+unfc [(Conjunction (Negation l) (Negation r))] = [l,r]
 
 rcont :: RandomGen g => g -> Settings -> [[Prop]]
 rcont gen s = filter areNotSat $ map unfc $ filter areNotSat $ filter (superfilter s) $ map prepfc $ nrprops gen s

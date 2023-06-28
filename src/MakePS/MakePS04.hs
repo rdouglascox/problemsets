@@ -12,7 +12,9 @@ import Text.LaTeX.Packages.Inputenc   -- usepackage [utf8] inputenc
 import Text.LaTeX.Base.Pretty         -- prettyLaTeX
 import Text.LaTeX.Packages.Trees.Qtree
 import Text.LaTeX.Packages.AMSSymb
+import Text.LaTeX.Packages.Fontenc
 import Text.LaTeX.Base.Math
+import Text.LaTeX.Packages.AMSFonts
 
 import Printing.LaTeXPLProps (printprops,printarg) 
 import Printing.LaTeXPLTrees (printtree) 
@@ -134,7 +136,7 @@ getq2gh g = do let p = plvalidg g settingPS04b
 
 -- |preamble for questions
 ps04pq :: Int -> LaTeX 
-ps04pq n = docSettings <> title "Problem Set 04: PL Trees (Questions)" <> author "" <> date (fromString $ "#" ++ show n)
+ps04pq n = docSettings <> title "Problem Set 04: PL Trees" <> author "PHIL1012 Introductory Logic" <> date (fromString $ "#" ++ show n)
 
 -- |preamble for answers
 ps04pa :: Int -> LaTeX 
@@ -143,7 +145,7 @@ ps04pa n = docSettings <> title "Problem Set 04: PL Trees (Answers)" <> author "
 -- |shared document settings
 docSettings :: LaTeX
 docSettings = documentclass [] article 
-            <> usepackage [] amssymb 
+            <> usepackage [] amsfonts 
             <> usepackage [utf8] inputenc 
             <> usepackage [] qtree 
             <> importGeometry [GWidth (Cm 18)]
@@ -164,7 +166,8 @@ ps04a x y n = ps04pa n <> document (maketitle <> answers' x y)
 
 -- | the text of q1
 q1text :: LaTeX
-q1text = item Nothing <> "Use a tree to test whether the following are contraries. If they are not, then read a countermodel off the tree."
+q1text = item Nothing <> "Use a tree to test whether the following are contradictories, contraries, or neither."
+
 
 -- | the text of q2
 q2text :: LaTeX
